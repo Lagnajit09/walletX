@@ -1,6 +1,8 @@
-import { PrismaClient } from "@repo/db/client";
-const client = new PrismaClient();
+"use client";
 
-export default function Home() {
-  return <div className="text-2xl">Hi there!</div>;
+// import { useBalance } from "@repo/store/useBalance";
+
+export default function () {
+  const balance = 12;
+  return <div>hi there {balance}</div>;
 }
