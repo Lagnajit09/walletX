@@ -1,8 +1,11 @@
 "use client";
 
-// import { useBalance } from "@repo/store/useBalance";
+import { Appbar } from "@repo/ui/appbar";
 
 export default function () {
-  const balance = 12;
-  return <div>hi there {balance}</div>;
+  return (
+    <div>
+      <Appbar onSignin={() => {}} onSignout={() => {}} />
+    </div>
+  );
 }
