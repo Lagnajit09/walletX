@@ -21,8 +21,10 @@ const SignIn = () => {
         />
       </div>
       <div className="flex-1 p-10 gap-8 flex flex-col items-center">
-        <h1 className="text-3xl text-center font-bold">Sign In to SwiftPay</h1>
-        <AuthForm />
+        <h1 className="text-3xl text-center font-bold">
+          Get Started with SwiftPay
+        </h1>
+        <AuthForm page={"signup"} />
       </div>
     </div>
   );
