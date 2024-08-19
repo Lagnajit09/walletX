@@ -23,7 +23,11 @@ export default async function Page() {
           </p>
         </div>
         <div className=" w-[100%] mt-4 border-1 bg-[rgb(96,165,250)] p-2 rounded-lg text-white text-center">
-          <NavigateButton page="SignUp" title="Get Started" />
+          <NavigateButton
+            page="SignUp"
+            title="Get Started"
+            classname="w-full"
+          />
         </div>
       </div>
       <div className="flex flex-col justify-center">

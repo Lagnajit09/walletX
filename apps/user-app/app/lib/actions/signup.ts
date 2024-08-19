@@ -14,5 +14,6 @@ export default async function signup(name: string, number: string) {
     return { status: true, message: "Account created successfully!", user };
   } catch (e) {
     console.error(e);
+    return { status: false, message: "Error in signing up!" };
   }
 }

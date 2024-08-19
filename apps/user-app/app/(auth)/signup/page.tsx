@@ -24,7 +24,7 @@ const SignIn = () => {
         <h1 className="text-3xl text-center font-bold">
           Get Started with SwiftPay
         </h1>
-        <AuthForm newUser={"signup"} />
+        <AuthForm newUser={true} />
       </div>
     </div>
   );

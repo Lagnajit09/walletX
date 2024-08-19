@@ -7,7 +7,7 @@ import signup from "../app/lib/actions/signup";
 import { signIn } from "next-auth/react";
 import NavigateButton from "./NavigateButton";
 
-const AuthForm = ({ newUser }: { newUser?: string }) => {
+const AuthForm = ({ newUser }: { newUser?: boolean }) => {
   const [phnNo, setPhnNo] = useState("");
   const [name, setName] = useState("");
   const [otpInputs, setOtpInputs] = useState(["", "", "", ""]);
@@ -32,6 +32,8 @@ const AuthForm = ({ newUser }: { newUser?: string }) => {
       const res = await signup(name, phnNo);
       if (res?.status) {
         signinHandler();
+      } else {
+        throw new Error("SignUp Error!");
       }
     } catch (error) {
       console.error(error);

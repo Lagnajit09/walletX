@@ -17,7 +17,7 @@ const NavigateButton = ({
       onClick={() => {
         router.push(page.toLowerCase());
       }}
-      className={`w-[100%]` + classname}
+      className={`w-[100%] ${classname}`}
     >
       {title}
     </button>
