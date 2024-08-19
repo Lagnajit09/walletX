@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "./lib/auth";
 import Image from "next/image";
 import landingpage from "../public/landingpage.jpg";
+import NavigateButton from "../components/NavigateButton";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);
@@ -21,8 +22,8 @@ export default async function Page() {
             Join the tens of mill ions of people on WalletX
           </p>
         </div>
-        <div className="mt-4 border-1 bg-[rgb(96,165,250)] p-2 rounded-lg text-white text-center">
-          <button> Get WalletX</button>
+        <div className=" w-[100%] mt-4 border-1 bg-[rgb(96,165,250)] p-2 rounded-lg text-white text-center">
+          <NavigateButton page="SignUp" title="Get Started" />
         </div>
       </div>
       <div className="flex flex-col justify-center">

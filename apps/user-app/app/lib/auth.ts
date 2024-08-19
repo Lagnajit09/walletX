@@ -22,6 +22,8 @@ export const authOptions = {
       },
       async authorize(credentials: any) {
         // const hashedPassword = await bcrypt.hash(credentials?.password, 10);
+
+        console.log(credentials);
         const existingUser = await db.user.findFirst({
           where: {
             number: credentials?.phone,
@@ -41,22 +43,22 @@ export const authOptions = {
           // }
           // return null;
         }
-        try {
-          const user = await db.user.create({
-            data: {
-              number: credentials?.phone,
-              password: "",
-              // password: hashedPassword,
-            },
-          });
-          return {
-            id: user.id.toString(),
-            name: user.name,
-            number: user.number,
-          };
-        } catch (e) {
-          console.error(e);
-        }
+        // try {
+        //   const user = await db.user.create({
+        //     data: {
+        //       number: credentials?.phone,
+        //       password: "",
+        //       // password: hashedPassword,
+        //     },
+        //   });
+        //   return {
+        //     id: user.id.toString(),
+        //     name: user.name,
+        //     number: user.number,
+        //   };
+        // } catch (e) {
+        //   console.error(e);
+        // }
         return null;
       },
     }),

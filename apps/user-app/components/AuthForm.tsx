@@ -3,8 +3,11 @@ import { Button } from "@repo/ui/button";
 import { TextInput } from "@repo/ui/textinput";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import signup from "../app/lib/actions/signup";
+import { signIn } from "next-auth/react";
+import NavigateButton from "./NavigateButton";
 
-const AuthForm = ({ page }: { page?: string }) => {
+const AuthForm = ({ newUser }: { newUser?: string }) => {
   const [phnNo, setPhnNo] = useState("");
   const [name, setName] = useState("");
   const [otpInputs, setOtpInputs] = useState(["", "", "", ""]);
@@ -17,10 +20,28 @@ const AuthForm = ({ page }: { page?: string }) => {
     setOtpInputs(newOtpInputs);
   };
 
+  const signinHandler = async () => {
+    await signIn("credentials", {
+      phone: phnNo,
+      redirect: false,
+    });
+    router.push("/dashboard");
+  };
+  const signupHandler = async () => {
+    try {
+      const res = await signup(name, phnNo);
+      if (res?.status) {
+        signinHandler();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
       <div className="w-[70%] m-auto">
-        {page && (
+        {newUser && (
           <TextInput
             placeholder="Name"
             onChange={(value) => {
@@ -52,26 +73,29 @@ const AuthForm = ({ page }: { page?: string }) => {
           </div>
         </div>
       </div>
-      <Button children="Get Started" onClick={() => {}} />
+      <Button
+        children="Get Started"
+        onClick={async () => {
+          newUser ? signupHandler() : signinHandler();
+        }}
+      />
       <div className="">
-        {page ? (
+        {newUser ? (
           <div className="flex flex-col items-center gap-3">
             <p>Already have an account?</p>
-            <Button
-              children="Sign In"
-              onClick={() => {
-                router.push("/signin");
-              }}
+            <NavigateButton
+              title="Sign In"
+              page="signin"
+              classname=" w-full py-2 bg-gray-800 rounded-lg text-white"
             />
           </div>
         ) : (
           <div className="flex flex-col items-center gap-3">
             <p>Don't have an account?</p>
-            <Button
-              children="Sign Up"
-              onClick={() => {
-                router.push("/signup");
-              }}
+            <NavigateButton
+              title="Sign Up"
+              page="signup"
+              classname=" w-full py-2 bg-gray-800 rounded-lg text-white"
             />
           </div>
         )}
