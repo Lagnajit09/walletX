@@ -6,7 +6,7 @@ import { signIn } from "next-auth/react";
 
 const SignIn = () => {
   return (
-    <div className="max-w-[100vw] m-20 flex border-2 rounded-lg max-h-[70vh] overflow-hidden">
+    <div className="max-w-[100vw] mx-20 my-10 flex border-2 rounded-lg max-h-[80vh] overflow-hidden">
       <div className="bg-gray-800 flex flex-col items-center justify-center text-white flex-1 gap-7 rounded-tl-lg rounded-bl-lg">
         <div className="flex flex-col items-center gap-3">
           <h1 className="text-5xl">Welcome to SwiftPay!</h1>

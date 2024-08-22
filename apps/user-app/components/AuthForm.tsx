@@ -10,26 +10,30 @@ import NavigateButton from "./NavigateButton";
 const AuthForm = ({ newUser }: { newUser?: boolean }) => {
   const [phnNo, setPhnNo] = useState("");
   const [name, setName] = useState("");
-  const [otpInputs, setOtpInputs] = useState(["", "", "", ""]);
+  const [passwd, setPasswd] = useState("");
+  // const [otpInputs, setOtpInputs] = useState(["", "", "", ""]);
   const router = useRouter();
 
-  const handleInputChange = (index: number, value: string) => {
-    if (value.length > 1) return; // Only allow one character
-    const newOtpInputs = [...otpInputs];
-    newOtpInputs[index] = value;
-    setOtpInputs(newOtpInputs);
-  };
+  // const handleInputChange = (index: number, value: string) => {
+  //   if (value.length > 1) return; // Only allow one character
+  //   const newOtpInputs = [...otpInputs];
+  //   newOtpInputs[index] = value;
+  //   setOtpInputs(newOtpInputs);
+  // };
 
   const signinHandler = async () => {
-    await signIn("credentials", {
+    const user = await signIn("credentials", {
       phone: phnNo,
+      password: passwd,
       redirect: false,
     });
+    console.log(user);
     router.push("/dashboard");
   };
+
   const signupHandler = async () => {
     try {
-      const res = await signup(name, phnNo);
+      const res = await signup(name, phnNo, passwd);
       if (res?.status) {
         signinHandler();
       } else {
@@ -58,22 +62,31 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
             setPhnNo(value);
           }}
         />
-        <div className="flex w-[100%] justify-between items-center">
-          <div className="flex w-[40%] gap-2">
-            {otpInputs.map((input, index) => (
-              <TextInput
-                key={index}
-                placeholder="0"
-                value={input}
-                onChange={(value) => handleInputChange(index, value)}
-                autoComplete="off"
-              />
-            ))}
+        <TextInput
+          inputType="password"
+          placeholder="Password"
+          onChange={(value) => {
+            setPasswd(value);
+          }}
+        />
+        {/* {newUser && (
+          <div className="flex w-[100%] justify-between items-center">
+            <div className="flex w-[40%] gap-2">
+              {otpInputs.map((input, index) => (
+                <TextInput
+                  key={index}
+                  placeholder="0"
+                  value={input}
+                  onChange={(value) => handleInputChange(index, value)}
+                  autoComplete="off"
+                />
+              ))}
+            </div>
+            <div className="hover:border-b hover:border-black">
+              <button>Send OTP</button>
+            </div>
           </div>
-          <div className="hover:border-b hover:border-black">
-            <button>Send OTP</button>
-          </div>
-        </div>
+        )} */}
       </div>
       <Button
         children="Get Started"
