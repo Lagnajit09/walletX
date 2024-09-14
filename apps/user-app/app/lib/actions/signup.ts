@@ -1,14 +1,20 @@
 "use server";
-
+import bcrypt from "bcrypt";
 import db from "@repo/db/client";
 
-export default async function signup(name: string, number: string) {
+export default async function signup(
+  name: string,
+  number: string,
+  password: string
+) {
   try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const user = await db.user.create({
       data: {
         number,
         name,
-        password: "",
+        password: hashedPassword,
       },
     });
     return { status: true, message: "Account created successfully!", user };
