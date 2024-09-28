@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { authOptions } from "../lib/auth";
 import { SidebarItem } from "../../components/SidebarItem";
 
@@ -10,7 +9,7 @@ export default async function Layout({ children }: { children: any }) {
   // }
   return (
     <div className="flex">
-      <div className="w-72 border-r border-slate-300 min-h-screen mr-4 pt-28">
+      <div className="flex flex-col justify-between w-72 border-r border-slate-300 min-h-[92vh] mr-4 pt-5">
         <div>
           <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
           <SidebarItem
@@ -27,6 +26,13 @@ export default async function Layout({ children }: { children: any }) {
             href={"/p2p"}
             icon={<P2PTransferIcon />}
             title="P2P Transfer"
+          />
+        </div>
+        <div className="border-t">
+          <SidebarItem
+            href={"/profile"}
+            icon={<ProfileIcon />}
+            title={session.user.name}
           />
         </div>
       </div>
@@ -105,6 +111,25 @@ function TransactionsIcon() {
         stroke-linecap="round"
         stroke-linejoin="round"
         d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+      />
+    </svg>
+  );
+}
+
+function ProfileIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      className="size-6"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
       />
     </svg>
   );

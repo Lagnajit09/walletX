@@ -17,7 +17,7 @@ export const SidebarItem = ({
 
   return (
     <div
-      className={`flex ${selected ? "text-[#6a51a6]" : "text-slate-500"} cursor-pointer  p-2 pl-8`}
+      className={`flex ${selected ? "text-[#6a51a6]" : "text-slate-500"} cursor-pointer  p-3 pl-7 text-lg items-center`}
       onClick={() => {
         router.push(href);
       }}
