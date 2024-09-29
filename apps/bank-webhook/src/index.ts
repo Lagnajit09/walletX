@@ -1,7 +1,12 @@
 import db from "@repo/db/client";
 import express from "express";
+import dotenv from "dotenv";
+import path from "path";
 
 const app = express();
+app.use(express.json());
+
+dotenv.config({ path: path.resolve(__dirname, "../../../packages/db/.env") });
 
 app.post("/hdfcWebhook", async (req, res) => {
   //TODO: Add zod validation here?
@@ -21,7 +26,7 @@ app.post("/hdfcWebhook", async (req, res) => {
     await db.$transaction([
       db.balance.updateMany({
         where: {
-          userId: Number(paymentInformation.amount),
+          userId: Number(paymentInformation.userId),
         },
         data: {
           amount: {
