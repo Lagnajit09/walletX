@@ -3,6 +3,7 @@
 import prisma from "@repo/db/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
+import axios from "axios";
 
 export async function createOnRampTransaction(
   provider: string,
@@ -28,7 +29,13 @@ export async function createOnRampTransaction(
     },
   });
 
+  const res = await axios.post("http://localhost:3003/hdfcWebhook", {
+    token: token,
+    user_identifier: Number(userId),
+    amount: amount * 100,
+  });
+
   return {
-    message: "Done",
+    message: res.data,
   };
 }
