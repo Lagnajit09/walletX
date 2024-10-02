@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { authOptions } from "./lib/auth";
 import Image from "next/image";
 import landingpage from "../public/landingpage.jpg";
-import NavigateButton from "../components/NavigateButton";
+import NavigateButton from "../src/components/custom/NavigateButton";
 
 export default async function Page() {
   const session = await getServerSession(authOptions);

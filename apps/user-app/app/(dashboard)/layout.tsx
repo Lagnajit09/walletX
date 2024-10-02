@@ -9,11 +9,11 @@ export default async function Layout({ children }: { children: any }) {
   // }
   return (
     <div className="flex">
-      <div className="flex flex-col justify-between w-72 border-r border-slate-300 min-h-[92vh] mr-4 pt-5">
+      <div className="flex flex-col justify-between w-[15vw] max-h-[90vh] fixed border-r border-slate-300 min-h-[92vh] mr-4 pt-5">
         <div>
           <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
           <SidebarItem
-            href={"/transfer"}
+            href={"/wallet"}
             icon={<TransferIcon />}
             title="Wallet"
           />
@@ -36,7 +36,7 @@ export default async function Layout({ children }: { children: any }) {
           />
         </div>
       </div>
-      {children}
+      <div className="ml-[17vw] w-[80vw]">{children}</div>
     </div>
   );
 }
