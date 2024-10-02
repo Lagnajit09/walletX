@@ -3,7 +3,7 @@ import { Button } from "@repo/ui/button";
 import { TextInput } from "@repo/ui/textinput";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import signup from "../app/lib/actions/signup";
+import signup from "../../../app/lib/actions/signup";
 import { signIn } from "next-auth/react";
 import NavigateButton from "./NavigateButton";
 

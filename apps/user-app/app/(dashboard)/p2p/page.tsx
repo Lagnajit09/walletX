@@ -1,4 +1,4 @@
-import { SendCard } from "../../../components/SendCard";
+import { SendCard } from "../../../src/components/custom/SendCard";
 
 export default function () {
   return (

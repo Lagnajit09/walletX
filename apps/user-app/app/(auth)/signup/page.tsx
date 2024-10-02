@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@repo/ui/button";
 import React from "react";
-import AuthForm from "../../../components/AuthForm";
+import AuthForm from "../../../src/components/custom/AuthForm";
 import { signIn } from "next-auth/react";
 
 const SignIn = () => {
