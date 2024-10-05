@@ -8,7 +8,7 @@ export const TextInput = ({
   value,
   autoComplete,
 }: {
-  placeholder: string;
+  placeholder: string | undefined | null;
   onChange: (value: string) => void;
   label?: string;
   inputType?: string;
@@ -26,7 +26,7 @@ export const TextInput = ({
         value={value}
         id="first_name"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        placeholder={placeholder}
+        placeholder={placeholder || ""}
         autoComplete={autoComplete || "true"}
       />
     </div>

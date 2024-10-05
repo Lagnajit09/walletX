@@ -28,8 +28,6 @@ export const AddMoney = () => {
   const [showError, setShowError] = useState(false);
   const session = useSession();
 
-  console.log(session);
-
   return (
     <Card title="Add Money">
       <ErrorModal
