@@ -17,6 +17,15 @@ export default async function signup(
         password: hashedPassword,
       },
     });
+
+    await db.balance.create({
+      data: {
+        amount: 0,
+        userId: user.id,
+        locked: 0,
+      },
+    });
+
     return { status: true, message: "Account created successfully!", user };
   } catch (e) {
     console.error(e);
