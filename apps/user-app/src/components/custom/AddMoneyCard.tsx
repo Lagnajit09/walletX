@@ -7,6 +7,7 @@ import { TextInput } from "@repo/ui/textinput";
 import { createOnRampTransaction } from "../../../app/lib/actions/createOnrampTransaction";
 import { useSession } from "next-auth/react";
 import ErrorModal from "./ErrorModal";
+import { CheckPin } from "./CheckPin";
 
 const SUPPORTED_BANKS = [
   {
@@ -26,17 +27,46 @@ export const AddMoney = () => {
   const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
   const [value, setValue] = useState(0);
   const [showError, setShowError] = useState(false);
+  const [showPinModal, setShowPinModal] = useState(false);
   const session = useSession();
+  const [errMsg, setErrMsg] = useState({
+    title: "",
+    description: "",
+  });
+
+  const handleTriggerPinModal = () => {
+    setShowPinModal(!showPinModal);
+  };
+
+  const addMoneyHandler = async (pinIsValid: boolean) => {
+    if (!pinIsValid) {
+      setErrMsg({
+        title: "Incorrect Pin",
+        description: "Please provide the correct pin.",
+      });
+      setShowError(true);
+      return;
+    }
+
+    await createOnRampTransaction(provider, value);
+    window.location.reload();
+  };
 
   return (
     <Card title="Add Money">
       <ErrorModal
-        title="Please Set Your Pin First!"
-        description="To update your pin, Go to Profile > Settings > Pin"
+        title={errMsg.title}
+        description={errMsg.description}
         continueBtn="Okay"
         open={showError}
         setOpen={setShowError}
       />
+      <CheckPin
+        open={showPinModal}
+        setOpen={handleTriggerPinModal}
+        addMoneyHandler={addMoneyHandler}
+      />
+
       <div className="w-full">
         <TextInput
           label={"Amount"}
@@ -65,9 +95,13 @@ export const AddMoney = () => {
             disable={value === 0 ? true : false}
             onClick={async () => {
               if (session?.data?.user?.pin) {
-                const res = await createOnRampTransaction(provider, value);
-                window.location.reload();
+                handleTriggerPinModal();
               } else {
+                setErrMsg({
+                  title: "Please Set Your Pin First!",
+                  description:
+                    "To update your pin, Go to Profile > Settings > Pin",
+                });
                 setShowError(true);
               }
             }}

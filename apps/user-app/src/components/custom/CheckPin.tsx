@@ -7,31 +7,26 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { updateProfile } from "../../../app/lib/actions/updateProfile";
 import { useState } from "react";
-import { getSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
-interface UpdateModalProps {
+interface CheckPinProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  field: string;
-  value: string;
+  addMoneyHandler: (pinIsValid: boolean) => void;
 }
 
-export function UpdateModal({ open, setOpen, field, value }: UpdateModalProps) {
-  const [newVal, setNewVal] = useState(value);
+export function CheckPin({ open, setOpen, addMoneyHandler }: CheckPinProps) {
+  const [newVal, setNewVal] = useState("0000");
+  const session = useSession();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Enter Your Pin:</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              {field}
-            </Label>
             <Input
               id="name"
               value={newVal}
@@ -42,18 +37,12 @@ export function UpdateModal({ open, setOpen, field, value }: UpdateModalProps) {
         </div>
         <DialogFooter>
           <Button
-            onClick={async () => {
-              try {
-                await updateProfile(field.toLowerCase(), newVal);
-                await getSession();
-                window.location.reload();
-                setOpen(false);
-              } catch (error) {
-                console.error("Failed to update profile", error);
-              }
+            onClick={() => {
+              addMoneyHandler(newVal == session.data?.user?.pin);
+              setOpen(false);
             }}
           >
-            Save changes
+            Add Money
           </Button>
         </DialogFooter>
       </DialogContent>

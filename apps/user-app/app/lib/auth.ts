@@ -59,9 +59,20 @@ export const authOptions = {
       return token;
     },
     async session({ token, session }: any) {
-      session.user.id = token.sub;
-      session.user.number = token.number;
-      session.user.pin = token.pin;
+      // session.user.id = token.sub;
+      // session.user.number = token.number;
+      // session.user.pin = token.pin;
+
+      const user = await db.user.findUnique({
+        where: { id: Number(token.sub) }, // Assuming token.sub contains user id
+      });
+
+      // Update session with the latest user data
+      session.user.id = user?.id;
+      session.user.name = user?.name;
+      session.user.number = user?.number;
+      session.user.pin = user?.pin;
+
       return session;
     },
   },
