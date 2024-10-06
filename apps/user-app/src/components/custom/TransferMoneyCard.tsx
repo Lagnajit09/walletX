@@ -4,7 +4,6 @@ import { Card } from "@repo/ui/card";
 import { Select } from "@repo/ui/select";
 import { useState } from "react";
 import { TextInput } from "@repo/ui/textinput";
-import { createOnRampTransaction } from "../../../app/lib/actions/createOnrampTransaction";
 import { useSession } from "next-auth/react";
 import ErrorModal from "./ErrorModal";
 import { CheckPin } from "./CheckPin";
@@ -20,7 +19,17 @@ const SUPPORTED_BANKS = [
   },
 ];
 
-export const AddMoney = () => {
+interface TransferMoneyProps {
+  title: string;
+  callbackFunc: Function;
+  btnText: string;
+}
+
+export const TransferMoney = ({
+  title,
+  callbackFunc,
+  btnText,
+}: TransferMoneyProps) => {
   const [redirectUrl, setRedirectUrl] = useState(
     SUPPORTED_BANKS[0]?.redirectUrl
   );
@@ -38,7 +47,7 @@ export const AddMoney = () => {
     setShowPinModal(!showPinModal);
   };
 
-  const addMoneyHandler = async (pinIsValid: boolean) => {
+  const transferMoneyHandler = async (pinIsValid: boolean) => {
     if (!pinIsValid) {
       setErrMsg({
         title: "Incorrect Pin",
@@ -48,12 +57,16 @@ export const AddMoney = () => {
       return;
     }
 
-    await createOnRampTransaction(provider, value);
+    await callbackFunc(provider, value);
     window.location.reload();
   };
 
   return (
-    <Card title="Add Money">
+    <Card
+      title={title}
+      classname="bg-blue-400 rounded-lg"
+      titleClass="text-white font-semibold"
+    >
       <ErrorModal
         title={errMsg.title}
         description={errMsg.description}
@@ -64,18 +77,19 @@ export const AddMoney = () => {
       <CheckPin
         open={showPinModal}
         setOpen={handleTriggerPinModal}
-        addMoneyHandler={addMoneyHandler}
+        addMoneyHandler={transferMoneyHandler}
       />
 
       <div className="w-full">
         <TextInput
           label={"Amount"}
           placeholder={"Amount"}
+          labelClass="text-white"
           onChange={(val) => {
             setValue(Number(val));
           }}
         />
-        <div className="py-4 text-left">Bank</div>
+        <div className="py-4 text-left text-white">Bank</div>
         <Select
           onSelect={(value) => {
             setRedirectUrl(
@@ -93,6 +107,7 @@ export const AddMoney = () => {
         <div className="flex justify-center pt-4">
           <Button
             disable={value === 0 ? true : false}
+            classname="bg-white text-black font-semibold hover:bg-gray-200"
             onClick={async () => {
               if (session?.data?.user?.pin) {
                 handleTriggerPinModal();
@@ -106,7 +121,7 @@ export const AddMoney = () => {
               }
             }}
           >
-            Add Money
+            {btnText}
           </Button>
         </div>
       </div>

@@ -1,9 +1,11 @@
 import prisma from "@repo/db/client";
-import { AddMoney } from "../../../src/components/custom/AddMoneyCard";
 import { BalanceCard } from "../../../src/components/custom/BalanceCard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { OnRampTransactions } from "../../../src/components/custom/OnRampTransactions";
+import { createOnRampTransaction } from "../../lib/actions/createOnrampTransaction";
+import { TransferMoney } from "@/components/custom/TransferMoneyCard";
+import { createOffRampTransaction } from "../../lib/actions/createOffRampTransaction";
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
@@ -44,13 +46,31 @@ export default async function () {
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
         <div>
-          <AddMoney />
-        </div>
-        <div>
           <BalanceCard amount={balance.amount} locked={balance.locked} />
-          <div className="pt-4">
+          {/* <div className="pt-4">
             <OnRampTransactions transactions={transactions} />
-          </div>
+          </div> */}
+        </div>
+        <div className=""></div>
+        <div className="mt-5">
+          <p className="text-2xl font-bold text-purple-800 mb-3">
+            Add to Wallet
+          </p>
+          <TransferMoney
+            title="Add Money"
+            callbackFunc={createOnRampTransaction}
+            btnText="Add Money"
+          />
+        </div>
+        <div className="mt-5">
+          <p className="text-2xl font-bold text-purple-800 mb-3">
+            Withdraw to Bank
+          </p>
+          <TransferMoney
+            title="Withdraw Money"
+            callbackFunc={createOffRampTransaction}
+            btnText="Withdraw Money"
+          />
         </div>
       </div>
     </div>

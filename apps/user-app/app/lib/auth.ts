@@ -70,6 +70,7 @@ export const authOptions = {
       // Update session with the latest user data
       session.user.id = user?.id;
       session.user.name = user?.name;
+      session.user.email = user?.email;
       session.user.number = user?.number;
       session.user.pin = user?.pin;
 
