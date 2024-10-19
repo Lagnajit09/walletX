@@ -15,10 +15,12 @@ app.post("/hdfcWebhook", async (req, res) => {
     token: string;
     userId: string;
     amount: string;
+    type: string;
   } = {
     token: req.body.token,
     userId: req.body.user_identifier,
     amount: req.body.amount,
+    type: req.body.type,
   };
 
   // Update balance in db, add txn
@@ -29,19 +31,35 @@ app.post("/hdfcWebhook", async (req, res) => {
           userId: Number(paymentInformation.userId),
         },
         data: {
-          amount: {
-            increment: Number(paymentInformation.amount),
-          },
+          amount:
+            paymentInformation.type == "credit"
+              ? {
+                  increment: Number(paymentInformation.amount),
+                }
+              : paymentInformation.type == "debit"
+                ? {
+                    decrement: Number(paymentInformation.amount),
+                  }
+                : {},
         },
       }),
-      db.onRampTransaction.updateMany({
-        where: {
-          token: paymentInformation.token,
-        },
-        data: {
-          status: "Success",
-        },
-      }),
+      paymentInformation.type == "credit"
+        ? db.onRampTransaction.updateMany({
+            where: {
+              token: paymentInformation.token,
+            },
+            data: {
+              status: "Success",
+            },
+          })
+        : db.offRampTransaction.updateMany({
+            where: {
+              token: paymentInformation.token,
+            },
+            data: {
+              status: "Success",
+            },
+          }),
     ]);
 
     res.json({

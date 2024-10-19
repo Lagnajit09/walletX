@@ -17,7 +17,7 @@ export async function createOnRampTransaction(
       message: "Unauthenticated request",
     };
   }
-  const token = (Math.random() * 1000).toString();
+  const token = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
   await prisma.onRampTransaction.create({
     data: {
       provider,
@@ -33,6 +33,7 @@ export async function createOnRampTransaction(
     token: token,
     user_identifier: Number(userId),
     amount: amount * 100,
+    type: "credit",
   });
 
   return {
