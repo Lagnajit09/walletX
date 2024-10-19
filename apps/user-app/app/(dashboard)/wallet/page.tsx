@@ -7,6 +7,8 @@ import { createOnRampTransaction } from "../../lib/actions/createOnrampTransacti
 import { TransferMoney } from "@/components/custom/TransferMoneyCard";
 import { createOffRampTransaction } from "../../lib/actions/createOffRampTransaction";
 import { getRecentTransactions } from "../../lib/actions/getRecentTransactions";
+import { DataTable } from "@/components/ui/data-table";
+import { columns } from "@/components/custom/Columns";
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
@@ -23,22 +25,31 @@ async function getBalance() {
 
 async function getTransactions() {
   const session = await getServerSession(authOptions);
-  // const txns = await prisma.onRampTransaction.findMany({
-  //   where: {
-  //     userId: Number(session?.user?.id),
-  //   },
-  //   orderBy: {
-  //     startTime: "desc",
-  //   },
-  // });
+
   const txns = await getRecentTransactions(Number(session?.user?.id));
-  return txns.map((t) => ({
-    time: t.startTime,
-    amount: t.amount,
-    status: t.status,
-    provider: t.provider,
-    type: t.type,
-  }));
+  return txns.map((t) => {
+    const date = new Date(t.startTime);
+
+    const formattedDate = date.toLocaleDateString("en-GB", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    }); // Output: 19 Oct 2024
+
+    const formattedTime = date.toLocaleTimeString("en-IN", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    }); // Output: 11:50 AM or 11:50 am
+
+    return {
+      date: `${formattedTime} on ${formattedDate}`, // 11:50 am on 19 Oct 2024
+      amount: t.type == "onRamp" ? `+${t.amount / 100}` : `-${t.amount / 100}`,
+      status: t.status,
+      provider: t.provider,
+      type: t.type,
+    };
+  });
 }
 
 export default async function () {
@@ -46,7 +57,7 @@ export default async function () {
   const transactions = await getTransactions();
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-10">
       <div className="text-4xl text-[#6a51a6] pt-8 mb-0 font-bold">
         Transfer
       </div>
@@ -76,8 +87,11 @@ export default async function () {
           />
         </div>
       </div>
-      <div className="pt-4">
-        <OnRampTransactions transactions={transactions} />
+      <div className="mt-5 mx-4">
+        <p className="text-2xl font-bold text-purple-800 mb-3">
+          Recent Transactions
+        </p>
+        <DataTable columns={columns} data={transactions} />
       </div>
     </div>
   );
