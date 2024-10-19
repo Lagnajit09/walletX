@@ -44,7 +44,7 @@ export function UpdateModal({ open, setOpen, field, value }: UpdateModalProps) {
           <Button
             onClick={async () => {
               try {
-                await updateProfile(field.toLowerCase(), newVal);
+                await updateProfile(field.toLowerCase(), newVal.trim());
                 await getSession();
                 window.location.reload();
                 setOpen(false);

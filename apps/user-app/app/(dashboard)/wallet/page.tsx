@@ -6,6 +6,7 @@ import { OnRampTransactions } from "../../../src/components/custom/OnRampTransac
 import { createOnRampTransaction } from "../../lib/actions/createOnrampTransaction";
 import { TransferMoney } from "@/components/custom/TransferMoneyCard";
 import { createOffRampTransaction } from "../../lib/actions/createOffRampTransaction";
+import { getRecentTransactions } from "../../lib/actions/getRecentTransactions";
 
 async function getBalance() {
   const session = await getServerSession(authOptions);
@@ -20,36 +21,38 @@ async function getBalance() {
   };
 }
 
-async function getOnRampTransactions() {
+async function getTransactions() {
   const session = await getServerSession(authOptions);
-  const txns = await prisma.onRampTransaction.findMany({
-    where: {
-      userId: Number(session?.user?.id),
-    },
-  });
+  // const txns = await prisma.onRampTransaction.findMany({
+  //   where: {
+  //     userId: Number(session?.user?.id),
+  //   },
+  //   orderBy: {
+  //     startTime: "desc",
+  //   },
+  // });
+  const txns = await getRecentTransactions(Number(session?.user?.id));
   return txns.map((t) => ({
     time: t.startTime,
     amount: t.amount,
     status: t.status,
     provider: t.provider,
+    type: t.type,
   }));
 }
 
 export default async function () {
   const balance = await getBalance();
-  const transactions = await getOnRampTransactions();
+  const transactions = await getTransactions();
 
   return (
     <div className="w-full">
-      <div className="text-4xl text-[#6a51a6] pt-8 mb-8 font-bold">
+      <div className="text-4xl text-[#6a51a6] pt-8 mb-0 font-bold">
         Transfer
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
         <div>
           <BalanceCard amount={balance.amount} locked={balance.locked} />
-          {/* <div className="pt-4">
-            <OnRampTransactions transactions={transactions} />
-          </div> */}
         </div>
         <div className=""></div>
         <div className="mt-5">
@@ -72,6 +75,9 @@ export default async function () {
             btnText="Withdraw Money"
           />
         </div>
+      </div>
+      <div className="pt-4">
+        <OnRampTransactions transactions={transactions} />
       </div>
     </div>
   );

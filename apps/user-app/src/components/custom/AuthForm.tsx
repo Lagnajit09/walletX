@@ -90,6 +90,7 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
       </div>
       <Button
         children="Get Started"
+        classname="bg-gray-800 text-white"
         onClick={async () => {
           newUser ? signupHandler() : signinHandler();
         }}

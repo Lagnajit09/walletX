@@ -21,7 +21,10 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
         </h1>
       </Link>
       <div className="flex flex-col justify-center pt-2">
-        <Button onClick={user ? onSignout : onSignin}>
+        <Button
+          classname="bg-gray-900 text-white"
+          onClick={user ? onSignout : onSignin}
+        >
           {user ? "Logout" : "Login"}
         </Button>
       </div>

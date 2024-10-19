@@ -38,7 +38,7 @@ export function CheckPin({ open, setOpen, addMoneyHandler }: CheckPinProps) {
         <DialogFooter>
           <Button
             onClick={() => {
-              addMoneyHandler(newVal == session.data?.user?.pin);
+              addMoneyHandler(newVal.trim() == session.data?.user?.pin);
               setOpen(false);
             }}
           >
