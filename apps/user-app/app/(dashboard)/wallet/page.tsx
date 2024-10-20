@@ -29,6 +29,7 @@ async function getTransactions() {
     }); // Output: 11:50 AM or 11:50 am
 
     return {
+      id: t.id,
       date: `${formattedTime} on ${formattedDate}`, // 11:50 am on 19 Oct 2024
       amount: t.type == "onRamp" ? `+${t.amount / 100}` : `-${t.amount / 100}`,
       status: t.status,

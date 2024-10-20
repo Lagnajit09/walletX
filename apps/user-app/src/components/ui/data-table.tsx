@@ -15,12 +15,28 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Payment } from "../custom/Columns";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
 }
+
+export type Payment = {
+  id?: number;
+  amount: string;
+  status:
+    | "Pending"
+    | "Processing"
+    | "Success"
+    | "Failure"
+    | "Sent"
+    | "Received";
+  date: string;
+  provider?: string;
+  type?: string;
+  toUser?: string;
+  fromUser?: string;
+};
 
 export function DataTable<TData, TValue>({
   columns,

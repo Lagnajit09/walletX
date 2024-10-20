@@ -4,13 +4,11 @@ import React from "react";
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 
 interface ErrorModalProps {
@@ -26,7 +24,6 @@ const ErrorModal = ({
   open,
   title,
   description,
-  cancelBtn,
   continueBtn,
   setOpen,
 }: ErrorModalProps) => {

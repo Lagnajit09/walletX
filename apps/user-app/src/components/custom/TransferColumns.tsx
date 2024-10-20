@@ -1,28 +1,24 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { Payment } from "../ui/data-table";
 
-export type p2pPayment = {
-  id?: string;
-  amount: string;
-  status: "Pending" | "Processing" | "Success" | "Failure";
-  date: string;
-  provider: string;
-  type: string;
-};
-
-export const TransferColumns: ColumnDef<p2pPayment>[] = [
+export const TransferColumns: ColumnDef<Payment>[] = [
   {
     accessorKey: "date",
     header: "Date",
   },
   {
-    accessorKey: "to",
+    accessorKey: "toUser",
     header: "To",
   },
   {
+    accessorKey: "fromUser",
+    header: "From",
+  },
+  {
     accessorKey: "amount",
-    header: "Amount",
+    header: "Amount (INR)",
   },
   {
     accessorKey: "status",
