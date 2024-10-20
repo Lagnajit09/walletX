@@ -58,7 +58,7 @@ export default async function () {
 
   return (
     <div className="w-full pb-10">
-      <div className="text-4xl text-[#6a51a6] pt-8 mb-0 font-bold">
+      <div className="text-4xl text-[#00b4d8] pt-8 mb-0 font-bold">
         Transfer
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
@@ -67,7 +67,7 @@ export default async function () {
         </div>
         <div className=""></div>
         <div className="mt-5">
-          <p className="text-2xl font-bold text-purple-800 mb-3">
+          <p className="text-2xl font-bold text-[#00b4d8] mb-3">
             Add to Wallet
           </p>
           <TransferMoney
@@ -77,7 +77,7 @@ export default async function () {
           />
         </div>
         <div className="mt-5">
-          <p className="text-2xl font-bold text-purple-800 mb-3">
+          <p className="text-2xl font-bold text-[#00b4d8] mb-3">
             Withdraw to Bank
           </p>
           <TransferMoney
@@ -88,10 +88,10 @@ export default async function () {
         </div>
       </div>
       <div className="mt-5 mx-4">
-        <p className="text-2xl font-bold text-purple-800 mb-3">
+        <p className="text-2xl font-bold text-[#00b4d8] mb-3">
           Recent Transactions
         </p>
-        <p className="text-gray-500 mb-4">
+        <p className="text-gray-300 mb-4">
           You can only see the transactions of last 30 days.
         </p>
         <DataTable columns={columns} data={transactions} />

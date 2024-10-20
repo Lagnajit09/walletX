@@ -25,17 +25,18 @@ export function UpdateModal({ open, setOpen, field, value }: UpdateModalProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle className="text-gray-800">Edit profile</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+            <Label htmlFor="name" className="text-right text-gray-800">
               {field}
             </Label>
             <Input
               id="name"
               value={newVal}
-              className="col-span-3"
+              type={field == "Pin" ? "password" : "text"}
+              className="col-span-3 text-black"
               onChange={(e) => setNewVal(e.target.value)}
             />
           </div>

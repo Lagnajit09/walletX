@@ -23,10 +23,14 @@ const ProfileData = ({ label, value }: profileDataProps) => {
       />
       <div className="flex gap-2 items-center">
         <div className="w-full mb-4">
-          <h4 className="block mb-2 text-sm font-medium text-gray-900">
+          <h4 className="block mb-2 text-sm font-medium text-gray-200">
             {label}
           </h4>
-          <p className="border-b w-full p-2">{value}</p>
+          <input
+            className="border-b w-full p-2 bg-inherit"
+            value={value}
+            type={label == "Pin" ? "password" : "text"}
+          ></input>
         </div>
         <div onClick={handleModalTrigger}>
           <EditIcon />
@@ -46,7 +50,7 @@ export function EditIcon() {
       viewBox="0 0 24 24"
       stroke-width="1.5"
       stroke="currentColor"
-      className="size-4 cursor-pointer text-gray-800"
+      className="size-4 cursor-pointer text-gray-300"
     >
       <path
         stroke-linecap="round"

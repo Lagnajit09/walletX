@@ -34,6 +34,7 @@ export function SendCard() {
                 onClick={async () => {
                   await p2pTransfer(number, Number(amount) * 100);
                 }}
+                classname="bg-gray-800 text-white hover:bg-gray-700"
               >
                 Send
               </Button>{" "}

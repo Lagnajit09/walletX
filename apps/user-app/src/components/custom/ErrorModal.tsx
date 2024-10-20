@@ -35,7 +35,7 @@ const ErrorModal = ({
       {/* <AlertDialogTrigger>Open</AlertDialogTrigger> */}
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle className="text-black">{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

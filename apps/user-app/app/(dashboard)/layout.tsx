@@ -9,7 +9,7 @@ export default async function Layout({ children }: { children: any }) {
   // }
   return (
     <div className="flex">
-      <div className="flex flex-col justify-between w-[15vw] max-h-[90vh] fixed border-r border-slate-300 min-h-[92vh] mr-4 pt-5">
+      <div className="flex flex-col justify-between w-[15vw] max-h-[90vh] fixed border-r-2 border-slate-700 min-h-[92vh] mr-4 pt-5">
         <div>
           <SidebarItem href={"/dashboard"} icon={<HomeIcon />} title="Home" />
           <SidebarItem
@@ -28,7 +28,7 @@ export default async function Layout({ children }: { children: any }) {
             title="P2P Transfer"
           />
         </div>
-        <div className="border-t">
+        <div className="border-t bg-blue-950 border-gray-800">
           <SidebarItem
             href={"/profile"}
             icon={<ProfileIcon />}

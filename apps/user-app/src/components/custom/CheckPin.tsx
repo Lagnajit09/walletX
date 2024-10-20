@@ -23,14 +23,15 @@ export function CheckPin({ open, setOpen, addMoneyHandler }: CheckPinProps) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Enter Your Pin:</DialogTitle>
+          <DialogTitle className="text-black">Enter Your Pin:</DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
             <Input
               id="name"
               value={newVal}
-              className="col-span-3"
+              type="password"
+              className="col-span-3 text-black"
               onChange={(e) => setNewVal(e.target.value)}
             />
           </div>

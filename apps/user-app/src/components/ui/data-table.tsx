@@ -33,14 +33,17 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border-2">
+    <div className="rounded-md border-2 border-[#5585a2]">
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className="border-[#5585a2]">
               {headerGroup.headers.map((header) => {
                 return (
-                  <TableHead key={header.id} className="bg-gray-200">
+                  <TableHead
+                    key={header.id}
+                    className="bg-[#5585a2] text-white"
+                  >
                     {header.isPlaceholder
                       ? null
                       : flexRender(
@@ -59,6 +62,7 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                className="hover:bg-inherit border-[#5585a2]"
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell
@@ -74,8 +78,8 @@ export function DataTable<TData, TValue>({
                               row.original.type === "onRamp"
                             ? "text-green-600" // Apply green for onRamp (incoming) transactions
                             : cell.column.id === "amount" &&
-                                row.original.type !== "onRamp"
-                              ? "text-red-600" // Apply red for non-onRamp (outgoing) transactions
+                                row.original.type === "offRamp"
+                              ? "text-red-500" // Apply red for non-onRamp (outgoing) transactions
                               : ""
                     }
                   >

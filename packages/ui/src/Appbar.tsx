@@ -11,7 +11,7 @@ interface AppbarProps {
 
 export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
   return (
-    <div className="flex justify-between border-b px-4">
+    <div className="flex justify-between border-b border-gray-700 px-4">
       <Link href={"/"}>
         <h1
           className="text-xl font-bold flex flex-col justify-center h-full"
@@ -22,7 +22,7 @@ export const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
       </Link>
       <div className="flex flex-col justify-center pt-2">
         <Button
-          classname="bg-gray-900 text-white"
+          classname="bg-[#023e8a] text-white"
           onClick={user ? onSignout : onSignin}
         >
           {user ? "Logout" : "Login"}

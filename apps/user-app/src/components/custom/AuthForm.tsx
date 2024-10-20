@@ -90,7 +90,7 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
       </div>
       <Button
         children="Get Started"
-        classname="bg-gray-800 text-white"
+        classname="bg-[#023e8a] text-white"
         onClick={async () => {
           newUser ? signupHandler() : signinHandler();
         }}
@@ -102,7 +102,7 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
             <NavigateButton
               title="Sign In"
               page="signin"
-              classname=" w-full py-2 bg-gray-800 rounded-lg text-white"
+              classname=" w-full py-2 bg-[#023e8a] rounded-lg text-white"
             />
           </div>
         ) : (
@@ -111,7 +111,7 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
             <NavigateButton
               title="Sign Up"
               page="signup"
-              classname=" w-full py-2 bg-gray-800 rounded-lg text-white"
+              classname=" w-full py-2 bg-[#023e8a] rounded-lg text-white"
             />
           </div>
         )}

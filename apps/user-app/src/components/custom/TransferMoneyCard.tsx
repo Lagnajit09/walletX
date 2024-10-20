@@ -64,7 +64,7 @@ export const TransferMoney = ({
   return (
     <Card
       title={title}
-      classname="bg-blue-400 rounded-lg"
+      classname="bg-[#023e8a] rounded-lg"
       titleClass="text-white font-semibold"
     >
       <ErrorModal
