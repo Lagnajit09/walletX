@@ -10,7 +10,7 @@ export const BalanceCard = ({
   return (
     <Card
       title={"Balance"}
-      classname="bg-[#5585a2] rounded-lg text-gray-300"
+      classname="bg-[#023e8a] rounded-lg text-gray-300"
       titleClass="text-white font-semibold"
     >
       <div className="flex justify-between border-b border-slate-300 py-2">

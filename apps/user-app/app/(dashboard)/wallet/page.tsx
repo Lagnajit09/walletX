@@ -1,27 +1,13 @@
-import prisma from "@repo/db/client";
 import { BalanceCard } from "../../../src/components/custom/BalanceCard";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
-import { OnRampTransactions } from "../../../src/components/custom/OnRampTransactions";
 import { createOnRampTransaction } from "../../lib/actions/createOnrampTransaction";
 import { TransferMoney } from "@/components/custom/TransferMoneyCard";
 import { createOffRampTransaction } from "../../lib/actions/createOffRampTransaction";
 import { getRecentTransactions } from "../../lib/actions/getRecentTransactions";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/components/custom/Columns";
-
-async function getBalance() {
-  const session = await getServerSession(authOptions);
-  const balance = await prisma.balance.findFirst({
-    where: {
-      userId: Number(session?.user?.id),
-    },
-  });
-  return {
-    amount: balance?.amount || 0,
-    locked: balance?.locked || 0,
-  };
-}
+import { getBalance } from "../../lib/actions/getBalance";
 
 async function getTransactions() {
   const session = await getServerSession(authOptions);
@@ -58,9 +44,7 @@ export default async function () {
 
   return (
     <div className="w-full pb-10">
-      <div className="text-4xl text-[#00b4d8] pt-8 mb-0 font-bold">
-        Transfer
-      </div>
+      <div className="text-4xl text-[#00b4d8] pt-8 mb-0 font-bold">Wallet</div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
         <div>
           <BalanceCard amount={balance.amount} locked={balance.locked} />
