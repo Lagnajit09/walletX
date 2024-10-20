@@ -67,6 +67,11 @@ model p2pTransfer {
   fromUser   User     @relation(name: "FromUserRelation", fields: [fromUserId], references: [id])
   toUserId   Int
   toUser     User     @relation(name: "ToUserRelation", fields: [toUserId], references: [id])
+
+  // Indexes on fromUserId, toUserId, and a composite index
+  @@index([fromUserId])
+  @@index([toUserId])
+  @@index([fromUserId, toUserId])
 }
 
 enum AuthType {
