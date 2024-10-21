@@ -5,7 +5,7 @@ import prisma from "@repo/db/client";
 
 type TransactionStatus = "Sent" | "Received";
 
-interface Transaction {
+export interface Transaction {
   id: number;
   amount: string;
   date: string;

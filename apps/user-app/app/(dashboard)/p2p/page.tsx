@@ -1,9 +1,25 @@
 import { BalanceCard } from "@/components/custom/BalanceCard";
 import { SendCard } from "../../../src/components/custom/SendCard";
 import { getBalance } from "../../lib/actions/getBalance";
+import React, { Suspense } from "react";
+import Loader from "@/components/custom/Loader";
 
-export default async function () {
+export default function SendMoneyPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <SendMoneyContent />
+    </Suspense>
+  );
+}
+
+// Fetch balance data
+async function getBalanceData() {
   const balance = await getBalance();
+  return balance;
+}
+
+async function SendMoneyContent() {
+  const balance = await getBalanceData();
 
   return (
     <div className="w-full">

@@ -8,7 +8,10 @@ import { getRecentTransactions } from "../../lib/actions/getRecentTransactions";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "@/components/custom/Columns";
 import { getBalance } from "../../lib/actions/getBalance";
+import React, { Suspense } from "react";
+import Loader from "@/components/custom/Loader";
 
+// Fetch transactions and balance
 async function getTransactions() {
   const session = await getServerSession(authOptions);
 
@@ -20,17 +23,17 @@ async function getTransactions() {
       day: "numeric",
       month: "short",
       year: "numeric",
-    }); // Output: 19 Oct 2024
+    });
 
     const formattedTime = date.toLocaleTimeString("en-IN", {
       hour: "numeric",
       minute: "numeric",
       hour12: true,
-    }); // Output: 11:50 AM or 11:50 am
+    });
 
     return {
       id: t.id,
-      date: `${formattedTime} on ${formattedDate}`, // 11:50 am on 19 Oct 2024
+      date: `${formattedTime} on ${formattedDate}`,
       amount: t.type == "onRamp" ? `+${t.amount / 100}` : `-${t.amount / 100}`,
       status: t.status,
       provider: t.provider,
@@ -39,8 +42,21 @@ async function getTransactions() {
   });
 }
 
-export default async function () {
+async function getBalanceData() {
   const balance = await getBalance();
+  return balance;
+}
+
+export default function WalletPage() {
+  return (
+    <Suspense fallback={<Loader />}>
+      <WalletContent />
+    </Suspense>
+  );
+}
+
+async function WalletContent() {
+  const balance = await getBalanceData();
   const transactions = await getTransactions();
 
   return (
