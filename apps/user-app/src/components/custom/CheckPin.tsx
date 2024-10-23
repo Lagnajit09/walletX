@@ -14,10 +14,16 @@ interface CheckPinProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   addMoneyHandler: (pinIsValid: boolean) => void;
+  buttonText: string;
 }
 
-export function CheckPin({ open, setOpen, addMoneyHandler }: CheckPinProps) {
-  const [newVal, setNewVal] = useState("0000");
+export function CheckPin({
+  open,
+  setOpen,
+  addMoneyHandler,
+  buttonText,
+}: CheckPinProps) {
+  const [newVal, setNewVal] = useState("");
   const session = useSession();
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -30,6 +36,8 @@ export function CheckPin({ open, setOpen, addMoneyHandler }: CheckPinProps) {
             <Input
               id="name"
               value={newVal}
+              max={4}
+              maxLength={4}
               type="password"
               className="col-span-3 text-black"
               onChange={(e) => setNewVal(e.target.value)}
@@ -43,7 +51,7 @@ export function CheckPin({ open, setOpen, addMoneyHandler }: CheckPinProps) {
               setOpen(false);
             }}
           >
-            Add Money
+            {buttonText}
           </Button>
         </DialogFooter>
       </DialogContent>

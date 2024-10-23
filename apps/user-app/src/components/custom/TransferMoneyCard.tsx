@@ -75,6 +75,7 @@ export const TransferMoney = ({
         setOpen={setShowError}
       />
       <CheckPin
+        buttonText={title}
         open={showPinModal}
         setOpen={handleTriggerPinModal}
         addMoneyHandler={transferMoneyHandler}

@@ -72,6 +72,7 @@ export function SendCard() {
           setOpen={setShowError}
         />
         <CheckPin
+          buttonText="Send"
           open={showPinModal}
           setOpen={handleTriggerPinModal}
           addMoneyHandler={transferMoneyHandler}

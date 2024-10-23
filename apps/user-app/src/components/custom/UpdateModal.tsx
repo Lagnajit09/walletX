@@ -35,6 +35,7 @@ export function UpdateModal({ open, setOpen, field, value }: UpdateModalProps) {
             <Input
               id="name"
               value={newVal}
+              maxLength={field == "Pin" ? 4 : 200}
               type={field == "Pin" ? "password" : "text"}
               className="col-span-3 text-black"
               onChange={(e) => setNewVal(e.target.value)}
