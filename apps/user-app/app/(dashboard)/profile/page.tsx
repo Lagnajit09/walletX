@@ -32,17 +32,15 @@ function ProfileContent({ session }: { session: any }) {
         <p className="text-2xl text-[#0077b6] pt-8 mb-8 font-bold">
           Account Information
         </p>
-        <div className="flex gap-10">
+        <div className="w-full flex gap-10">
           <Account
             title="HDFC Bank"
-            icon={<HDFCLogoIcon />}
             acc_num="XXXX XXXX 1234"
             ifsc="HDFC0001234"
             balance="₹50,000.00"
           />
           <Account
             title="Axis Bank"
-            icon={<AxisLogoIcon />}
             acc_num="XXXX XXXX 7890"
             ifsc="AXS0006712"
             balance="₹20,000.00"

@@ -64,7 +64,7 @@ export const TransferMoney = ({
   return (
     <Card
       title={title}
-      classname="bg-[#023e8a] rounded-lg"
+      classname="bg-[#1e3a5f] rounded-lg border-none"
       titleClass="text-white font-semibold"
     >
       <ErrorModal
@@ -85,13 +85,15 @@ export const TransferMoney = ({
         <TextInput
           label={"Amount"}
           placeholder={"Amount"}
-          labelClass="text-white"
+          labelClass="text-gray-400"
+          classname="bg-[#112d4f] text-gray-200"
           onChange={(val) => {
             setValue(Number(val));
           }}
         />
-        <div className="py-4 text-left text-white">Bank</div>
+        <div className="py-4 text-left text-gray-400">Bank</div>
         <Select
+          classname="bg-[#112d4f] text-gray-200"
           onSelect={(value) => {
             setRedirectUrl(
               SUPPORTED_BANKS.find((x) => x.name === value)?.redirectUrl || ""
@@ -108,7 +110,7 @@ export const TransferMoney = ({
         <div className="flex justify-center pt-4">
           <Button
             disable={value === 0 ? true : false}
-            classname="bg-white text-black font-semibold hover:bg-gray-200"
+            classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200"
             onClick={async () => {
               if (session?.data?.user?.pin) {
                 handleTriggerPinModal();

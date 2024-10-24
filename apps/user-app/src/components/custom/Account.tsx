@@ -5,17 +5,15 @@ interface AccountProps {
   acc_num: string;
   ifsc: string;
   balance: string;
-  icon: React.ReactNode;
 }
 export default function AccountCard({
   title,
   acc_num,
   ifsc,
   balance,
-  icon,
 }: AccountProps) {
   return (
-    <Card className="bg-[#1e3a5f] border-none text-white">
+    <Card className="w-[50%] bg-[#1e3a5f] border-none text-white">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">{title}</CardTitle>
         <svg

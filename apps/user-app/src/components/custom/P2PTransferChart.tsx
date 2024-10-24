@@ -34,9 +34,9 @@ const chartConfig = {
 
 export default function P2PTransfersChart({ chartData }: any) {
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col bg-[#1e3a5f]">
       <CardHeader className="items-center pb-0">
-        <CardTitle>P2P Transactions</CardTitle>
+        <CardTitle className="text-white">P2P Transactions</CardTitle>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
@@ -62,7 +62,7 @@ export default function P2PTransfersChart({ chartData }: any) {
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
-        <div className="leading-none text-muted-foreground">
+        <div className="leading-none text-gray-300">
           Showing total P2P transactions
         </div>
       </CardFooter>

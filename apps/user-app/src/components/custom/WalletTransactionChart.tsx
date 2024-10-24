@@ -48,10 +48,10 @@ const chartConfig = {
 
 export default function WalletTransactionChart({ chartData }: any) {
   return (
-    <Card>
+    <Card className="bg-[#1e3a5f]">
       <CardHeader>
-        <CardTitle>Wallet Transactions</CardTitle>
-        <CardDescription>
+        <CardTitle className="text-white">Wallet Transactions</CardTitle>
+        <CardDescription className="text-gray-300">
           {chartData[0].month} - {chartData[chartData.length - 1].month}
         </CardDescription>
       </CardHeader>
@@ -94,7 +94,7 @@ export default function WalletTransactionChart({ chartData }: any) {
       <CardFooter>
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
+            <div className="flex items-center gap-2 leading-none text-gray-300">
               Showing total transactions for the last 6 months
             </div>
           </div>

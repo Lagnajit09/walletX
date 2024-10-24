@@ -51,10 +51,10 @@ export function SendCard() {
   };
 
   return (
-    <div className="w-[40%] mt-10">
+    <div className="w-[40%] my-10">
       <Card
-        title="Send"
-        classname="bg-[#023e8a] rounded-lg text-gray-300"
+        title="Send Money"
+        classname="bg-[#1e3a5f] border-none rounded-lg text-gray-300"
         titleClass="text-white font-semibold"
       >
         <ErrorModal
@@ -79,6 +79,7 @@ export function SendCard() {
         />
         <div className="min-w-72 pt-2">
           <TextInput
+            classname="bg-[#112d4f] text-gray-200"
             placeholder={"Number"}
             label="Number"
             onChange={(value) => {
@@ -87,6 +88,7 @@ export function SendCard() {
             labelClass="text-gray-200"
           />
           <TextInput
+            classname="bg-[#112d4f] text-gray-200"
             placeholder={"Amount"}
             label="Amount"
             onChange={(value) => {
@@ -97,7 +99,7 @@ export function SendCard() {
           <div className="pt-4 flex justify-center">
             <Button
               disable={amount === 0 || number === "" ? true : false}
-              classname="bg-white text-black font-semibold hover:bg-gray-200"
+              classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200"
               onClick={async () => {
                 if (session?.data?.user?.pin) {
                   handleTriggerPinModal();

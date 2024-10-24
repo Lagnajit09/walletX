@@ -32,7 +32,7 @@ const Appbar = ({ user, onSignin, onSignout, path }: AppbarProps) => {
       </Link>
       <div className="flex flex-col justify-center pt-2">
         <Button
-          classname="bg-[#023e8a] text-white"
+          classname="bg-[#4A9FF5] text-white"
           onClick={user ? onSignout : onSignin}
         >
           {user ? "Logout" : "Login"}

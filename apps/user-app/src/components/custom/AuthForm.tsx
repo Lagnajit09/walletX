@@ -49,6 +49,7 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
       <div className="w-[70%] m-auto">
         {newUser && (
           <TextInput
+            classname="bg-[#193f6e] text-gray-200"
             placeholder="Name"
             onChange={(value) => {
               setName(value);
@@ -56,6 +57,7 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
           />
         )}
         <TextInput
+          classname="bg-[#193f6e] text-gray-200"
           inputType="tel"
           placeholder="Phone Number"
           onChange={(value) => {
@@ -63,6 +65,7 @@ const AuthForm = ({ newUser }: { newUser?: boolean }) => {
           }}
         />
         <TextInput
+          classname="bg-[#193f6e] text-gray-200"
           inputType="password"
           placeholder="Password"
           onChange={(value) => {
