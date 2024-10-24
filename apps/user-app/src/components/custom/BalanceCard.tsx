@@ -1,4 +1,5 @@
-import { Card } from "@repo/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Lock, Unlock } from "lucide-react";
 
 export const BalanceCard = ({
   amount,
@@ -7,26 +8,51 @@ export const BalanceCard = ({
   amount: number;
   locked: number;
 }) => {
+  function formatNumber(number: number) {
+    return number.toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  }
   return (
-    <Card
-      title={"Balance"}
-      classname="bg-[#023e8a] rounded-lg text-gray-300"
-      titleClass="text-white font-semibold"
-    >
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>Unlocked balance</div>
-        <div className="text-gray-200 font-semibold">{amount / 100} INR</div>
-      </div>
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>Total Locked Balance</div>
-        <div className="text-gray-200 font-semibold">{locked / 100} INR</div>
-      </div>
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>Total Balance</div>
-        <div className="text-gray-200 font-semibold">
-          {(locked + amount) / 100} INR
+    <Card className="bg-[#1e3a5f] border-none text-white">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-[#4a9ff5]">
+          Balance
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Lock className="h-5 w-5 text-yellow-400" />
+              <span className="text-sm text-gray-300">Locked Balance</span>
+            </div>
+            <span className="text-lg font-medium">
+              ₹ {formatNumber(locked / 100)}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Unlock className="h-5 w-5 text-green-400" />
+              <span className="text-sm text-gray-300">Unlocked Balance</span>
+            </div>
+            <span className="text-lg font-medium">
+              ₹ {formatNumber(amount / 100)}
+            </span>
+          </div>
+          <div className="pt-4 border-t border-gray-600">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-300">
+                Total Balance
+              </span>
+              <span className="text-2xl font-bold text-[#4a9ff5]">
+                ₹ {formatNumber((locked + amount) / 100)}
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
+      </CardContent>
     </Card>
   );
 };

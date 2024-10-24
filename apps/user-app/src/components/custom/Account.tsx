@@ -1,32 +1,53 @@
-import { HDFCLogoIcon } from "@/constants/Icons";
-import { Card } from "@repo/ui/card";
-import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const Account = () => {
+interface AccountProps {
+  title: string;
+  acc_num: string;
+  ifsc: string;
+  balance: string;
+  icon: React.ReactNode;
+}
+export default function AccountCard({
+  title,
+  acc_num,
+  ifsc,
+  balance,
+  icon,
+}: AccountProps) {
   return (
-    <Card
-      title={"HDFC Bank"}
-      classname="bg-[#39708e] rounded-lg text-gray-300 w-[45%]"
-      titleClass="text-white font-semibold"
-    >
-      <HDFCLogoIcon />
-
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>Acount Number: </div>
-        <div className="text-gray-200 font-semibold tracking-widest">
-          •••••••• 4785
+    <Card className="bg-[#1e3a5f] border-none text-white">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <CardTitle className="text-2xl font-bold">{title}</CardTitle>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          className="h-8 w-8 text-[#4a9ff5]"
+        >
+          <rect width="20" height="14" x="2" y="5" rx="2" />
+          <path d="M2 10h20" />
+        </svg>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <p className="text-sm text-gray-400">Account Number</p>
+            <p className="text-lg font-medium">{acc_num}</p>
+          </div>
+          <div className="space-y-1">
+            <p className="text-sm text-gray-400">IFSC Code</p>
+            <p className="text-lg font-medium">{ifsc}</p>
+          </div>
+          <div className="col-span-2 space-y-1">
+            <p className="text-sm text-gray-400">Balance</p>
+            <p className="text-2xl font-bold text-[#4a9ff5]">{balance}</p>
+          </div>
         </div>
-      </div>
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>IFSC Code: </div>
-        <div className="text-gray-200 font-semibold">ABC8125L</div>
-      </div>
-      <div className="flex justify-between border-b border-slate-300 py-2">
-        <div>Balance: </div>
-        <div className="text-gray-200 font-semibold">50000 INR</div>
-      </div>
+      </CardContent>
     </Card>
   );
-};
-
-export default Account;
+}
