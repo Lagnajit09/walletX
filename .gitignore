@@ -36,3 +36,11 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+
+# Deployment - Firebase
+firebase.json
+.firebaserc
+functions
+.github
+public

@@ -16,20 +16,22 @@ export default async function DashboardPage() {
 
   return (
     <div className="my-8">
-      <h1 className="text-4xl font-bold">Welcome, {session.user.name}!</h1>
+      <h1 className="text-2xl md:text-4xl font-bold">
+        Welcome, {session.user.name}!
+      </h1>
       <div className="mt-8 w-full">
-        <div className="w-[35%]">
+        <div className="w-[95%] md:w-[35%]">
           <Suspense fallback={<Loader />}>
             <BalanceContent />
           </Suspense>
         </div>
-        <div className="mt-5 flex gap-10">
-          <div className="w-[45%]">
+        <div className="mt-5 md:flex gap-10">
+          <div className="w-[95%] md:w-[45%] mb-5 md:mb-0">
             <Suspense fallback={<Loader />}>
               <WalletTransactionContent />
             </Suspense>
           </div>
-          <div className="w-[45%]">
+          <div className="w-[95%] md:w-[45%]">
             <Suspense fallback={<Loader />}>
               <P2PTransfersContent />
             </Suspense>

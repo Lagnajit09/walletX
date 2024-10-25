@@ -26,10 +26,12 @@ async function SendMoneyContent() {
       <div className="text-4xl text-[#00b4d8] py-8 mb-0 font-bold">
         Send Money
       </div>
-      <div className="w-[40%]">
+      <div className="w-[95%] md:w-[40%]">
         <BalanceCard amount={balance.amount} locked={balance.locked} />
       </div>
-      <SendCard />
+      <div className="w-[95%] md:w-[40%]">
+        <SendCard />
+      </div>
     </div>
   );
 }

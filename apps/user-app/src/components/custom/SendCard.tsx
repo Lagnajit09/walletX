@@ -51,7 +51,7 @@ export function SendCard() {
   };
 
   return (
-    <div className="w-[40%] my-10">
+    <div className="my-10">
       <Card
         title="Send Money"
         classname="bg-[#1e3a5f] border-none rounded-lg text-gray-300"
@@ -77,7 +77,7 @@ export function SendCard() {
           setOpen={handleTriggerPinModal}
           addMoneyHandler={transferMoneyHandler}
         />
-        <div className="min-w-72 pt-2">
+        <div className=" pt-2">
           <TextInput
             classname="bg-[#112d4f] text-gray-200"
             placeholder={"Number"}

@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AccountCardIcon } from "../constants/Icons";
 
 interface AccountProps {
   title: string;
@@ -13,22 +14,10 @@ export default function AccountCard({
   balance,
 }: AccountProps) {
   return (
-    <Card className="w-[50%] bg-[#1e3a5f] border-none text-white">
+    <Card className="w-[95%] md:w-[50%] bg-[#1e3a5f] border-none text-white">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-2xl font-bold">{title}</CardTitle>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth="2"
-          className="h-8 w-8 text-[#4a9ff5]"
-        >
-          <rect width="20" height="14" x="2" y="5" rx="2" />
-          <path d="M2 10h20" />
-        </svg>
+        <AccountCardIcon />
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
