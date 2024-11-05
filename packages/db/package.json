@@ -1,6 +1,6 @@
 {
   "name": "@lm.swiftpay/db",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Database package for SwiftPay",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -15,6 +15,9 @@
     "db:generate": "npx prisma generate",
     "db:push": "npx prisma db push --skip-generate",
     "postinstall": "npx prisma generate"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",

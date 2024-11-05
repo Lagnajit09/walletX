@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "npx prisma generate && esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --external:@lm.swiftpay/db --external:express --external:cors --external:zod --external:@prisma/client",
+    "build": "cd ../../packages/db && prisma generate && cd ../../apps/bank-webhook && esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --external:@lm.swiftpay/db --external:express --external:cors --external:zod --external:@prisma/client",
     "start": "node dist/index.js",
     "lint": "eslint src/**/*.ts"
   },
@@ -14,6 +14,7 @@
   "license": "ISC",
   "dependencies": {
     "@lm.swiftpay/db": "*",
+    "@prisma/client": "^5.0.0",
     "cors": "^2.8.5",
     "express": "^4.19.1",
     "zod": "^3.23.8",

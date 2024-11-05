@@ -10,8 +10,8 @@
       "config": {
         "includeFiles": [
           "dist/**",
-          "../../packages/db/node_modules/.prisma/**",
-          "../../packages/db/prisma/**"
+          "../../packages/db/prisma/**",
+          "../../packages/db/node_modules/.prisma/**"
         ]
       }
     }
