@@ -1,7 +1,8 @@
 {
-  "name": "@repo/ui",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@lm.swiftpay/ui",
+  "version": "1.0.0",
+  "private": false,
+  "description": "UI components for SwiftPay",
   "exports": {
     "./button": "./src/button.tsx",
     "./card": "./src/card.tsx",
@@ -11,9 +12,14 @@
     "./select": "./src/Select.tsx",
     "./textinput": "./src/TextInput.tsx"
   },
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "lint": "eslint . --max-warnings 0",
-    "generate:component": "turbo gen react-component"
+    "generate:component": "turbo gen react-component",
+    "build": "tsc",
+    "prepublishOnly": "npm run build"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
@@ -29,5 +35,8 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-router-dom": "^6.26.1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

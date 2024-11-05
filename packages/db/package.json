@@ -1,21 +1,33 @@
 {
-  "name": "@repo/db",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "@lm.swiftpay/db",
+  "version": "1.0.1",
+  "description": "Database package for SwiftPay",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "private": false,
+  "files": [
+    "dist/",
+    "prisma/",
+    "README.md"
+  ],
   "scripts": {
+    "build": "tsc",
+    "generate": "prisma generate",
+    "prepublishOnly": "npm run build && npm run generate",
+    "postinstall": "prisma generate",
+    "dev": "tsc -w",
+    "lint": "eslint src/**/*.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "@prisma/client": "^5.17.0"
+    "@prisma/client": "^5.0.0"
   },
-  "exports": {
-    "./client": "./src/index.ts"
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "prisma": "^5.0.0",
+    "typescript": "^5.0.0"
   },
-  "prisma": {
-    "seed": "ts-node ./prisma/seed.ts"
+  "publishConfig": {
+    "access": "public"
   }
 }
