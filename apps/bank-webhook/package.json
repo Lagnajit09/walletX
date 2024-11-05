@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --external:@repo/db",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --external:@lm.swiftpay/db --external:express --external:cors --external:zod",
     "start": "node dist/index.js",
     "lint": "eslint src/**/*.ts"
   },
@@ -16,7 +16,8 @@
     "@lm.swiftpay/db": "*",
     "cors": "^2.8.5",
     "express": "^4.19.1",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "dotenv": "^16.0.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
