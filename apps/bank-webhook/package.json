@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --external:@lm.swiftpay/db --external:express --external:cors --external:zod",
+    "build": "npx prisma generate && esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --external:@lm.swiftpay/db --external:express --external:cors --external:zod --external:@prisma/client",
     "start": "node dist/index.js",
     "lint": "eslint src/**/*.ts"
   },

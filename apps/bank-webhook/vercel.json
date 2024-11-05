@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../.. && npm install && npx turbo run build --filter=bank-webhook...",
+  "buildCommand": "cd ../.. && npm install && cd packages/db && npx prisma generate && cd ../../apps/bank-webhook && npx turbo run build --filter=bank-webhook...",
   "outputDirectory": "dist",
   "installCommand": "npm install",
   "framework": null,
@@ -9,7 +9,9 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "dist/**"
+          "dist/**",
+          "../../packages/db/node_modules/.prisma/**",
+          "../../packages/db/prisma/**"
         ]
       }
     }
@@ -29,8 +31,5 @@
       "src": "/(.*)",
       "dest": "dist/index.js"
     }
-  ],
-  "env": {
-    "NODE_ENV": "production"
-  }
+  ]
 }

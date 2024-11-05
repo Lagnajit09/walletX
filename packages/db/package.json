@@ -1,6 +1,6 @@
 {
   "name": "@lm.swiftpay/db",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "description": "Database package for SwiftPay",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -11,13 +11,10 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc",
-    "generate": "prisma generate",
-    "prepublishOnly": "npm run build && npm run generate",
-    "prepare": "npm run generate",
-    "dev": "tsc -w",
-    "lint": "eslint src/**/*.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "npx prisma generate && tsc",
+    "db:generate": "npx prisma generate",
+    "db:push": "npx prisma db push --skip-generate",
+    "postinstall": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.0.0",

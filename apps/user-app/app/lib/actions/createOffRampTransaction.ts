@@ -29,12 +29,15 @@ export async function createOffRampTransaction(
     },
   });
 
-  const res = await axios.post("http://localhost:3003/hdfcWebhook", {
-    token: token,
-    user_identifier: Number(userId),
-    amount: amount * 100,
-    type: "debit",
-  });
+  const res = await axios.post(
+    "https://bank-webhook-rosy.vercel.app/hdfcWebhook",
+    {
+      token: token,
+      user_identifier: Number(userId),
+      amount: amount * 100,
+      type: "debit",
+    }
+  );
 
   return {
     message: res.data,
