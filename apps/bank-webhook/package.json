@@ -2,24 +2,31 @@
   "name": "bank-webhook",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "build": "npx esbuild ./src/index.ts --bundle --platform=node --outfile=dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --external:@repo/db",
     "start": "node dist/index.js",
-    "dev": "npm run build && npm run start"
+    "lint": "eslint src/**/*.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@repo/db": "*",
-    "@types/express": "^4.17.21",
+    "@lm.swiftpay/db": "*",
     "cors": "^2.8.5",
-    "esbuild": "^0.20.2",
     "express": "^4.19.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/cors": "^2.8.17"
+    "@types/cors": "^2.8.17",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.0.0",
+    "esbuild": "^0.20.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

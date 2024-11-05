@@ -1,6 +1,6 @@
 "use server";
 
-import prisma from "@repo/db/client";
+import prisma from "@lm.swiftpay/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import axios from "axios";

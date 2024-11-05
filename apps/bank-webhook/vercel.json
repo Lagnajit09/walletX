@@ -1,16 +1,18 @@
 {
-    "version": 2,
-    "builds": [
-      {
-        "src": "src/index.ts",
-        "use": "@vercel/node"
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "src/index.ts"
-      }
-    ],
-    "outputDirectory": "dist"
-  }
+  "buildCommand": "cd ../.. && npm install && npx turbo run build --filter=bank-webhook...",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": null,
+  "builds": [
+    {
+      "src": "dist/index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "dist/index.js"
+    }
+  ]
+}

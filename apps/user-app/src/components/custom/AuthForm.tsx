@@ -1,6 +1,6 @@
 "use client";
-import { Button } from "@repo/ui/button";
-import { TextInput } from "@repo/ui/textinput";
+import { Button } from "@lm.swiftpay/ui/button";
+import { TextInput } from "@lm.swiftpay/ui/textinput";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import signup from "../../../app/lib/actions/signup";

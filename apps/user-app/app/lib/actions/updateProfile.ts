@@ -1,6 +1,6 @@
 "use server";
 
-import db from "@repo/db/client";
+import db from "@lm.swiftpay/db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 

@@ -1,4 +1,4 @@
-import db from "@repo/db/client";
+import db from "@lm.swiftpay/db";
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";

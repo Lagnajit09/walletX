@@ -1,6 +1,6 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
-import Appbar from "@repo/ui/appbar";
+import Appbar from "@lm.swiftpay/ui/appbar";
 import { usePathname, useRouter } from "next/navigation";
 import Loader from "./Loader";
 

@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@repo/ui/button";
+import { Button } from "@lm.swiftpay/ui/button";
 import React from "react";
 import AuthForm from "../../../src/components/custom/AuthForm";
 import { signIn } from "next-auth/react";
