@@ -1,31 +1,33 @@
-import { BrowserRouter } from "react-router-dom";
 import { Button } from "./button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 
 interface AppbarProps {
   user?: {
     name?: string | null;
   };
-  onSignin: any;
-  onSignout: any;
-  path: string;
+  onSignin: () => void;
+  onSignout: () => void;
 }
 
-const Appbar = ({ user, onSignin, onSignout, path }: AppbarProps) => {
+const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
+  const pathname = usePathname();
   const [isAuthPage, setIsAuthPage] = useState(false);
 
-  // useEffect to update `isAuthPage` based on the current location
+  // useEffect to update `isAuthPage` based on the current path
   useEffect(() => {
     const authRoutes = ["/signin", "/signup"];
-    setIsAuthPage(authRoutes.includes(path));
-  }, [path]); // Run this effect whenever `location.pathname` changes
+    setIsAuthPage(authRoutes.includes(pathname || ""));
+  }, [pathname]);
 
   return (
     <div
-      className={`flex justify-between border-b border-gray-700 px-4 ${!isAuthPage ? "fixed" : ""} w-full bg-[#0b2545]`}
+      className={`flex justify-between border-b border-gray-700 px-4 ${
+        !isAuthPage ? "fixed" : ""
+      } w-full bg-[#0b2545]`}
     >
-      <Link href={"/"}>
+      <Link href="/">
         <h1 className="text-xl font-bold flex flex-col justify-center h-full">
           SwiftPay
         </h1>
@@ -42,8 +44,5 @@ const Appbar = ({ user, onSignin, onSignout, path }: AppbarProps) => {
   );
 };
 
-export default ({ user, onSignin, onSignout, path }: AppbarProps) => (
-  <BrowserRouter>
-    <Appbar onSignin={onSignin} onSignout={onSignout} user={user} path={path} />
-  </BrowserRouter>
-);
+// Export directly since we don't need the wrapper anymore
+export default Appbar;

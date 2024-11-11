@@ -1,8 +1,9 @@
 "use client";
 import { signOut, useSession } from "next-auth/react";
-import Appbar from "@lm.swiftpay/ui/appbar";
+
 import { usePathname, useRouter } from "next/navigation";
 import Loader from "./Loader";
+import AppbarWrapper from "@/src/custom-ui/Appbar";
 
 export function AppbarClient() {
   const session = useSession();
@@ -13,13 +14,12 @@ export function AppbarClient() {
   if (!session) return <Loader />;
 
   return (
-    <Appbar
+    <AppbarWrapper
       onSignin={() => router.push("/signin")}
       onSignout={async () => {
         await signOut({ callbackUrl: "/signin" });
       }}
       user={session.data?.user}
-      path={path}
     />
   );
 }
