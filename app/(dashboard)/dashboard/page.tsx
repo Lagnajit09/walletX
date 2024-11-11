@@ -3,16 +3,28 @@ import { authOptions } from "../../lib/auth";
 import { Suspense } from "react";
 import Loader from "@/src/components/custom/Loader";
 import { BalanceCard } from "@/src/components/custom/BalanceCard";
-import WalletTransactionChart from "@/src/components/custom/WalletTransactionChart";
-import P2PTransfersChart from "@/src/components/custom/P2PTransferChart";
 import { getBalance } from "../../lib/actions/getBalance";
 import { getChartData } from "../../lib/actions/getChartData";
 import { getP2PChartData } from "../../lib/actions/getP2PChartData";
+import {
+  ClientP2PChart,
+  ClientWalletChart,
+} from "@/src/components/custom/ClientCharts";
+
+// Add this at the top level to ensure proper serialization
+const serializeData = (data: any) => {
+  return JSON.parse(JSON.stringify(data));
+};
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions);
 
   if (!session || !session.user) return <p>Unauthorized Access!</p>;
+
+  // Fetch all data at the parent level
+  const balance = serializeData(await getBalance());
+  const walletTxnData = serializeData(await getChartData());
+  const p2pTransferData = serializeData(await getP2PChartData());
 
   return (
     <div className="my-8">
@@ -22,18 +34,18 @@ export default async function DashboardPage() {
       <div className="mt-8 w-full">
         <div className="w-[95%] md:w-[35%]">
           <Suspense fallback={<Loader />}>
-            <BalanceContent />
+            <BalanceCard amount={balance.amount} locked={balance.locked} />
           </Suspense>
         </div>
         <div className="mt-5 md:flex gap-10">
           <div className="w-[95%] md:w-[45%] mb-5 md:mb-0">
             <Suspense fallback={<Loader />}>
-              <WalletTransactionContent />
+              <ClientWalletChart data={walletTxnData} />
             </Suspense>
           </div>
           <div className="w-[95%] md:w-[45%]">
             <Suspense fallback={<Loader />}>
-              <P2PTransfersContent />
+              <ClientP2PChart data={p2pTransferData} />
             </Suspense>
           </div>
         </div>
@@ -41,21 +53,3 @@ export default async function DashboardPage() {
     </div>
   );
 }
-
-// Separate component for rendering balance card
-const BalanceContent = async () => {
-  const balance = await getBalance();
-  return <BalanceCard amount={balance.amount} locked={balance.locked} />;
-};
-
-// Separate component for rendering wallet transaction chart
-const WalletTransactionContent = async () => {
-  const walletTxnData = await getChartData();
-  return <WalletTransactionChart chartData={walletTxnData} />;
-};
-
-// Separate component for rendering P2P transfers chart
-const P2PTransfersContent = async () => {
-  const p2pTransferData = await getP2PChartData();
-  return <P2PTransfersChart chartData={p2pTransferData} />;
-};
