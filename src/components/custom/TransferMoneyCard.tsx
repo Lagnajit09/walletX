@@ -7,6 +7,7 @@ import { TextInput } from "@/src/custom-ui/TextInput";
 import { useSession } from "next-auth/react";
 import ErrorModal from "./ErrorModal";
 import { CheckPin } from "./CheckPin";
+import { useRouter } from "next/navigation";
 
 const SUPPORTED_BANKS = [
   {
@@ -30,6 +31,7 @@ export const TransferMoney = ({
   callbackFunc,
   btnText,
 }: TransferMoneyProps) => {
+  const router = useRouter();
   const [redirectUrl, setRedirectUrl] = useState(
     SUPPORTED_BANKS[0]?.redirectUrl
   );
@@ -58,7 +60,7 @@ export const TransferMoney = ({
     }
 
     await callbackFunc(provider, value);
-    window.location.reload();
+    router.refresh();
   };
 
   return (
