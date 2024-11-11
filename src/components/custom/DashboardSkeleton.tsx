@@ -1,4 +1,3 @@
-// src/components/custom/DashboardSkeleton.tsx
 "use client";
 
 import { Card, CardContent, CardHeader } from "../ui/card";

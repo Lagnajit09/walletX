@@ -1,8 +1,6 @@
-// app/(dashboard)/dashboard/page.tsx
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { Suspense } from "react";
-import Loader from "@/src/components/custom/Loader";
 import { BalanceCard } from "@/src/components/custom/BalanceCard";
 import {
   ClientP2PChart,

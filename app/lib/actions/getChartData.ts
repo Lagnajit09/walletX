@@ -2,88 +2,139 @@ import prisma from "../db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import { chartDataProps } from "@/src/components/custom/WalletTransactionChart";
+import { unstable_noStore as noStore } from "next/cache";
 
-// Helper function to get month name
-function getMonthName(monthIndex: number) {
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  return months[monthIndex]; // 0-based index for months
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+] as const;
+
+function normalizeMonth(
+  year: number,
+  month: number
+): { year: number; month: number } {
+  let normalizedYear = year;
+  let normalizedMonth = month;
+
+  if (month < 0) {
+    const yearsToSubtract = Math.floor(Math.abs(month) / 12) + 1;
+    normalizedYear -= yearsToSubtract;
+    normalizedMonth = 12 + (month % 12);
+  } else if (month > 11) {
+    normalizedYear += Math.floor(month / 12);
+    normalizedMonth = month % 12;
+  }
+
+  return { year: normalizedYear, month: normalizedMonth };
 }
 
-// Helper function to get the start and end of a month
 function getMonthRange(year: number, month: number) {
-  const startDate = new Date(year, month, 1); // First day of the month
-  const endDate = new Date(year, month + 1, 0); // Last day of the month (0th day of the next month is the last day of this month)
-  endDate.setHours(23, 59, 59, 999); // Set end of day time for last day of the month
+  const { year: normalizedYear, month: normalizedMonth } = normalizeMonth(
+    year,
+    month
+  );
+
+  const startDate = new Date(normalizedYear, normalizedMonth, 1);
+  startDate.setHours(0, 0, 0, 0);
+
+  const endDate = new Date(normalizedYear, normalizedMonth + 1, 0);
+  endDate.setHours(23, 59, 59, 999);
+
   return { startDate, endDate };
 }
 
-// Fetch chart data for Add and Withdraw transactions
-export const getChartData = async (): Promise<chartDataProps[]> => {
-  const currentDate = new Date();
-  const session = await getServerSession(authOptions);
-  const userId = session.user.id;
+export async function getChartData(): Promise<chartDataProps[]> {
+  noStore(); // Disable caching
 
-  // Generate data for the last 6 months
-  const chartData = [];
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session?.user?.id) {
+      throw new Error("Unauthorized access");
+    }
 
-  for (let i = 5; i >= 0; i--) {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth() - i;
+    const userId = session.user.id;
+    const currentDate = new Date();
+    const chartData: chartDataProps[] = [];
 
-    const { startDate, endDate } = getMonthRange(year, month);
+    // Generate data for the last 6 months
+    for (let i = 5; i >= 0; i--) {
+      const targetMonth = currentDate.getMonth() - i;
+      const targetYear = currentDate.getFullYear();
 
-    // OnRampTransaction (Add to Wallet)
-    const onRamp = await prisma.onRampTransaction.aggregate({
-      _sum: { amount: true },
-      where: {
-        userId,
-        startTime: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
-    });
+      const { startDate, endDate } = getMonthRange(targetYear, targetMonth);
 
-    // OffRampTransaction (Withdraw from Wallet)
-    const offRamp = await prisma.offRampTransaction.aggregate({
-      _sum: { amount: true },
-      where: {
-        userId,
-        startTime: {
-          gte: startDate,
-          lte: endDate,
-        },
-      },
-    });
+      const [onRampData, offRampData] = await Promise.all([
+        // OnRampTransaction (Add to Wallet)
+        prisma.onRampTransaction.aggregate({
+          _sum: { amount: true },
+          where: {
+            userId,
+            startTime: {
+              gte: startDate,
+              lte: endDate,
+            },
+            status: "Success", // Add status check if applicable
+          },
+        }),
 
-    // Create a data point for each month
-    chartData.push({
-      month: getMonthName(startDate.getMonth()), // Convert month index to name
-      added: (onRamp._sum.amount || 0) / 100, // Add to Wallet, assuming amounts are stored in cents
-      withdrawn: (offRamp._sum.amount || 0) / 100, // Withdraw from Wallet
-    });
+        // OffRampTransaction (Withdraw from Wallet)
+        prisma.offRampTransaction.aggregate({
+          _sum: { amount: true },
+          where: {
+            userId,
+            startTime: {
+              gte: startDate,
+              lte: endDate,
+            },
+            status: "Success", // Add status check if applicable
+          },
+        }),
+      ]);
+
+      const { month } = normalizeMonth(targetYear, targetMonth);
+
+      chartData.push({
+        month: MONTHS[month],
+        added: Number((onRampData._sum?.amount || 0) / 100) || 0,
+        withdrawn: Number((offRampData._sum.amount || 0) / 100) || 0,
+      });
+    }
+
+    // Ensure we have data for all months
+    if (chartData.length !== 6) {
+      const missingMonthCount = 6 - chartData.length;
+      const currentMonth = currentDate.getMonth();
+
+      for (let i = 0; i < missingMonthCount; i++) {
+        const monthIndex = (currentMonth - (5 - i) + 12) % 12;
+        chartData.unshift({
+          month: MONTHS[monthIndex],
+          added: 0,
+          withdrawn: 0,
+        });
+      }
+    }
+
+    return chartData;
+  } catch (error) {
+    console.error("Error fetching chart data:", error);
+
+    // Return empty data for all months if there's an error
+    const currentMonth = new Date().getMonth();
+    return Array.from({ length: 6 }, (_, i) => ({
+      month: MONTHS[(currentMonth - 5 + i + 12) % 12],
+      added: 0,
+      withdrawn: 0,
+    }));
   }
-
-  return chartData;
-  //   return [
-  //     { month: "January", desktop: 186, mobile: 80 },
-  //     { month: "February", desktop: 305, mobile: 200 },
-  //     { month: "March", desktop: 237, mobile: 120 },
-  //     { month: "April", desktop: 73, mobile: 190 },
-  //     { month: "May", desktop: 209, mobile: 130 },
-  //     { month: "June", desktop: 214, mobile: 140 },
-  //   ];
-};
+}
