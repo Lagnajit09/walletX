@@ -1,4 +1,4 @@
-import { Card } from "@lm.swiftpay/ui/card";
+import { Card } from "@/src/custom-ui/card";
 
 export const OnRampTransactions = ({
   transactions,

@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/src/components/ui/alert-dialog";
 
 interface ErrorModalProps {
   open: boolean;

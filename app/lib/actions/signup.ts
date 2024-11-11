@@ -1,6 +1,6 @@
 "use server";
 import bcrypt from "bcrypt";
-import db from "@lm.swiftpay/db";
+import db from "../db";
 
 export default async function signup(
   name: string,

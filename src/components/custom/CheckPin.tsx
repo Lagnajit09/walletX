@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/src/components/ui/dialog";
+import { Input } from "@/src/components/ui/input";
 import { useState } from "react";
 import { useSession } from "next-auth/react";
 

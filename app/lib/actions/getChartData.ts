@@ -1,7 +1,7 @@
-import prisma from "@lm.swiftpay/db";
+import prisma from "../db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
-import { chartDataProps } from "@/components/custom/WalletTransactionChart";
+import { chartDataProps } from "@/src/components/custom/WalletTransactionChart";
 
 // Helper function to get month name
 function getMonthName(monthIndex: number) {

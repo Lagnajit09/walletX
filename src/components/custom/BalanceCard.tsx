@@ -1,4 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
 import { Lock, Unlock } from "lucide-react";
 
 export const BalanceCard = ({

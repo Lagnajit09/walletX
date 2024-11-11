@@ -1,4 +1,4 @@
-import db from "@lm.swiftpay/db";
+import db from "../db";
 
 export async function getRecentTransactions(userId: number) {
   const today = new Date();

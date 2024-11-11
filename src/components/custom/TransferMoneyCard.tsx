@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "@lm.swiftpay/ui/button";
-import { Card } from "@lm.swiftpay/ui/card";
-import { Select } from "@lm.swiftpay/ui/select";
+import { Button } from "@/src/custom-ui/button";
+import { Card } from "@/src/custom-ui/card";
+import { Select } from "@/src/custom-ui/Select";
 import { useState } from "react";
-import { TextInput } from "@lm.swiftpay/ui/textinput";
+import { TextInput } from "@/src/custom-ui/TextInput";
 import { useSession } from "next-auth/react";
 import ErrorModal from "./ErrorModal";
 import { CheckPin } from "./CheckPin";

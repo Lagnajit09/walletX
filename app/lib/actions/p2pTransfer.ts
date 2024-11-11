@@ -1,7 +1,7 @@
 "use server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
-import prisma from "@lm.swiftpay/db";
+import prisma from "../db";
 
 type TransactionStatus = "Sent" | "Received";
 
@@ -34,7 +34,9 @@ export async function p2pTransfer(to: string, amount: number) {
     };
   }
   await prisma.$transaction(async (tx) => {
-    await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(from)} FOR UPDATE`;
+    await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(
+      from
+    )} FOR UPDATE`;
 
     const fromBalance = await tx.balance.findUnique({
       where: { userId: Number(from) },

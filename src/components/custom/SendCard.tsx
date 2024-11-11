@@ -1,7 +1,7 @@
 "use client";
-import { Button } from "@lm.swiftpay/ui/button";
-import { Card } from "@lm.swiftpay/ui/card";
-import { TextInput } from "@lm.swiftpay/ui/textinput";
+import { Button } from "@/src/custom-ui/button";
+import { Card } from "@/src/custom-ui/card";
+import { TextInput } from "@/src/custom-ui/TextInput";
 import { useState } from "react";
 import { p2pTransfer } from "../../../app/lib/actions/p2pTransfer";
 import { useSession } from "next-auth/react";
