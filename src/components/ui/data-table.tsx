@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/src/components/ui/table";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -88,15 +88,15 @@ export function DataTable<TData, TValue>({
                       cell.getValue() === "Success"
                         ? "text-green-600 font-semibold" // Apply green color for success status
                         : cell.column.id === "status" &&
-                            cell.getValue() === "Failure"
-                          ? "text-red-600 font-semibold" // Apply red color for failure status
-                          : cell.column.id === "amount" &&
-                              row.original.type === "onRamp"
-                            ? "text-green-600" // Apply green for onRamp (incoming) transactions
-                            : cell.column.id === "amount" &&
-                                row.original.type === "offRamp"
-                              ? "text-red-500" // Apply red for non-onRamp (outgoing) transactions
-                              : ""
+                          cell.getValue() === "Failure"
+                        ? "text-red-600 font-semibold" // Apply red color for failure status
+                        : cell.column.id === "amount" &&
+                          row.original.type === "onRamp"
+                        ? "text-green-600" // Apply green for onRamp (incoming) transactions
+                        : cell.column.id === "amount" &&
+                          row.original.type === "offRamp"
+                        ? "text-red-500" // Apply red for non-onRamp (outgoing) transactions
+                        : ""
                     }
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
