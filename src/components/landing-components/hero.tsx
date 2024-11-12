@@ -51,7 +51,7 @@ const Hero = ({ user }: Props) => {
         transition={{ repeat: Infinity, duration: 5 }}
         className="absolute inset-0 z-0"
       >
-        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/6207714/pexels-photo-6207714.jpeg?auto=compress&cs=tinysrgb&w=600')] bg-cover bg-center opacity-75 blur-[2px]"></div>
+        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/12935076/pexels-photo-12935076.jpeg?auto=compress&cs=tinysrgb&w=600')] bg-cover bg-center opacity-75 blur-[2px]"></div>
       </motion.div>
     </>
   );
