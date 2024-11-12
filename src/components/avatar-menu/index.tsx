@@ -9,10 +9,7 @@ import {
 import {
   Menubar,
   MenubarContent,
-  MenubarItem,
   MenubarMenu,
-  MenubarSeparator,
-  MenubarShortcut,
   MenubarTrigger,
 } from "@/src/components/ui/menubar";
 import { LogOut, Settings } from "lucide-react";
@@ -25,7 +22,7 @@ interface AvatarMenuProps {
 
 export const AvatarMenu = ({ name, image }: AvatarMenuProps) => {
   const handleLogout = async () => {
-    await signOut();
+    await signOut({ callbackUrl: "/auth" });
   };
 
   return (

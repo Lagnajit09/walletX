@@ -32,7 +32,7 @@ const Hero = ({ user }: Props) => {
           <div className="space-x-4">
             <Link
               className="inline-flex h-10 items-center justify-center rounded-md bg-[#4A9FF5] px-8 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-[#3a8fe5] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#4A9FF5]"
-              href={user ? "/dashboard" : "/signup"}
+              href={user ? "/dashboard" : "/auth"}
             >
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
