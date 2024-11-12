@@ -1,0 +1,8 @@
+{
+  "extends": ["next/core-web-vitals", "next/typescript"],
+    "rules": {
+      "@typescript-eslint/no-explicit-any": "error",
+      "import/no-anonymous-default-export": "error",
+      "react/display-name": "error"
+    }
+}
