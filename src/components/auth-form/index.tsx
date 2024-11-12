@@ -21,22 +21,18 @@ import { ArrowRight } from "lucide-react";
 import { signIn } from "next-auth/react";
 import signup from "@/app/lib/actions/signup";
 import { useRouter } from "next/navigation";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/src/components/ui/alert";
 
 type Props = {};
 
 const AuthForm = (props: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [phnNo, setPhnNo] = useState("");
-  const [email, setEmail] = useState("");
+  const [err, setErr] = useState("");
   const [name, setName] = useState("");
   const [passwd, setPasswd] = useState("");
   const router = useRouter();
-
-  //   const handleSubmit = (event: React.FormEvent) => {
-  //     event.preventDefault();
-  //     setIsLoading(true);
-  //     setTimeout(() => setIsLoading(false), 2000);
-  //   };
 
   const signinHandler = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -49,10 +45,17 @@ const AuthForm = (props: Props) => {
         redirect: false,
       });
       console.log(user);
+      if (!user?.ok) throw new Error("Incorrect phone or password!");
       router.push("/dashboard");
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErr(error.message);
       router.refresh();
+    } finally {
+      setIsLoading(false);
+      setName("");
+      setPhnNo("");
+      setPasswd("");
     }
   };
 
@@ -61,19 +64,32 @@ const AuthForm = (props: Props) => {
     try {
       setIsLoading(true);
       const res = await signup(name, phnNo, passwd);
-      if (res?.status) {
+      if (res?.ok) {
         signinHandler(event);
       } else {
-        throw new Error("SignUp Error!");
+        throw new Error(res.message);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
+      setErr(error.message);
       router.refresh();
+    } finally {
+      setIsLoading(false);
+      setName("");
+      setPhnNo("");
+      setPasswd("");
     }
   };
 
   return (
     <div className="w-[450px] m-auto">
+      {err && (
+        <Alert variant="destructive" className="mb-4">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{err}</AlertDescription>
+        </Alert>
+      )}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -90,7 +106,11 @@ const AuthForm = (props: Props) => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="signup" className="w-full">
+            <Tabs
+              defaultValue="signup"
+              className="w-full"
+              onValueChange={() => setErr("")}
+            >
               <TabsList className="grid w-full grid-cols-2 mb-4">
                 <TabsTrigger value="signup">Sign Up</TabsTrigger>
                 <TabsTrigger value="signin">Sign In</TabsTrigger>
