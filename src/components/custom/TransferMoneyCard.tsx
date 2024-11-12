@@ -112,7 +112,7 @@ export const TransferMoney = ({
         <div className="flex justify-center pt-4">
           <Button
             disable={value === 0 ? true : false}
-            classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200"
+            classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200 hover:text-[#4A9FF5]"
             onClick={async () => {
               if (session?.data?.user?.pin) {
                 handleTriggerPinModal();

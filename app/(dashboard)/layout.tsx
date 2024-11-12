@@ -8,11 +8,7 @@ import {
   TransactionsIcon,
   TransferIcon,
 } from "@/src/components/constants/Icons";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/src/components/ui/avatar";
+import { AvatarMenu } from "@/src/components/avatar-menu";
 
 export default async function Layout({ children }: { children: any }) {
   const session = await getServerSession(authOptions);
@@ -49,12 +45,7 @@ export default async function Layout({ children }: { children: any }) {
         </div>
       </div>
       <div className="w-full flex flex-col ml-[12vw] items-end">
-        <Avatar className="m-2 mr-5 flex">
-          <AvatarImage src="www.abc.png" />
-          <AvatarFallback className="bg-gray-700">
-            {session.user.name[0]}
-          </AvatarFallback>
-        </Avatar>
+        <AvatarMenu name={session.user.name} image={session.user.image || ""} />
         <div className="px-[2vw] w-full rounded-tl-md bg-[#0b2545]">
           {children}
         </div>
