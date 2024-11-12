@@ -103,7 +103,7 @@ export function SendCard() {
           <div className="pt-4 flex justify-center">
             <Button
               disable={amount === 0 || number === "" ? true : false}
-              classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200"
+              classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200 hover:text-[#4A9FF5]"
               onClick={async () => {
                 if (session?.data?.user?.pin) {
                   handleTriggerPinModal();

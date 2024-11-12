@@ -25,7 +25,7 @@ function ProfileContent({ session }: { session: any }) {
         <ProfileData label="Name" value={session.user.name || ""} />
         <ProfileData label="Number" value={session.user.number || ""} />
         <ProfileData label="Email" value={session.user.email || " "} />
-        <ProfileData label="Pin" value={session.user.pin || " "} />
+        <ProfileData label="Pin" value={session.user.pin || ""} />
       </div>
       <div className="">
         <p className="text-2xl text-[#0077b6] pt-8 mb-8 font-bold">

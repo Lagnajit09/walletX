@@ -32,7 +32,7 @@ const Hero = ({ user }: Props) => {
           <div className="space-x-4">
             <Link
               className="inline-flex h-10 items-center justify-center rounded-md bg-[#4A9FF5] px-8 py-2 text-sm font-medium text-white shadow transition-colors hover:bg-[#3a8fe5] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#4A9FF5]"
-              href={user ? "/dashboard" : "/signup"}
+              href={user ? "/dashboard" : "/auth"}
             >
               Get Started
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -51,7 +51,7 @@ const Hero = ({ user }: Props) => {
         transition={{ repeat: Infinity, duration: 5 }}
         className="absolute inset-0 z-0"
       >
-        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/6207714/pexels-photo-6207714.jpeg?auto=compress&cs=tinysrgb&w=600')] bg-cover bg-center opacity-75 blur-[2px]"></div>
+        <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/12935076/pexels-photo-12935076.jpeg?auto=compress&cs=tinysrgb&w=600')] bg-cover bg-center opacity-75 blur-[2px]"></div>
       </motion.div>
     </>
   );

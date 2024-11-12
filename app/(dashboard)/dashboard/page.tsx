@@ -13,7 +13,9 @@ export default async function DashboardPage() {
   noStore(); // Disable caching for this route
   const session = await getServerSession(authOptions);
 
-  if (!session || !session.user) return <p>Unauthorized Access!</p>;
+  if (!session || !session.user) {
+    return <p>Unauthorized Access!</p>;
+  }
 
   return (
     <div className="my-8">

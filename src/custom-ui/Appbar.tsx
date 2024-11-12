@@ -20,7 +20,7 @@ const Appbar = ({ user, onSignin, onSignout }: AppbarProps) => {
       <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
         <Link
           className="text-sm font-medium hover:text-white transition-colors border border-[#4A9FF5] p-2 rounded-md hover:bg-[#4A9FF5]"
-          href="/dashboard"
+          href={user ? "/dashboard" : "/auth"}
         >
           Dashboard
         </Link>

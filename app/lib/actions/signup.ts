@@ -26,9 +26,17 @@ export default async function signup(
       },
     });
 
-    return { status: true, message: "Account created successfully!", user };
-  } catch (e) {
+    return {
+      ok: true,
+      message: "Account created successfully!",
+      user,
+      status: 200,
+    };
+  } catch (e: any) {
     console.error(e);
-    return { status: false, message: "Error in signing up!" };
+    if (e.name === "PrismaClientKnownRequestError") {
+      return { ok: false, message: "Account already exists!", status: 400 };
+    }
+    return { ok: false, message: "Error in signing up!", status: 500 };
   }
 }

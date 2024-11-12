@@ -5,23 +5,25 @@ import Hero from "@/src/components/landing-components/hero";
 import Footer from "@/src/components/landing-components/footer";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./lib/auth";
+import { AppbarClient } from "@/src/components/custom/AppbarClient";
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
 
   return (
-    <div className="flex flex-col w-full items-center min-h-screen bg-gradient-to-br from-[#0b2545] to-[#13315c] text-white">
+    <div className="flex flex-col w-full items-center min-h-screen text-white bg-gray-900">
+      <AppbarClient />
       <main className="flex-1 w-full">
         <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48 overflow-hidden">
           <Hero user={session?.user} />
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#0d2d54]">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-900">
           <Features />
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#0b2545]">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-950">
           <Example />
         </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#0d2d54]">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-900">
           <FAQ />
         </section>
       </main>
