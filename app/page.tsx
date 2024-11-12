@@ -1,42 +1,33 @@
+import Features from "@/src/components/landing-components/features";
+import Example from "@/src/components/landing-components/example";
+import FAQ from "@/src/components/landing-components/faq";
+import Hero from "@/src/components/landing-components/hero";
+import Footer from "@/src/components/landing-components/footer";
 import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 import { authOptions } from "./lib/auth";
-import Image from "next/image";
-import landingpage from "../public/landingpage.jpg";
-import NavigateButton from "../src/components/custom/NavigateButton";
 
-export default async function Page() {
+export default async function Home() {
   const session = await getServerSession(authOptions);
-  if (session?.user) {
-    redirect("/dashboard");
-  }
 
   return (
-    <div className="flex justify-around">
-      <div className="flex flex-col justify-center h-[90vh] px-10 gap-2">
-        <p className="text-8xl"> Fast, safe</p>
-        <p className="text-8xl">social payment</p>
-        <div className=" mt-5">
-          <p className="text-lg">Pay, get paid, grow a business, and more</p>
-          <p className="text-lg">
-            Join the tens of mill ions of people on WalletX
-          </p>
-        </div>
-        <div className=" w-[100%] mt-4 border-1 bg-[rgb(96,165,250)] p-2 rounded-lg text-white text-center">
-          <NavigateButton
-            page="SignUp"
-            title="Get Started"
-            classname="w-full"
-          />
-        </div>
-      </div>
-      <div className="flex flex-col justify-center">
-        <Image
-          src={landingpage}
-          alt="landingimage.png"
-          className="rounded-lg"
-        />
-      </div>
+    <div className="flex flex-col w-full items-center min-h-screen bg-gradient-to-br from-[#0b2545] to-[#13315c] text-white">
+      <main className="flex-1 w-full">
+        <section className="relative w-full py-12 md:py-24 lg:py-32 xl:py-48 overflow-hidden">
+          <Hero user={session?.user} />
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#0d2d54]">
+          <Features />
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#0b2545]">
+          <Example />
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-[#0d2d54]">
+          <FAQ />
+        </section>
+      </main>
+      <footer className="flex flex-col gap-2 sm:flex-row py-6 w-full shrink-0 items-center px-4 md:px-6 border-t border-[#1c3a5e]">
+        <Footer />
+      </footer>
     </div>
   );
 }

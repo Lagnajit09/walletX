@@ -7,8 +7,10 @@ import { p2pTransfer } from "../../../app/lib/actions/p2pTransfer";
 import { useSession } from "next-auth/react";
 import ErrorModal from "./ErrorModal";
 import { CheckPin } from "./CheckPin";
+import { useRouter } from "next/navigation";
 
 export function SendCard() {
+  const router = useRouter();
   const [number, setNumber] = useState("");
   const [amount, setAmount] = useState(0);
   const [errMsg, setErrMsg] = useState({
@@ -46,7 +48,9 @@ export function SendCard() {
       });
       setShowError(true);
     } finally {
-      window.location.reload();
+      router.refresh();
+      setNumber("");
+      setAmount(0);
     }
   };
 

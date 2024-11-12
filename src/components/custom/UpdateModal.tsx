@@ -11,6 +11,7 @@ import { Label } from "@/src/components/ui/label";
 import { updateProfile } from "../../../app/lib/actions/updateProfile";
 import { useState } from "react";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface UpdateModalProps {
   open: boolean;
@@ -20,6 +21,7 @@ interface UpdateModalProps {
 }
 
 export function UpdateModal({ open, setOpen, field, value }: UpdateModalProps) {
+  const router = useRouter();
   const [newVal, setNewVal] = useState(value);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -48,7 +50,7 @@ export function UpdateModal({ open, setOpen, field, value }: UpdateModalProps) {
               try {
                 await updateProfile(field.toLowerCase(), newVal.trim());
                 await getSession();
-                window.location.reload();
+                router.refresh();
                 setOpen(false);
               } catch (error) {
                 console.error("Failed to update profile", error);
