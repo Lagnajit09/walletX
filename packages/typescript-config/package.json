@@ -1,9 +1,0 @@
-{
-  "name": "@lm.swiftpay/typescript-config",
-  "version": "0.0.0",
-  "private": false,
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
-}
