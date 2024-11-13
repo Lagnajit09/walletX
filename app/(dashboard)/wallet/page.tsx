@@ -61,9 +61,11 @@ async function WalletContent() {
 
   return (
     <div className="w-full pb-10">
-      <div className="text-4xl text-[#00b4d8] pt-8 mb-0 font-bold">Wallet</div>
+      <div className="text-4xl text-[#00b4d8] pt-2 pb-6 mb-0 font-bold">
+        Wallet
+      </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 p-4">
-        <div className="w-[80%]">
+        <div className="w-full">
           <BalanceCard amount={balance.amount} locked={balance.locked} />
         </div>
         <div className=""></div>
