@@ -46,7 +46,7 @@ const AuthForm = (props: Props) => {
       });
       console.log(user);
       if (!user?.ok) throw new Error("Incorrect phone or password!");
-      router.push("/dashboard");
+      router.push("/wallet");
     } catch (error: any) {
       console.error(error);
       setErr(error.message);

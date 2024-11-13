@@ -8,6 +8,15 @@ import {
 } from "@/src/components/custom/ClientCharts";
 import { DashboardSkeleton } from "@/src/components/custom/DashboardSkeleton";
 import { unstable_noStore as noStore } from "next/cache";
+// import Loader from "@/src/components/custom/Loader";
+
+// export default function DashboardPage() {
+//   return (
+//     <Suspense fallback={<Loader />}>
+//       <DashboardContent />
+//     </Suspense>
+//   );
+// }
 
 export default async function DashboardPage() {
   noStore(); // Disable caching for this route
@@ -55,11 +64,14 @@ async function BalanceSection() {
 async function WalletChartSection() {
   const { getChartData } = await import("../../lib/actions/getChartData");
   const data = await getChartData();
+  console.log(data);
   return <ClientWalletChart data={JSON.parse(JSON.stringify(data))} />;
 }
 
 async function P2PChartSection() {
   const { getP2PChartData } = await import("../../lib/actions/getP2PChartData");
   const data = await getP2PChartData();
+  console.log(data);
+  if (data[0].amount === 0 && data[1].amount === 0) return <></>;
   return <ClientP2PChart data={JSON.parse(JSON.stringify(data))} />;
 }
