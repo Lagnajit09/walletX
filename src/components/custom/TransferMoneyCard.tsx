@@ -36,6 +36,7 @@ export const TransferMoney = ({
     SUPPORTED_BANKS[0]?.redirectUrl
   );
   const [provider, setProvider] = useState(SUPPORTED_BANKS[0]?.name || "");
+  const [isLoading, setisLoading] = useState(false);
   const [value, setValue] = useState(0);
   const [showError, setShowError] = useState(false);
   const [showPinModal, setShowPinModal] = useState(false);
@@ -58,9 +59,16 @@ export const TransferMoney = ({
       setShowError(true);
       return;
     }
-
-    await callbackFunc(provider, value);
-    router.refresh();
+    try {
+      setisLoading(true);
+      await callbackFunc(provider, value);
+      router.refresh();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setValue(0);
+      setisLoading(false);
+    }
   };
 
   return (
@@ -87,6 +95,7 @@ export const TransferMoney = ({
         <TextInput
           label={"Amount"}
           placeholder={"Amount"}
+          value={`${value}`}
           labelClass="text-gray-400"
           classname="bg-[#112d4f] text-gray-200"
           onChange={(val) => {
@@ -111,7 +120,7 @@ export const TransferMoney = ({
         />
         <div className="flex justify-center pt-4">
           <Button
-            disable={value === 0 ? true : false}
+            disable={value === 0 || isLoading ? true : false}
             classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200 hover:text-[#4A9FF5]"
             onClick={async () => {
               if (session?.data?.user?.pin) {
@@ -126,7 +135,7 @@ export const TransferMoney = ({
               }
             }}
           >
-            {btnText}
+            {isLoading ? "Processing..." : btnText}
           </Button>
         </div>
       </div>
