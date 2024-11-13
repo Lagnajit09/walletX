@@ -28,7 +28,7 @@ export const SidebarItem = ({
       <div
         className={`font-bold ${
           selected ? "text-[#0077b6]" : "text-slate-300"
-        }`}
+        } hidden md:block`}
       >
         {title}
       </div>

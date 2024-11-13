@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 
 export function SendCard() {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   const [number, setNumber] = useState("");
   const [amount, setAmount] = useState(0);
   const [errMsg, setErrMsg] = useState({
@@ -35,6 +36,7 @@ export function SendCard() {
       return;
     }
     try {
+      setIsLoading(true);
       await p2pTransfer(number, amount * 100);
       setErrMsg({
         title: "Success",
@@ -48,9 +50,10 @@ export function SendCard() {
       });
       setShowError(true);
     } finally {
-      router.refresh();
+      setIsLoading(false);
       setNumber("");
       setAmount(0);
+      router.refresh();
     }
   };
 
@@ -86,6 +89,7 @@ export function SendCard() {
             classname="bg-[#112d4f] text-gray-200"
             placeholder={"Number"}
             label="Number"
+            value={number}
             onChange={(value) => {
               setNumber(value);
             }}
@@ -95,6 +99,7 @@ export function SendCard() {
             classname="bg-[#112d4f] text-gray-200"
             placeholder={"Amount"}
             label="Amount"
+            value={`${amount}`}
             onChange={(value) => {
               setAmount(Number(value));
             }}
@@ -102,7 +107,9 @@ export function SendCard() {
           />
           <div className="pt-4 flex justify-center">
             <Button
-              disable={amount === 0 || number === "" ? true : false}
+              disable={
+                amount === 0 || number === "" || isLoading ? true : false
+              }
               classname="bg-[#4A9FF5] text-gray-100 font-semibold hover:bg-gray-200 hover:text-[#4A9FF5]"
               onClick={async () => {
                 if (session?.data?.user?.pin) {
@@ -117,7 +124,7 @@ export function SendCard() {
                 }
               }}
             >
-              Send
+              {isLoading ? "Sending..." : "Send"}
             </Button>
           </div>
         </div>

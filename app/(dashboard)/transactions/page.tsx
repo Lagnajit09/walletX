@@ -19,12 +19,13 @@ async function P2PTransfers() {
   }
 
   return (
-    <div className="h-[92vh]">
-      <div className="text-4xl text-[#00b4d8] pt-8 mb-8 font-bold">
+    <div className="w-full">
+      <div className="text-4xl text-[#00b4d8] pb-6 pt-2 font-bold">
         P2P Transfers
       </div>
-
-      <DataTable columns={TransferColumns} data={transactions} />
+      <div className="w-full overflow-x-auto">
+        <DataTable columns={TransferColumns} data={transactions} />
+      </div>
     </div>
   );
 }

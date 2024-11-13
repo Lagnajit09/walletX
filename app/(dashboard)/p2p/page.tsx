@@ -23,7 +23,7 @@ async function SendMoneyContent() {
 
   return (
     <div className="w-full">
-      <div className="text-4xl text-[#00b4d8] py-8 mb-0 font-bold">
+      <div className="text-4xl text-[#00b4d8] pt-2 pb-6 mb-0 font-bold">
         Send Money
       </div>
       <div className="w-[95%] md:w-[40%]">
