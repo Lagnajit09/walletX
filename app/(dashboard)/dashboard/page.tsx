@@ -8,17 +8,17 @@ import {
 } from "@/src/components/custom/ClientCharts";
 import { DashboardSkeleton } from "@/src/components/custom/DashboardSkeleton";
 import { unstable_noStore as noStore } from "next/cache";
-import Loader from "@/src/components/custom/Loader";
+// import Loader from "@/src/components/custom/Loader";
 
-export default function DashboardPage() {
-  return (
-    <Suspense fallback={<Loader />}>
-      <DashboardContent />
-    </Suspense>
-  );
-}
+// export default function DashboardPage() {
+//   return (
+//     <Suspense fallback={<Loader />}>
+//       <DashboardContent />
+//     </Suspense>
+//   );
+// }
 
-export async function DashboardContent() {
+export default async function DashboardPage() {
   noStore(); // Disable caching for this route
   const session = await getServerSession(authOptions);
 
