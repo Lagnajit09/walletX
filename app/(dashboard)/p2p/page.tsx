@@ -3,6 +3,8 @@ import { SendCard } from "../../../src/components/custom/SendCard";
 import { getBalance } from "../../lib/actions/getBalance";
 import React, { Suspense } from "react";
 import Loader from "@/src/components/custom/Loader";
+import Contacts from "@/src/components/custom/Contacts";
+import { getContacts } from "@/app/lib/actions/useContact";
 
 export default function SendMoneyPage() {
   return (
@@ -20,18 +22,22 @@ async function getBalanceData() {
 
 async function SendMoneyContent() {
   const balance = await getBalanceData();
+  const contacts = await getContacts();
 
   return (
-    <div className="w-full">
-      <div className="text-4xl text-[#00b4d8] pt-2 pb-6 mb-0 font-bold">
-        Send Money
+    <main className="flex-1 py-8">
+      <div className="container mx-auto px-4">
+        <h1 className="text-3xl font-bold mb-8">Transfer Money</h1>
+        <div className="grid gap-8 md:grid-cols-2">
+          <div className="space-y-8">
+            <BalanceCard amount={balance.amount} locked={balance.locked} />
+            <SendCard />
+          </div>
+          <div className="h-fit">
+            <Contacts userContacts={contacts} />
+          </div>
+        </div>
       </div>
-      <div className="w-[95%] md:w-[40%]">
-        <BalanceCard amount={balance.amount} locked={balance.locked} />
-      </div>
-      <div className="w-[95%] md:w-[40%]">
-        <SendCard />
-      </div>
-    </div>
+    </main>
   );
 }

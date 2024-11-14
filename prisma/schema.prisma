@@ -21,6 +21,17 @@ model User {
   sentTransfers      p2pTransfer[]        @relation(name: "FromUserRelation")
   receivedTransfers  p2pTransfer[]        @relation(name: "ToUserRelation")
   OffRampTransaction OffRampTransaction[]
+  Contact            Contact[]
+}
+
+model Contact {
+  id     Int    @id @default(autoincrement())
+  name   String
+  phone  String @unique
+  userId Int // Foreign key to User
+  user   User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
 }
 
 model Merchant {
