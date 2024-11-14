@@ -4,6 +4,7 @@ import { getBalance } from "../../lib/actions/getBalance";
 import React, { Suspense } from "react";
 import Loader from "@/src/components/custom/Loader";
 import Contacts from "@/src/components/custom/Contacts";
+import { getContacts } from "@/app/lib/actions/useContact";
 
 export default function SendMoneyPage() {
   return (
@@ -21,6 +22,7 @@ async function getBalanceData() {
 
 async function SendMoneyContent() {
   const balance = await getBalanceData();
+  const contacts = await getContacts();
 
   return (
     <main className="flex-1 py-8">
@@ -32,7 +34,7 @@ async function SendMoneyContent() {
             <SendCard />
           </div>
           <div className="h-fit">
-            <Contacts />
+            <Contacts userContacts={contacts} />
           </div>
         </div>
       </div>

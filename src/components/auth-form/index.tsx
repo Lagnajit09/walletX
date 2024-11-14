@@ -23,6 +23,7 @@ import signup from "@/app/lib/actions/signup";
 import { useRouter } from "next/navigation";
 import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/src/components/ui/alert";
+import { validatePhone } from "@/app/lib/actions/validatePhone";
 
 type Props = {};
 
@@ -61,6 +62,11 @@ const AuthForm = (props: Props) => {
 
   const signupHandler = async (event: React.FormEvent) => {
     event.preventDefault();
+    const isValid = validatePhone(phnNo);
+    if (!isValid.ok) {
+      setErr(isValid.message);
+      return;
+    }
     try {
       setIsLoading(true);
       const res = await signup(name, phnNo, passwd);
