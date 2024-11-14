@@ -7,12 +7,14 @@ import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Plus, Search } from "lucide-react";
 import { ScrollArea } from "../ui/scroll-area";
 
+interface ContactsList {
+  id: number;
+  name: string;
+  phone: string;
+}
+
 export default function Contacts() {
-  const [contacts, setContacts] = useState([
-    { id: 1, name: "Alice Johnson", phone: "+91 98765 43210" },
-    { id: 2, name: "Bob Smith", phone: "+91 87654 32109" },
-    { id: 3, name: "Charlie Brown", phone: "+91 76543 21098" },
-  ]);
+  const [contacts, setContacts] = useState<ContactsList[]>([]);
   const [newContact, setNewContact] = useState({ name: "", phone: "" });
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -52,26 +54,31 @@ export default function Contacts() {
             <Search className="h-4 w-4" />
           </Button>
         </div>
-        <ScrollArea className="h-[200px] pr-4">
-          {filteredContacts.map((contact) => (
-            <div
-              key={contact.id}
-              className="flex items-center space-x-4 py-2 border-b border-[#1c3a5e] last:border-b-0"
-            >
-              <Avatar>
-                <AvatarFallback>
-                  {contact.name
-                    .split(" ")
-                    .map((n) => n[0])
-                    .join("")}
-                </AvatarFallback>
-              </Avatar>
-              <div>
-                <p className="font-medium">{contact.name}</p>
-                <p className="text-sm text-gray-400">{contact.phone}</p>
+        <ScrollArea className="max-h-[200px] pr-4">
+          {contacts.length !== 0 ? (
+            filteredContacts.map((contact) => (
+              <div
+                key={contact.id}
+                className="flex items-center space-x-4 py-2 border-b border-[#1c3a5e] last:border-b-0"
+              >
+                <Avatar>
+                  <AvatarFallback className="bg-[#6f95c3]">
+                    {contact.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")
+                      .toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="font-medium">{contact.name}</p>
+                  <p className="text-sm text-gray-400">{contact.phone}</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : (
+            <p className="text-gray-400">No contacts</p>
+          )}
         </ScrollArea>
         <form onSubmit={handleAddContact} className="space-y-2">
           <Input

@@ -32,7 +32,7 @@ export const AvatarMenu = ({ name, image }: AvatarMenuProps) => {
           <Avatar className="cursor-pointer">
             <AvatarImage src={image} />
             <AvatarFallback className="bg-gray-700 text-white">
-              {name[0]}
+              {name[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </MenubarTrigger>
