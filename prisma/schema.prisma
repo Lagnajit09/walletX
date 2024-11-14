@@ -27,8 +27,8 @@ model User {
 model Contact {
   id     Int    @id @default(autoincrement())
   name   String
-  phone  String @unique
-  userId Int // Foreign key to User
+  phone  String
+  userId Int
   user   User   @relation(fields: [userId], references: [id])
 
   @@index([userId])

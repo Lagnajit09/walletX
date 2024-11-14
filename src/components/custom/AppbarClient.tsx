@@ -15,7 +15,7 @@ export function AppbarClient() {
     <AppbarWrapper
       onSignin={() => router.push("/auth")}
       onSignout={async () => {
-        await signOut({ callbackUrl: "/signin" });
+        await signOut({ callbackUrl: "/auth" });
       }}
       user={session.data?.user}
     />
