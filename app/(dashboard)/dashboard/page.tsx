@@ -2,10 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../../lib/auth";
 import { Suspense } from "react";
 import { BalanceCard } from "@/src/components/custom/BalanceCard";
-import {
-  ClientP2PChart,
-  ClientWalletChart,
-} from "@/src/components/custom/ClientCharts";
+import { ClientP2PChart } from "@/src/components/custom/ClientCharts";
 import { DashboardSkeleton } from "@/src/components/custom/DashboardSkeleton";
 import { unstable_noStore as noStore } from "next/cache";
 // import Loader from "@/src/components/custom/Loader";
@@ -38,11 +35,11 @@ export default async function DashboardPage() {
           </Suspense>
         </div>
         <div className="mt-5 md:flex gap-10">
-          <div className="w-[95%] md:w-[45%] mb-5 md:mb-0">
+          {/* <div className="w-[95%] md:w-[45%] mb-5 md:mb-0">
             <Suspense fallback={<DashboardSkeleton type="chart" />}>
               <WalletChartSection />
             </Suspense>
-          </div>
+          </div> */}
           <div className="w-[95%] md:w-[45%]">
             <Suspense fallback={<DashboardSkeleton type="chart" />}>
               <P2PChartSection />
@@ -61,12 +58,12 @@ async function BalanceSection() {
   return <BalanceCard amount={balance.amount} locked={balance.locked} />;
 }
 
-async function WalletChartSection() {
-  const { getChartData } = await import("../../lib/actions/getChartData");
-  const data = await getChartData();
-  console.log(data);
-  return <ClientWalletChart data={JSON.parse(JSON.stringify(data))} />;
-}
+// async function WalletChartSection() {
+//   const { getChartData } = await import("../../lib/actions/getChartData");
+//   const data = await getChartData();
+//   console.log(data);
+//   return <ClientWalletChart data={JSON.parse(JSON.stringify(data))} />;
+// }
 
 async function P2PChartSection() {
   const { getP2PChartData } = await import("../../lib/actions/getP2PChartData");
