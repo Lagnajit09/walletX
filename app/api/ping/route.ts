@@ -1,7 +1,13 @@
 import db from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
-export const GET = async () => {
+export const GET = async (req: Request) => {
+  if (
+    req.headers.get("Authorization") !== `Bearer ${process.env.CRON_SECRET}`
+  ) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
   const res = await db.contact.count();
 
   if (res) {
