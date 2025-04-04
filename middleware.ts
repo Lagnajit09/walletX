@@ -12,7 +12,7 @@ const protectedRoutes = [
 ];
 
 // Define auth routes (login/signup pages)
-const authRoutes = ["/auth"];
+const authRoutes = ["/signin", "/signup"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -40,7 +40,7 @@ export async function middleware(request: NextRequest) {
   // If the user is on a protected route and is not authenticated,
   // redirect them to the signin page
   if (isProtectedRoute && !token) {
-    const signInUrl = new URL("/auth", request.url);
+    const signInUrl = new URL("/signin", request.url);
     // Add the current path as a callback URL
     signInUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(signInUrl);
@@ -61,7 +61,8 @@ export const config = {
     // Match all routes except static files and other system routes
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
     // Include auth routes
-    "/auth",
+    "/signin",
+    "/signup",
     // Include protected routes
     "/dashboard/:path*",
     "/p2p/:path*",

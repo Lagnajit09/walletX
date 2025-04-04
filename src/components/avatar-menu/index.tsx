@@ -22,7 +22,7 @@ interface AvatarMenuProps {
 
 export const AvatarMenu = ({ name, image }: AvatarMenuProps) => {
   const handleLogout = async () => {
-    await signOut({ callbackUrl: "/auth" });
+    await signOut({ callbackUrl: "/signin" });
   };
 
   return (
