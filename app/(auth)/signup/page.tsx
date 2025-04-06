@@ -1,4 +1,3 @@
-// app/signup/page.tsx
 import BackBtn from "@/src/components/custom/BackBtn";
 import { SignUpForm } from "./_components/SignUpForm";
 
