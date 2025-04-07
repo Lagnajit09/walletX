@@ -28,7 +28,9 @@ export default async function DashboardPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <RecentTransactions />
+          <Suspense fallback={<DashboardSkeleton type="balance" />}>
+            <RecentTransactionsSection />
+          </Suspense>
           <BankAccounts />
         </div>
       </main>
@@ -64,6 +66,13 @@ async function BalanceSection() {
   const { getBalance } = await import("../../lib/actions/getBalance");
   const balance = await getBalance();
   return <BalanceCard amount={balance.amount} locked={balance.locked} />;
+}
+
+async function RecentTransactionsSection() {
+  const { getP2PTransfers } = await import("@/app/lib/actions/p2pTransfer");
+  const transactions = await getP2PTransfers();
+  const recents = transactions.slice(0, 3);
+  return <RecentTransactions recentTransactions={recents} />;
 }
 
 // async function WalletChartSection() {
