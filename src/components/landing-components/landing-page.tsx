@@ -1,14 +1,7 @@
 "use client";
 
 import React from "react";
-import {
-  ArrowRight,
-  CreditCard,
-  Send,
-  Wallet,
-  ArrowDown,
-  ArrowUp,
-} from "lucide-react";
+import { ArrowRight, CreditCard, Send, Wallet, ArrowDown } from "lucide-react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "../ui/button";

@@ -1,7 +1,7 @@
 import React from "react";
 import { ArrowUpRight, ArrowDownLeft, Wallet, BarChart3 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
-// import { useIsMobile } from "@/hooks/use-mobile";
+import Link from "next/link";
 
 export const BalanceCard = ({
   amount,
@@ -10,8 +10,6 @@ export const BalanceCard = ({
   amount: number;
   locked: number;
 }) => {
-  // const isMobile = useIsMobile();
-
   function formatNumber(number: number) {
     return number.toLocaleString("en-IN", {
       minimumFractionDigits: 2,
@@ -45,23 +43,24 @@ export const BalanceCard = ({
 
       <div className="flex items-end gap-2 mb-6">
         <span className="text-3xl md:text-4xl font-bold">
-          ₹{formatNumber(amount / 100)}
+          ₹ {formatNumber(amount / 100)}
         </span>
-        {/* <span className="text-green-500 text-xs mb-1 flex items-center">
-          +2.5% <ArrowUpRight className="h-3 w-3 ml-0.5" />
-        </span> */}
       </div>
 
-      <div className="flex items-center justify-between gap-3">
-        <Button className="flex-1 bg-swift-purple hover:bg-swift-dark-purple flex items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-swift-purple/20">
-          <ArrowUpRight className="h-4 w-4" /> Send
-        </Button>
-        <Button
-          variant="outline"
-          className="flex-1 border-swift-purple text-swift-purple hover:text-swift-dark-purple hover:border-swift-dark-purple flex items-center justify-center gap-2 transition-all duration-300"
-        >
-          <ArrowDownLeft className="h-4 w-4" /> Receive
-        </Button>
+      <div className="flex items-center gap-3">
+        <Link href={"/wallet"}>
+          <Button className="flex-1 bg-swift-purple hover:bg-swift-dark-purple flex items-center justify-center gap-2 transition-all duration-300 shadow-md hover:shadow-lg hover:shadow-swift-purple/20">
+            <Wallet className="h-6 w-6 text-white" /> Wallet
+          </Button>
+        </Link>
+        <Link href={"/transfer"}>
+          <Button
+            variant="outline"
+            className="flex-1 border-swift-purple text-swift-purple hover:text-swift-dark-purple hover:border-swift-dark-purple flex items-center justify-center gap-2 transition-all duration-300"
+          >
+            <ArrowUpRight className="h-4 w-4" /> Send
+          </Button>
+        </Link>
       </div>
     </div>
   );

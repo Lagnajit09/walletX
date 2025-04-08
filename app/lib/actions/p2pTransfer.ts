@@ -66,7 +66,9 @@ export async function p2pTransfer(to: string, amount: number) {
   });
 }
 
-export const getP2PTransfers = async (): Promise<Transaction[] | string> => {
+export const getP2PTransfers = async (
+  limit: number = 0
+): Promise<Transaction[] | string> => {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return "Not authorized!";
@@ -87,6 +89,7 @@ export const getP2PTransfers = async (): Promise<Transaction[] | string> => {
     orderBy: {
       timestamp: "desc",
     },
+    take: limit > 0 ? limit : undefined, // Apply limit if provided
   });
 
   // Format the transactions
