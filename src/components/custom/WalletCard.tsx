@@ -40,6 +40,9 @@ import {
 import { banks, cards } from "@/app/lib/banks";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import PinVerificationDialog from "./PinVerificationDialog";
+import { createOnRampTransaction } from "@/app/lib/actions/createOnrampTransaction";
+import { createOffRampTransaction } from "@/app/lib/actions/createOffRampTransaction";
 
 type WalletCardProps = {
   existingBalance: number;
@@ -103,25 +106,51 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
     setIsPinDialogOpen(true);
   };
 
-  const handleVerifiedTransaction = () => {
+  const handleVerifiedTransaction = async () => {
     if (!pendingTransaction) return;
 
     if (pendingTransaction.type === "deposit") {
-      setBalance((prev) => prev + Number(pendingTransaction.amount));
-      toast({
-        title: "Deposit successful",
-        description: `$${Number(pendingTransaction.amount).toFixed(
-          2
-        )} has been added to your wallet`,
-      });
+      try {
+        await createOnRampTransaction(
+          selectedBankId || selectedCardId,
+          Number(pendingTransaction.amount)
+        );
+        setBalance((prev) => prev + Number(pendingTransaction.amount) * 100);
+        toast({
+          title: "Deposit successful",
+          description: `$${Number(pendingTransaction.amount).toFixed(
+            2
+          )} has been added to your wallet`,
+        });
+      } catch (error) {
+        console.error("Error creating on-ramp transaction:", error);
+        toast({
+          title: "Deposit failed",
+          description: "There was an error processing your deposit",
+          variant: "destructive",
+        });
+      }
     } else {
-      setBalance((prev) => prev - Number(pendingTransaction.amount));
-      toast({
-        title: "Withdrawal successful",
-        description: `$${Number(pendingTransaction.amount).toFixed(
-          2
-        )} has been withdrawn from your wallet`,
-      });
+      try {
+        await createOffRampTransaction(
+          selectedBankId || selectedCardId,
+          Number(pendingTransaction.amount)
+        );
+        setBalance((prev) => prev - Number(pendingTransaction.amount) * 100);
+        toast({
+          title: "Withdrawal successful",
+          description: `$${Number(pendingTransaction.amount).toFixed(
+            2
+          )} has been withdrawn from your wallet`,
+        });
+      } catch (error) {
+        console.error("Error creating off-ramp transaction:", error);
+        toast({
+          title: "Withdrawal failed",
+          description: "There was an error processing your withdrawal",
+          variant: "destructive",
+        });
+      }
     }
 
     setAmount("");
@@ -151,7 +180,9 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
           <div className="h-20 w-20 rounded-full bg-gradient-to-br from-swift-purple to-swift-blue flex items-center justify-center mb-4">
             <Wallet className="h-10 w-10 text-white" />
           </div>
-          <h2 className="text-4xl font-bold mb-2">₹ {formatNumber(balance)}</h2>
+          <h2 className="text-4xl font-bold mb-2">
+            ₹ {formatNumber(balance / 100)}
+          </h2>
           <p className="text-muted-foreground mb-6">Available Balance</p>
 
           <div className="flex flex-wrap gap-4 justify-center">
@@ -421,6 +452,12 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
           </div>
         </div>
       </CardContent>
+      {/* PIN Verification Dialog */}
+      <PinVerificationDialog
+        isOpen={isPinDialogOpen}
+        onClose={handleCloseDialog}
+        onVerify={handleVerifiedTransaction}
+      />
     </Card>
   );
 };

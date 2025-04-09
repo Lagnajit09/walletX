@@ -49,7 +49,7 @@ const MainHeader = () => {
                 <Loader />
               </AvatarFallback>
             )}
-            {session.status === "unauthenticated" && redirect("/login")}
+            {session.status === "unauthenticated" && redirect("/signin")}
             {session.status === "authenticated" && session.data?.user?.name && (
               <AvatarFallback>
                 {session.data?.user?.name[0].toUpperCase()}
