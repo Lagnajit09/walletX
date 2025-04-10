@@ -109,16 +109,24 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
   const handleVerifiedTransaction = async () => {
     if (!pendingTransaction) return;
 
+    let provider = "";
+
+    if (selectedBankId) {
+      provider = selectedBankId === "1" ? "HDFC Bank" : "ICICI Bank";
+    } else if (selectedCardId) {
+      provider = selectedCardId === "1" ? "Visa" : "MasterCard";
+    }
+
     if (pendingTransaction.type === "deposit") {
       try {
         await createOnRampTransaction(
-          selectedBankId || selectedCardId,
+          provider,
           Number(pendingTransaction.amount)
         );
         setBalance((prev) => prev + Number(pendingTransaction.amount) * 100);
         toast({
           title: "Deposit successful",
-          description: `$${Number(pendingTransaction.amount).toFixed(
+          description: `₹${Number(pendingTransaction.amount).toFixed(
             2
           )} has been added to your wallet`,
         });
@@ -133,13 +141,13 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
     } else {
       try {
         await createOffRampTransaction(
-          selectedBankId || selectedCardId,
+          provider,
           Number(pendingTransaction.amount)
         );
         setBalance((prev) => prev - Number(pendingTransaction.amount) * 100);
         toast({
           title: "Withdrawal successful",
-          description: `$${Number(pendingTransaction.amount).toFixed(
+          description: `₹${Number(pendingTransaction.amount).toFixed(
             2
           )} has been withdrawn from your wallet`,
         });
@@ -252,7 +260,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
                           <Label htmlFor="amount">Amount</Label>
                           <div className="relative">
                             <span className="absolute left-3 top-2.5 text-muted-foreground">
-                              $
+                              ₹
                             </span>
                             <Input
                               id="amount"
@@ -330,7 +338,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
                           <Label htmlFor="amount">Amount</Label>
                           <div className="relative">
                             <span className="absolute left-3 top-2.5 text-muted-foreground">
-                              $
+                              ₹
                             </span>
                             <Input
                               id="amount"
@@ -419,7 +427,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
                     <Label htmlFor="withdraw-amount">Amount</Label>
                     <div className="relative">
                       <span className="absolute left-3 top-2.5 text-muted-foreground">
-                        $
+                        ₹
                       </span>
                       <Input
                         id="withdraw-amount"
@@ -431,7 +439,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
                       />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Available balance: ${balance.toFixed(2)}
+                      Available balance: ₹{(balance / 100).toFixed(2)}
                     </p>
                   </div>
                   <Button

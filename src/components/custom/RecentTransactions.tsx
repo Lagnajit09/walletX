@@ -2,8 +2,8 @@ import React from "react";
 import { ArrowUpRight, ArrowDownLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
-import { Transaction } from "@/app/lib/actions/p2pTransfer";
 import { redirect } from "next/navigation";
+import { Transaction } from "@/lib/types";
 
 interface RecentTransactionsProps {
   recentTransactions: Transaction[] | string;

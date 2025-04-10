@@ -22,7 +22,7 @@ import { Suspense } from "react";
 import WalletCardSkeleton from "@/src/components/skeletons/WalletCardSkeleton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
-import { getRecentTransactions } from "@/app/lib/actions/getRecentTransactions";
+import { getRecentTransactions } from "@/app/lib/actions/getWalletTransactions";
 import RecentActivities from "@/src/components/custom/RecentWalletActivities";
 
 // Fetch transactions and balance

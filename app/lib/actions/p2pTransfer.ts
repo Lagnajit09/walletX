@@ -2,17 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "../db";
-
-type TransactionStatus = "Sent" | "Received";
-
-export interface Transaction {
-  id: number;
-  amount: string;
-  date: string;
-  fromUser: string;
-  toUser: string;
-  status: TransactionStatus; // Status will strictly be "Sent" or "Received"
-}
+import { Transaction, TransactionStatus } from "@/lib/types";
 
 export async function p2pTransfer(to: string, amount: number) {
   const session = await getServerSession(authOptions);
@@ -75,7 +65,7 @@ export const getP2PTransfers = async (
   }
 
   const userId = session.user?.id;
-  const userNumber = session.user?.number; // assuming number is available in session
+  const userNumber = session.user?.number;
 
   // Fetch transactions along with user details
   const transactions = await prisma.p2pTransfer.findMany({
@@ -114,7 +104,7 @@ export const getP2PTransfers = async (
 
     return {
       id: txn.id,
-      amount: String(txn.amount / 100),
+      amount: String(txn.amount),
       date: `${formattedTime} on ${formattedDate}`,
       fromUser:
         txn.fromUser.number === userNumber ? "You" : txn.fromUser.number,
