@@ -16,6 +16,11 @@ model User {
   number             String               @unique
   password           String
   pin                String?
+  createdAt          DateTime             @default(now())
+  dob                DateTime?
+  address            String?
+  country            String?
+  state              String?
   OnRampTransaction  OnRampTransaction[]
   Balance            Balance[]
   sentTransfers      p2pTransfer[]        @relation(name: "FromUserRelation")

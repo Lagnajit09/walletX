@@ -39,6 +39,12 @@ export const authOptions = {
               name: existingUser.name,
               number: existingUser.number,
               pin: existingUser.pin,
+              email: existingUser.email,
+              createdAt: existingUser.createdAt,
+              address: existingUser.address,
+              state: existingUser.state,
+              country: existingUser.country,
+              dob: existingUser.dob,
             };
           }
           return null;
@@ -73,6 +79,11 @@ export const authOptions = {
       session.user.email = user?.email;
       session.user.number = user?.number;
       session.user.pin = user?.pin;
+      session.user.createdAt = user?.createdAt;
+      session.user.address = user?.address;
+      session.user.state = user?.state;
+      session.user.country = user?.country;
+      session.user.dob = user?.dob;
 
       return session;
     },
