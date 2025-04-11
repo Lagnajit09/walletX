@@ -1,51 +1,280 @@
-import Account from "@/src/components/custom/Account";
-import ProfileData from "../../../src/components/custom/ProfileData";
-import React, { Suspense } from "react";
-import Loader from "@/src/components/custom/Loader";
+import React from "react";
+import {
+  Camera,
+  Mail,
+  Phone,
+  MapPin,
+  Edit,
+  CreditCard,
+  Building,
+  ShieldCheck,
+} from "lucide-react";
+import { Button } from "@/src/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card";
+import { Separator } from "@/src/components/ui/separator";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/src/components/ui/avatar";
+import MainHeader from "@/src/components/custom/MainHeader";
+import ProfileFormDialog from "@/src/components/custom/ProfileForm";
+import PinDialog from "@/src/components/custom/PinDialog";
+import { authOptions } from "@/app/lib/auth";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../lib/auth";
+import { redirect } from "next/navigation";
 
+// This is the main server-side rendered page component
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
 
+  if (!session || !session.user) redirect("/signin");
+
+  const getInitials = () => {
+    const name = session.user.name || "John Doe";
+    const initials = name
+      .split(" ")
+      .map((part: string) => part.charAt(0).toUpperCase())
+      .join("");
+    return initials;
+  };
+
+  const getAccCreationDate = () => {
+    const date = new Date(session.user.createdAt || Date.now());
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+    };
+    return date.toLocaleDateString("en-US", options);
+  };
+
+  const getAccountID = () => {
+    const accountId = session.user.id;
+    const formattedId = `SP-${accountId}-${getAccCreationDate().split(" ")[1]}`;
+    return formattedId;
+  };
+
   return (
-    <Suspense fallback={<Loader />}>
-      <ProfileContent session={session} />
-    </Suspense>
+    <main className="px-6 pt-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
+        {/* Profile Card */}
+        <Card className="md:col-span-1">
+          <CardContent className="pt-6">
+            <div className="flex flex-col items-center justify-center">
+              <div className="relative">
+                <Avatar className="w-24 h-24 border-4 border-white shadow-lg">
+                  <AvatarImage src="https://random.png" />
+                  <AvatarFallback className="text-2xl font-semibold bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 text-white">
+                    {getInitials()}
+                  </AvatarFallback>
+                </Avatar>
+                <Button
+                  size="icon"
+                  className="absolute bottom-0 right-0 h-8 w-8 rounded-full bg-swift-purple hover:bg-swift-dark-purple"
+                >
+                  <Camera className="h-4 w-4" />
+                </Button>
+              </div>
+
+              <h2 className="text-xl font-semibold mt-4">
+                {session.user.name.split(" ")[0]}
+              </h2>
+              <p className="text-muted-foreground">Premium Member</p>
+
+              {/* Client component for the edit button */}
+              <ProfileFormTrigger data={session.user} />
+            </div>
+
+            <Separator className="my-6" />
+
+            <div className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Mail className="h-5 w-5 text-swift-purple" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <p>{session.user.email}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Phone className="h-5 w-5 text-swift-purple" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Phone</p>
+                  <p>{session.user.number}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <MapPin className="h-5 w-5 text-swift-purple" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Address</p>
+                  {session.user.address && session.user.country ? (
+                    <>
+                      <p>{session.user.address}</p>
+                      <p>{session.user.country}</p>
+                    </>
+                  ) : (
+                    <p className="text-muted-foreground">Not provided</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="p-6 col-span-2">
+          <h3 className="font-medium mb-4">Bank Accounts</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {/* Bank Account Items */}
+            {[
+              {
+                id: 1,
+                name: "HDFC Bank",
+                accountNo: "****2345",
+                accountType: "Savings",
+                routingNo: "******123",
+              },
+              {
+                id: 2,
+                name: "ICICI Bank",
+                accountNo: "****8901",
+                accountType: "Checking",
+                routingNo: "******456",
+              },
+            ].map((account) => (
+              <div
+                key={account.id}
+                className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-swift-purple/10 rounded-full">
+                    <Building className="h-5 w-5 text-swift-purple" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">{account.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      Account: {account.accountNo}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Type: {account.accountType}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Routing: {account.routingNo}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="font-medium mb-4">Card Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+            {/* Card Detail Items */}
+            {[
+              {
+                id: 1,
+                name: "Visa Debit",
+                number: "**** **** **** 1234",
+                expiry: "12/27",
+                type: "debit",
+              },
+              {
+                id: 2,
+                name: "Mastercard",
+                number: "**** **** **** 5678",
+                expiry: "08/25",
+                type: "credit",
+              },
+            ].map((card) => (
+              <div
+                key={card.id}
+                className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                <div className="flex items-start gap-3">
+                  <div className="p-2 bg-swift-purple/10 rounded-full">
+                    <CreditCard className="h-5 w-5 text-swift-purple" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium">{card.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {card.number}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      Expires: {card.expiry}
+                    </p>
+                    <p className="text-sm text-muted-foreground capitalize">
+                      Type: {card.type}
+                    </p>
+                  </div>
+                </div>
+                <CardDetailButton cardId={card.id} />
+              </div>
+            ))}
+          </div>
+          <Separator className="my-6" />
+
+          <h3 className="font-medium mb-4">Security & Verification</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <SecurityButtons />
+          </div>
+        </Card>
+      </div>
+    </main>
   );
 }
 
-function ProfileContent({ session }: { session: any }) {
-  if (!session || !session.user) return <p>No session found.</p>;
-
+// Client Components
+const ProfileFormTrigger = ({ data }: any) => {
   return (
-    <div className="mb-8">
-      <div className="text-4xl text-[#0077b6] pt-8 mb-8 font-bold">Profile</div>
-      <div className="w-[90%] md:w-[30vw] mt-8 ml-5 flex flex-col gap-2">
-        <ProfileData label="Name" value={session.user.name || ""} />
-        <ProfileData label="Number" value={session.user.number || ""} />
-        <ProfileData label="Email" value={session.user.email || " "} />
-        <ProfileData label="Pin" value={session.user.pin || ""} />
-      </div>
-      <div className="">
-        <p className="text-2xl text-[#0077b6] pt-8 mb-8 font-bold">
-          Account Information
-        </p>
-        <div className="w-full flex flex-wrap md:flex-nowrap gap-10">
-          <Account
-            title="HDFC Bank"
-            acc_num="XXXX XXXX 1234"
-            ifsc="HDFC0001234"
-            balance="₹50,000.00"
-          />
-          <Account
-            title="Axis Bank"
-            acc_num="XXXX XXXX 7890"
-            ifsc="AXS0006712"
-            balance="₹20,000.00"
-          />
+    <ProfileFormDialog data={data}>
+      <Button variant="outline" className="mt-4 w-full flex gap-2">
+        <Edit className="h-4 w-4" /> Edit Profile
+      </Button>
+    </ProfileFormDialog>
+  );
+};
+
+const CardDetailButton = ({ cardId }: { cardId: number }) => {
+  return (
+    <PinDialog>
+      <Button
+        size="sm"
+        variant="outline"
+        className="mt-2 text-swift-purple w-full"
+      >
+        <ShieldCheck className="h-4 w-4 mr-1" /> View Full Details
+      </Button>
+    </PinDialog>
+  );
+};
+
+const SecurityButtons = () => {
+  return (
+    <>
+      <div className="flex items-center justify-between p-4 border rounded-lg">
+        <div>
+          <p className="font-medium">Two-Factor Authentication</p>
+          <p className="text-sm text-muted-foreground">
+            Enhance your account security
+          </p>
         </div>
+        <Button variant="outline">Enable</Button>
       </div>
-    </div>
+
+      <div className="flex items-center justify-between p-4 border rounded-lg">
+        <div>
+          <p className="font-medium">Identity Verification</p>
+          <p className="text-sm text-muted-foreground">
+            Verify your identity for higher limits
+          </p>
+        </div>
+        <Button>Verify</Button>
+      </div>
+    </>
   );
-}
+};

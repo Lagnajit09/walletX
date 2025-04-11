@@ -23,7 +23,7 @@ export function TransactionHeader() {
         </div>
 
         <div className="flex flex-wrap gap-3 items-center">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" className="h-9 gap-1">
               <Calendar className="h-4 w-4" />
               <span className="hidden sm:inline">Date Range</span>
@@ -50,7 +50,7 @@ export function TransactionHeader() {
           <Button variant="outline" size="sm" className="h-9 gap-1">
             <Download className="h-4 w-4" />
             <span className="hidden sm:inline">Export</span>
-          </Button>
+          </Button> */}
         </div>
       </CardContent>
     </Card>

@@ -16,12 +16,14 @@ import { Button } from "@/src/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 
 interface PinVerificationDialogProps {
+  userPin: string | null | undefined;
   isOpen: boolean;
   onClose: () => void;
   onVerify: () => void;
 }
 
 const PinVerificationDialog = ({
+  userPin,
   isOpen,
   onClose,
   onVerify,
@@ -30,9 +32,7 @@ const PinVerificationDialog = ({
   const { toast } = useToast();
 
   const handleVerifyPin = () => {
-    // In a real app, you'd verify this against a stored PIN
-    // For now, we'll assume "1234" is the correct PIN
-    if (pinValue === "1234") {
+    if (pinValue === userPin) {
       onVerify();
       onClose();
       setPinValue("");

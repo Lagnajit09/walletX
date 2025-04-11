@@ -1,48 +1,20 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/src/components/ui/sheet";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/src/components/ui/tabs";
-import { Input } from "@/src/components/ui/input";
-import { Label } from "@/src/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/src/components/ui/select";
-import {
-  CreditCard,
-  Plus,
-  Wallet,
-  ArrowDown,
-  ArrowUp,
-  Check,
-} from "lucide-react";
-import { banks, cards } from "@/app/lib/banks";
+import { Wallet } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import PinVerificationDialog from "./PinVerificationDialog";
 import { createOnRampTransaction } from "@/app/lib/actions/createOnrampTransaction";
 import { createOffRampTransaction } from "@/app/lib/actions/createOffRampTransaction";
+import DepositSheet from "./DepositSheet";
+import WithdrawSheet from "./WithdrawSheet";
+import { useSession } from "next-auth/react";
 
 type WalletCardProps = {
   existingBalance: number;
@@ -57,19 +29,19 @@ function formatNumber(number: number) {
 }
 
 const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
+  const session = useSession();
   const { toast } = useToast();
 
   const [balance, setBalance] = useState(existingBalance);
   const [amount, setAmount] = useState("");
-  const [selectedBankId, setSelectedBankId] = useState<string>("");
-  const [selectedCardId, setSelectedCardId] = useState<string>("");
   const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
   const [pendingTransaction, setPendingTransaction] = useState<{
     type: "deposit" | "withdraw";
     amount: string;
+    provider: string | undefined;
   } | null>(null);
 
-  const initiateDeposit = () => {
+  const initiateDeposit = (provider: string | undefined) => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
       toast({
         title: "Invalid amount",
@@ -79,11 +51,11 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
       return;
     }
 
-    setPendingTransaction({ type: "deposit", amount });
+    setPendingTransaction({ type: "deposit", amount, provider });
     setIsPinDialogOpen(true);
   };
 
-  const initiateWithdraw = () => {
+  const initiateWithdraw = (provider: string | undefined) => {
     if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
       toast({
         title: "Invalid amount",
@@ -93,7 +65,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
       return;
     }
 
-    if (Number(amount) > balance) {
+    if (Number(amount) > balance / 100) {
       toast({
         title: "Insufficient balance",
         description: "You don't have enough funds for this withdrawal",
@@ -102,25 +74,30 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
       return;
     }
 
-    setPendingTransaction({ type: "withdraw", amount });
+    setPendingTransaction({ type: "withdraw", amount, provider });
     setIsPinDialogOpen(true);
   };
 
   const handleVerifiedTransaction = async () => {
     if (!pendingTransaction) return;
 
-    let provider = "";
-
-    if (selectedBankId) {
-      provider = selectedBankId === "1" ? "HDFC Bank" : "ICICI Bank";
-    } else if (selectedCardId) {
-      provider = selectedCardId === "1" ? "Visa" : "MasterCard";
+    if (pendingTransaction.provider === undefined) {
+      toast({
+        title: "Provider required",
+        description: "Please select a provider to proceed",
+        variant: "destructive",
+      });
+      return;
     }
+
+    // // For simplicity, we're not passing the provider
+    // // In a real implementation, you'd need to get the provider from somewhere
+    // const provider = "Bank Account"; // Default provider
 
     if (pendingTransaction.type === "deposit") {
       try {
         await createOnRampTransaction(
-          provider,
+          pendingTransaction.provider,
           Number(pendingTransaction.amount)
         );
         setBalance((prev) => prev + Number(pendingTransaction.amount) * 100);
@@ -141,7 +118,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
     } else {
       try {
         await createOffRampTransaction(
-          provider,
+          pendingTransaction.provider,
           Number(pendingTransaction.amount)
         );
         setBalance((prev) => prev - Number(pendingTransaction.amount) * 100);
@@ -170,14 +147,6 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
     setPendingTransaction(null);
   };
 
-  const getSelectedBank = () => {
-    return banks.find((bank) => bank.id === selectedBankId);
-  };
-
-  const getSelectedCard = () => {
-    return cards.find((card) => card.id === selectedCardId);
-  };
-
   return (
     <Card className="lg:col-span-2 animate-fade-in">
       <CardHeader>
@@ -194,274 +163,27 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
           <p className="text-muted-foreground mb-6">Available Balance</p>
 
           <div className="flex flex-wrap gap-4 justify-center">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button className="gap-2">
-                  <ArrowDown className="h-4 w-4" /> Add Money
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Add Money to Wallet</SheetTitle>
-                </SheetHeader>
-                <div className="py-6">
-                  <Tabs defaultValue="bank">
-                    <TabsList className="grid w-full grid-cols-2 mb-4">
-                      <TabsTrigger value="bank">Bank Account</TabsTrigger>
-                      <TabsTrigger value="card">Debit/Credit Card</TabsTrigger>
-                    </TabsList>
+            <DepositSheet
+              hasPin={session.data?.user?.pin ? true : false}
+              amount={amount}
+              setAmount={setAmount}
+              initiateDeposit={initiateDeposit}
+            />
 
-                    <TabsContent value="bank" className="space-y-4">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="bank-account">
-                            Select Bank Account
-                          </Label>
-                          <Select
-                            value={selectedBankId}
-                            onValueChange={setSelectedBankId}
-                          >
-                            <SelectTrigger id="bank-account" className="w-full">
-                              <SelectValue placeholder="Select a bank account" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {banks.map((bank) => (
-                                <SelectItem key={bank.id} value={bank.id}>
-                                  <div className="flex items-center">
-                                    <span className="mr-2">{bank.name}</span>
-                                    <span className="text-xs text-muted-foreground">
-                                      ({bank.accountNo})
-                                    </span>
-                                  </div>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {getSelectedBank() && (
-                            <div className="rounded-lg p-3 bg-muted/50 flex items-center justify-between mt-2">
-                              <div className="flex items-center">
-                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-swift-purple/10 to-swift-blue/10 flex items-center justify-center mr-3">
-                                  <CreditCard className="h-4 w-4 text-swift-purple" />
-                                </div>
-                                <div>
-                                  <p className="font-medium text-sm">
-                                    {getSelectedBank()?.name}
-                                  </p>
-                                  <p className="text-swift-dark-gray text-xs">
-                                    {getSelectedBank()?.accountNo}
-                                  </p>
-                                </div>
-                              </div>
-                              <Check className="h-5 w-5 text-green-500" />
-                            </div>
-                          )}
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="amount">Amount</Label>
-                          <div className="relative">
-                            <span className="absolute left-3 top-2.5 text-muted-foreground">
-                              ₹
-                            </span>
-                            <Input
-                              id="amount"
-                              type="number"
-                              placeholder="0.00"
-                              className="pl-8"
-                              value={amount}
-                              onChange={(e: any) => setAmount(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                        <Button
-                          className="w-full"
-                          onClick={initiateDeposit}
-                          disabled={
-                            !selectedBankId || !amount || Number(amount) <= 0
-                          }
-                        >
-                          Add Money
-                        </Button>
-                      </div>
-                    </TabsContent>
-
-                    <TabsContent value="card" className="space-y-4">
-                      <div className="space-y-4">
-                        <div className="space-y-2">
-                          <Label htmlFor="card">Select Card</Label>
-                          <Select
-                            value={selectedCardId}
-                            onValueChange={setSelectedCardId}
-                          >
-                            <SelectTrigger id="card" className="w-full">
-                              <SelectValue placeholder="Select a card" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {cards.map((card) => (
-                                <SelectItem key={card.id} value={card.id}>
-                                  <div className="flex items-center">
-                                    <span className="mr-2">{card.type}</span>
-                                    <span className="text-xs text-muted-foreground">
-                                      (•••• {card.last4})
-                                    </span>
-                                  </div>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          {getSelectedCard() && (
-                            <div className="rounded-lg p-3 bg-muted/50 flex items-center justify-between mt-2">
-                              <div className="flex items-center">
-                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-swift-purple/10 to-swift-blue/10 flex items-center justify-center mr-3">
-                                  <CreditCard className="h-4 w-4 text-swift-purple" />
-                                </div>
-                                <div>
-                                  <p className="font-medium text-sm">
-                                    {getSelectedCard()?.type} ••••{" "}
-                                    {getSelectedCard()?.last4}
-                                  </p>
-                                  <p className="text-swift-dark-gray text-xs">
-                                    Expires {getSelectedCard()?.expiry}
-                                  </p>
-                                </div>
-                              </div>
-                              <Check className="h-5 w-5 text-green-500" />
-                            </div>
-                          )}
-                          <Button
-                            variant="outline"
-                            className="w-full mt-2 flex items-center gap-2"
-                          >
-                            <Plus className="h-4 w-4" /> Add New Card
-                          </Button>
-                        </div>
-                        <div className="space-y-2">
-                          <Label htmlFor="amount">Amount</Label>
-                          <div className="relative">
-                            <span className="absolute left-3 top-2.5 text-muted-foreground">
-                              ₹
-                            </span>
-                            <Input
-                              id="amount"
-                              type="number"
-                              placeholder="0.00"
-                              className="pl-8"
-                              value={amount}
-                              onChange={(e: any) => setAmount(e.target.value)}
-                            />
-                          </div>
-                        </div>
-                        <Button
-                          className="w-full"
-                          onClick={initiateDeposit}
-                          disabled={
-                            !selectedCardId || !amount || Number(amount) <= 0
-                          }
-                        >
-                          Add Money
-                        </Button>
-                      </div>
-                    </TabsContent>
-                  </Tabs>
-                </div>
-              </SheetContent>
-            </Sheet>
-
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="gap-2">
-                  <ArrowUp className="h-4 w-4" /> Withdraw
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <SheetHeader>
-                  <SheetTitle>Withdraw Money</SheetTitle>
-                </SheetHeader>
-                <div className="py-6 space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="withdraw-bank-account">
-                      Select Bank Account
-                    </Label>
-                    <Select
-                      value={selectedBankId}
-                      onValueChange={setSelectedBankId}
-                    >
-                      <SelectTrigger
-                        id="withdraw-bank-account"
-                        className="w-full"
-                      >
-                        <SelectValue placeholder="Select a bank account" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {banks.map((bank) => (
-                          <SelectItem key={bank.id} value={bank.id}>
-                            <div className="flex items-center">
-                              <span className="mr-2">{bank.name}</span>
-                              <span className="text-xs text-muted-foreground">
-                                ({bank.accountNo})
-                              </span>
-                            </div>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {getSelectedBank() && (
-                      <div className="rounded-lg p-3 bg-muted/50 flex items-center justify-between mt-2">
-                        <div className="flex items-center">
-                          <div className="h-8 w-8 rounded-full bg-gradient-to-br from-swift-purple/10 to-swift-blue/10 flex items-center justify-center mr-3">
-                            <CreditCard className="h-4 w-4 text-swift-purple" />
-                          </div>
-                          <div>
-                            <p className="font-medium text-sm">
-                              {getSelectedBank()?.name}
-                            </p>
-                            <p className="text-swift-dark-gray text-xs">
-                              {getSelectedBank()?.accountNo}
-                            </p>
-                          </div>
-                        </div>
-                        <Check className="h-5 w-5 text-green-500" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="withdraw-amount">Amount</Label>
-                    <div className="relative">
-                      <span className="absolute left-3 top-2.5 text-muted-foreground">
-                        ₹
-                      </span>
-                      <Input
-                        id="withdraw-amount"
-                        type="number"
-                        placeholder="0.00"
-                        className="pl-8"
-                        value={amount}
-                        onChange={(e: any) => setAmount(e.target.value)}
-                      />
-                    </div>
-                    <p className="text-sm text-muted-foreground">
-                      Available balance: ₹{(balance / 100).toFixed(2)}
-                    </p>
-                  </div>
-                  <Button
-                    className="w-full"
-                    onClick={initiateWithdraw}
-                    disabled={
-                      !selectedBankId ||
-                      !amount ||
-                      Number(amount) <= 0 ||
-                      Number(amount) > balance
-                    }
-                  >
-                    Withdraw Money
-                  </Button>
-                </div>
-              </SheetContent>
-            </Sheet>
+            <WithdrawSheet
+              hasPin={session.data?.user?.pin ? true : false}
+              amount={amount}
+              balance={balance}
+              setAmount={setAmount}
+              initiateWithdraw={initiateWithdraw}
+            />
           </div>
         </div>
       </CardContent>
+
       {/* PIN Verification Dialog */}
       <PinVerificationDialog
+        userPin={session.data?.user?.pin}
         isOpen={isPinDialogOpen}
         onClose={handleCloseDialog}
         onVerify={handleVerifiedTransaction}

@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 interface SidebarLinkProps {
   to: string;
@@ -104,7 +105,14 @@ const AppSidebar = ({
           ))}
         </nav>
 
-        <div className="p-4 mt-auto border-t">
+        <div
+          className="p-4 mt-auto border-t"
+          onClick={async () => {
+            await signOut({
+              callbackUrl: "/signin",
+            });
+          }}
+        >
           <Link
             href="/signin"
             className="flex items-center gap-3 px-3 py-2 rounded-lg text-red-500 hover:bg-red-50 transition-all"

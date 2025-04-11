@@ -73,8 +73,8 @@ const RecentTransactions = ({
           // Format amount with currency symbol and sign
           const formattedAmount =
             transaction.status === "Received"
-              ? `+₹${transaction.amount}`
-              : `-₹${transaction.amount}`;
+              ? `+ ₹${parseFloat(transaction.amount) / 100}`
+              : `- ₹${parseFloat(transaction.amount) / 100}`;
 
           return (
             <div
