@@ -6,7 +6,6 @@ import { useState } from "react";
 import { p2pTransfer } from "../../../app/lib/actions/p2pTransfer";
 import { useSession } from "next-auth/react";
 import ErrorModal from "./ErrorModal";
-import { CheckPin } from "./CheckPin";
 import { useRouter } from "next/navigation";
 
 export function SendCard() {
@@ -78,12 +77,12 @@ export function SendCard() {
           open={showError}
           setOpen={setShowError}
         />
-        <CheckPin
+        {/* <CheckPin
           buttonText="Send"
           open={showPinModal}
           setOpen={handleTriggerPinModal}
           addMoneyHandler={transferMoneyHandler}
-        />
+        /> */}
         <div className=" pt-2">
           <TextInput
             classname="bg-[#112d4f] text-gray-200"

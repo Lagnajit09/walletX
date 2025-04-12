@@ -3,12 +3,14 @@
 import React, { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import PinVerificationDialog from "@/src/components/custom/PinVerificationDialog";
+import { useSession } from "next-auth/react";
 
 interface PinDialogProps {
   children: React.ReactNode;
 }
 
 const PinDialog = ({ children }: PinDialogProps) => {
+  const session = useSession();
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
 
@@ -33,6 +35,7 @@ const PinDialog = ({ children }: PinDialogProps) => {
       {triggerElement}
 
       <PinVerificationDialog
+        userPin={session.data?.user?.pin}
         isOpen={open}
         onClose={() => setOpen(false)}
         onVerify={onVerify}
