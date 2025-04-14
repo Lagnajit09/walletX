@@ -40,6 +40,7 @@ export const authOptions = {
               number: existingUser.number,
               pin: existingUser.pin,
               email: existingUser.email,
+              walletID: existingUser.walletID,
               createdAt: existingUser.createdAt,
               address: existingUser.address,
               state: existingUser.state,
@@ -55,7 +56,6 @@ export const authOptions = {
   ],
   secret: process.env.JWT_SECRET || "secret",
   callbacks: {
-    // TODO: can u fix the type here? Using any is bad
     async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
@@ -65,12 +65,8 @@ export const authOptions = {
       return token;
     },
     async session({ token, session }: any) {
-      // session.user.id = token.sub;
-      // session.user.number = token.number;
-      // session.user.pin = token.pin;
-
       const user = await db.user.findUnique({
-        where: { id: Number(token.sub) }, // Assuming token.sub contains user id
+        where: { id: Number(token.sub) },
       });
 
       // Update session with the latest user data
@@ -79,6 +75,7 @@ export const authOptions = {
       session.user.email = user?.email;
       session.user.number = user?.number;
       session.user.pin = user?.pin;
+      session.user.walletID = user?.walletID;
       session.user.createdAt = user?.createdAt;
       session.user.address = user?.address;
       session.user.state = user?.state;

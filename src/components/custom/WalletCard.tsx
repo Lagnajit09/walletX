@@ -3,6 +3,7 @@
 import {
   Card,
   CardContent,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card";
@@ -160,7 +161,10 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
           <h2 className="text-4xl font-bold mb-2">
             ₹ {formatNumber(balance / 100)}
           </h2>
-          <p className="text-muted-foreground mb-6">Available Balance</p>
+          <p className="text-muted-foreground mb-2">Available Balance</p>
+          <p className="text-muted-foreground mb-6 text-sm">
+            Wallet-ID: {session.data?.user?.walletID}
+          </p>
 
           <div className="flex flex-wrap gap-4 justify-center">
             <DepositSheet

@@ -17,13 +17,13 @@ import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 import { Checkbox } from "@/src/components/ui/checkbox";
 import { Mail, Lock } from "lucide-react";
-import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { SigninFormSchema } from "@/app/lib/form";
 import { signIn } from "next-auth/react";
 import { useLoading } from "@/contexts/LoadingContext";
 import { Spinner } from "@/src/components/ui/spinner";
+import { toast } from "@/hooks/use-toast";
 
 // Create a TypeScript type from the schema
 type FormValues = z.infer<typeof SigninFormSchema>;
@@ -45,18 +45,25 @@ export function SignInForm() {
   const onSubmit = async (values: FormValues) => {
     // Handle authentication
     showLoader(3000);
-    console.log(values);
     try {
       const user = await signIn("credentials", {
         ...values,
         redirect: false,
       });
       if (!user?.ok) throw new Error("Incorrect phone or password!");
-      toast.success("Signed in successfully");
+      toast({
+        title: `Welcome!`,
+        description: "Signed in successfully.",
+        variant: "default",
+      });
       router.push("/dashboard");
     } catch (error) {
       console.error(error);
-      toast.error("Failed to sign in");
+      toast({
+        title: "Failed to Sign In!",
+        description: "Incorrect phone or password.",
+        variant: "destructive",
+      });
     }
   };
 

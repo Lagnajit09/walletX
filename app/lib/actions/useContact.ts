@@ -25,7 +25,11 @@ export async function addContact({
     });
 
     if (!isValidContact) {
-      return { ok: false, status: 404, message: "User doesn't exist!" };
+      return {
+        ok: false,
+        status: 404,
+        message: "This is not a registered phone number.",
+      };
     }
 
     // Create new contact
@@ -67,5 +71,36 @@ export async function getContacts() {
       message: "Error finding contacts!",
       contacts: [],
     };
+  }
+}
+
+export async function deleteUserContact({
+  id,
+  phone,
+}: {
+  id: number;
+  phone: string;
+}) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return { ok: false, status: 400, message: "Unauthorized" };
+    }
+
+    const userId = session.user.id;
+
+    // Delete contact
+    const response = await prisma.contact.delete({
+      where: {
+        id,
+        userId: session.user.id,
+        phone,
+      },
+    });
+
+    return { ok: true, status: 200, message: "Contact deleted." };
+  } catch (error: any) {
+    console.error("Error creating contact:", error);
+    return { ok: false, status: 500, message: "Error deleting contact!" };
   }
 }

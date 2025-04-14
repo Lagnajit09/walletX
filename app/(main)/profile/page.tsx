@@ -8,6 +8,7 @@ import {
   CreditCard,
   Building,
   ShieldCheck,
+  Key,
 } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import {
@@ -106,6 +107,14 @@ export default async function ProfilePage() {
                 <div>
                   <p className="text-sm text-muted-foreground">Phone</p>
                   <p>{session.user.number}</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3">
+                <Key className="h-5 w-5 text-swift-purple" />
+                <div>
+                  <p className="text-sm text-muted-foreground">Wallet-ID</p>
+                  <p>{session.user.walletID}</p>
                 </div>
               </div>
 

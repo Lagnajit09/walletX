@@ -114,7 +114,7 @@ const WithdrawSheet = ({
             <div className="space-y-2">
               <Label htmlFor="withdraw-amount">Amount</Label>
               <div className="relative">
-                <span className="absolute left-3 top-2.5 text-muted-foreground">
+                <span className="absolute left-3 top-1.5 text-muted-foreground">
                   ₹
                 </span>
                 <Input

@@ -14,6 +14,7 @@ model User {
   email              String?              @unique
   name               String?
   number             String               @unique
+  walletID           String               @unique
   password           String
   pin                String?
   createdAt          DateTime             @default(now())
@@ -30,11 +31,12 @@ model User {
 }
 
 model Contact {
-  id     Int    @id @default(autoincrement())
-  name   String
-  phone  String
-  userId Int
-  user   User   @relation(fields: [userId], references: [id])
+  id       Int     @id @default(autoincrement())
+  name     String
+  phone    String
+  walletID String? @default(uuid())
+  userId   Int
+  user     User    @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }

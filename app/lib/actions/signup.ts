@@ -1,20 +1,36 @@
 "use server";
 import bcrypt from "bcrypt";
 import db from "../db";
+import crypto from "crypto";
+
+function generateWalletID(
+  email: string,
+  phoneNumber: string,
+  salt = Date.now().toString()
+) {
+  const uniqueString = `${email}-${phoneNumber}-${salt}`;
+  const hash = crypto.createHash("sha256").update(uniqueString).digest("hex");
+  return `SP_${hash.substring(0, 16)}`;
+}
 
 export default async function signup(
   name: string,
+  email: string,
   number: string,
   password: string
 ) {
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const walletID = generateWalletID(email, number);
+
     const user = await db.user.create({
       data: {
         number,
+        email,
         name,
         password: hashedPassword,
+        walletID,
       },
     });
 

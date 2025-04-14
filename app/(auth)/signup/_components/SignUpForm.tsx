@@ -15,7 +15,6 @@ import {
 } from "@/src/components/ui/form";
 
 import { Mail, Lock, User, Phone } from "lucide-react";
-import { toast } from "sonner";
 import { Button } from "@/src/components/ui/button";
 import { Input } from "@/src/components/ui/input";
 import { Checkbox } from "@/src/components/ui/checkbox";
@@ -26,6 +25,7 @@ import signup from "@/app/lib/actions/signup";
 import { signIn } from "next-auth/react";
 import { useLoading } from "@/contexts/LoadingContext";
 import { Spinner } from "@/src/components/ui/spinner";
+import { toast } from "@/hooks/use-toast";
 
 export function SignUpForm() {
   const router = useRouter();
@@ -50,22 +50,38 @@ export function SignUpForm() {
     showLoader(3000);
     const { name, email, phone, password } = values;
     try {
-      const res = await signup(name, phone, password);
+      const res = await signup(name, email, phone, password);
       if (res?.ok) {
         const user = await signIn("credentials", {
           ...values,
           redirect: false,
         });
-        if (!user?.ok) throw new Error("Incorrect phone or password!");
       } else {
+        if (res.status === 400) {
+          toast({
+            title: "Failed to Create Account!",
+            description: "An account with this Email or Phone already exists.",
+            variant: "destructive",
+          });
+          return;
+        }
         throw new Error(res.message);
       }
-    } catch (error) {
+    } catch (error: any) {
+      toast({
+        title: "Failed to Create Account!",
+        description: "An error occured!",
+        variant: "destructive",
+      });
       console.error(error);
-      toast.error("Failed to create account");
+
       return;
     }
-    toast.success("Account created successfully");
+    toast({
+      title: `Welcome, ${name}`,
+      description: "Account created successfully!",
+      variant: "default",
+    });
     router.push("/dashboard");
   };
 
