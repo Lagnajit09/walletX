@@ -6,7 +6,7 @@ import {
 } from "@/src/components/ui/tabs";
 import { P2PTransactionsTab } from "./P2PTransactionsTab";
 import { WalletTransactionsTab } from "./WalletTransactionsTab";
-import { Transaction, WalletTransactionHistory } from "@/lib/types";
+import { Transaction, WalletTransactionHistory } from "@/types/transaction";
 
 interface TransactionHistoryProps {
   p2pTransactions: Transaction[];

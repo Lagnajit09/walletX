@@ -2,7 +2,7 @@ import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
-import { WalletTransactionHistory } from "@/lib/types";
+import { WalletTransactionHistory } from "@/types/transaction";
 
 interface WalletTransactionTableProps {
   transactions: WalletTransactionHistory[];

@@ -2,7 +2,7 @@ export interface Contact {
   id: number;
   name: string;
   phone: string;
-  walletID: string;
+  walletID: string | null;
   userId?: number;
 }
 

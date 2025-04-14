@@ -2,6 +2,7 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "../db";
+import { Contact } from "@/types/contact";
 
 export async function addContact({
   name,
@@ -51,7 +52,12 @@ export async function addContact({
   }
 }
 
-export async function getContacts() {
+export async function getContacts(): Promise<{
+  ok: boolean;
+  status: number;
+  message: string;
+  contacts: Contact[];
+}> {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {

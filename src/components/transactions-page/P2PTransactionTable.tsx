@@ -1,7 +1,7 @@
 import { ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/src/components/ui/badge";
 import { cn, formatCurrency } from "@/lib/utils";
-import { Transaction } from "@/lib/types";
+import { Transaction } from "@/types/transaction";
 
 interface P2PTransactionTableProps {
   transactions: Transaction[];

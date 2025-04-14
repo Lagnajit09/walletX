@@ -3,7 +3,7 @@ import { ArrowUpRight, ArrowDownLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { Transaction } from "@/lib/types";
+import { Transaction } from "@/types/transaction";
 
 interface RecentTransactionsProps {
   recentTransactions: Transaction[] | string;

@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { Search } from "lucide-react";
-import { WalletTransactionHistory } from "@/lib/types";
+import { WalletTransactionHistory } from "@/types/transaction";
 import { WalletTransactionTable } from "./WalletTransactionTable";
 import { TransactionPagination } from "./TransactionPagination";
 

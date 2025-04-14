@@ -1,4 +1,4 @@
-import { Transaction, WalletTransactionHistory } from "@/lib/types";
+import { Transaction, WalletTransactionHistory } from "@/types/transaction";
 import db from "../db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";

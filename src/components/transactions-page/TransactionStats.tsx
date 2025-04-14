@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { formatCurrency } from "@/lib/utils";
-import { Transaction, WalletTransactionHistory } from "@/lib/types";
+import { Transaction, WalletTransactionHistory } from "@/types/transaction";
 
 interface TransactionStatsProps {
   p2pTransactions: Transaction[];

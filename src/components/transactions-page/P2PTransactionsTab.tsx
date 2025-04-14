@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/src/components/ui/card";
 import { Search } from "lucide-react";
-import { Transaction } from "@/lib/types";
+import { Transaction } from "@/types/transaction";
 import { P2PTransactionTable } from "./P2PTransactionTable";
 import { TransactionPagination } from "./TransactionPagination";
 

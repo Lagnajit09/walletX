@@ -1,6 +1,18 @@
 export const banks = [
-  { id: "1", name: "HDFC Bank", accountNo: "****2345", logo: "HDFC" },
-  { id: "2", name: "ICICI Bank", accountNo: "****8901", logo: "ICICI" },
+  {
+    id: "1",
+    name: "HDFC Bank",
+    accountNo: "****2345",
+    logo: "HDFC",
+    delay: "100ms",
+  },
+  {
+    id: "2",
+    name: "ICICI Bank",
+    accountNo: "****8901",
+    logo: "ICICI",
+    delay: "200ms",
+  },
 ];
 
 export const cards = [

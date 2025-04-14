@@ -3,30 +3,11 @@
 import React from "react";
 import { CreditCard, ChevronRight, Plus } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { banks } from "@/app/lib/banks";
 
 const BankAccounts = () => {
-  const isMobile = useIsMobile();
-
-  const banks = [
-    {
-      id: 1,
-      name: "HDFC Bank",
-      accountNo: "****2345",
-      logo: "HDFC",
-      delay: "100ms",
-    },
-    {
-      id: 2,
-      name: "ICICI Bank",
-      accountNo: "****8901",
-      logo: "ICICI",
-      delay: "200ms",
-    },
-  ];
-
   return (
-    <div className={`w-full ${isMobile ? "mt-6" : "mt-6"}`}>
+    <div className="w-full mt-6 md:mt-6">
       <div className="flex justify-between items-center mb-4">
         <h3 className="font-medium text-lg">Linked Accounts</h3>
         <Button

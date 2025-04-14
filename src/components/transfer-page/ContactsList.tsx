@@ -37,7 +37,7 @@ export default function ContactsList({
                   className="flex items-center justify-between p-4 cursor-pointer hover:bg-muted/50"
                   onClick={() => {
                     onContactSelect(contact);
-                    setTransferWallet(contact.walletID);
+                    setTransferWallet(contact.walletID ? contact.walletID : "");
                   }}
                 >
                   <div className="flex items-center">
