@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  CreditCard,
-  Plus,
-  ExternalLink,
-  ArrowDown,
-  ArrowUp,
-  ChevronRight,
-} from "lucide-react";
+import { CreditCard, Plus, ExternalLink, ChevronRight } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 import {
   Card,
@@ -24,6 +17,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
 import { getRecentTransactions } from "@/app/lib/actions/getWalletTransactions";
 import RecentActivities from "@/src/components/custom/RecentWalletActivities";
+import { DashboardSkeleton } from "@/src/components/skeletons/DashboardSkeleton";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Wallet | Swift Pay",
+  description:
+    "Have your own Wallet, Connect to Bank accounts, Add Debit/Credit cards. Make your transactions.",
+};
 
 // Fetch transactions and balance
 async function getTransactions() {
@@ -58,7 +59,6 @@ async function getTransactions() {
 }
 
 const WalletPage = async () => {
-  const transactions = await getTransactions();
   return (
     <main className="px-4 pt-2 md:px-6 pt-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -163,21 +163,9 @@ const WalletPage = async () => {
             </Button>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              {transactions.length > 0 ? (
-                transactions.map((txn, index) => (
-                  <RecentActivities
-                    key={index}
-                    amount={txn.amount}
-                    date={txn.date}
-                    type={txn.type}
-                    status={txn.status}
-                  />
-                ))
-              ) : (
-                <p>No Recent Transactions</p>
-              )}
-            </div>
+            <Suspense fallback={<DashboardSkeleton type="balance" />}>
+              <RecentActivitiesSection />
+            </Suspense>
           </CardContent>
         </Card>
       </div>
@@ -187,11 +175,31 @@ const WalletPage = async () => {
 
 export default WalletPage;
 
-// Separate components for each section
 async function WalletCardSection() {
   const { getBalance } = await import("../../lib/actions/getBalance");
   const balance = await getBalance();
   return (
     <WalletCard existingBalance={balance.amount} locked={balance.locked} />
+  );
+}
+
+async function RecentActivitiesSection() {
+  const transactions = await getTransactions();
+  return (
+    <div className="space-y-4">
+      {transactions.length > 0 ? (
+        transactions.map((txn, index) => (
+          <RecentActivities
+            key={index}
+            amount={txn.amount}
+            date={txn.date}
+            type={txn.type}
+            status={txn.status}
+          />
+        ))
+      ) : (
+        <p>No Recent Transactions</p>
+      )}
+    </div>
   );
 }

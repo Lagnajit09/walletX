@@ -30,7 +30,7 @@ type FormValues = z.infer<typeof SigninFormSchema>;
 
 export function SignInForm() {
   const router = useRouter();
-  const { showLoader, isLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
 
   // Initialize form with proper typing
   const form = useForm<FormValues>({
@@ -44,7 +44,7 @@ export function SignInForm() {
 
   const onSubmit = async (values: FormValues) => {
     // Handle authentication
-    showLoader(3000);
+    setIsLoading(true);
     try {
       const user = await signIn("credentials", {
         ...values,

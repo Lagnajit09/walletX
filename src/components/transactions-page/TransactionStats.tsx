@@ -17,8 +17,6 @@ export function TransactionStats({
   p2pTransactions,
   walletTransactions,
 }: TransactionStatsProps) {
-  console.log(p2pTransactions);
-
   // Calculate total sent amount
   const totalSent = p2pTransactions
     .filter((tx) => tx.status === "Sent")

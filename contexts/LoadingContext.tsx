@@ -1,46 +1,39 @@
-"use client";
-
+// contexts/LoadingContext.tsx
 import React, { createContext, useState, useContext, useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
-interface LoadingContextType {
+type LoadingContextType = {
   isLoading: boolean;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  showLoader: (duration?: number) => void;
-}
+  setIsLoading: (loading: boolean) => void;
+};
 
 const LoadingContext = createContext<LoadingContextType | undefined>(undefined);
 
 export function LoadingProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const showLoader = (duration = 2000) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-    }, duration);
-  };
-
-  // Show loading on navigation
+  // Track route changes to show loading state
   useEffect(() => {
-    showLoader();
-  }, [pathname]);
+    setIsLoading(true);
+
+    // Short timeout to ensure loading indicator is visible
+    const timeout = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [pathname, searchParams]);
 
   return (
-    <LoadingContext.Provider value={{ isLoading, setIsLoading, showLoader }}>
+    <LoadingContext.Provider value={{ isLoading, setIsLoading }}>
       {children}
-      {isLoading && (
-        <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-gradient-to-r from-swift-purple via-swift-blue to-swift-light-purple">
-          <div className="h-full w-full animate-pulse-soft bg-gradient-to-r from-swift-purple to-swift-blue"></div>
-        </div>
-      )}
     </LoadingContext.Provider>
   );
 }
 
-export const useLoading = (): LoadingContextType => {
+export const useLoading = () => {
   const context = useContext(LoadingContext);
   if (context === undefined) {
     throw new Error("useLoading must be used within a LoadingProvider");

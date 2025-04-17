@@ -79,6 +79,20 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       keyframes: {
+        jump: {
+          "15%": { "border-bottom-right-radius": "3px" },
+          "25%": { transform: "translateY(9px) rotate(22.5deg)" },
+          "50%": {
+            transform: "translateY(18px) scale(1, 0.9) rotate(45deg)",
+            "border-bottom-right-radius": "40px",
+          },
+          "75%": { transform: "translateY(9px) rotate(67.5deg)" },
+          "100%": { transform: "translateY(0) rotate(90deg)" },
+        },
+        shadow: {
+          "0%, 100%": { transform: "scale(1, 1)" },
+          "50%": { transform: "scale(1.2, 1)" },
+        },
         "caret-blink": {
           "0%,70%,100%": { opacity: "1" },
           "20%,50%": { opacity: "0" },
@@ -136,6 +150,8 @@ export default {
         "slide-up": "slide-up 0.6s ease-out",
         "slide-right": "slide-right 0.6s ease-out",
         "caret-blink": "caret-blink 1.25s ease-out infinite",
+        jump: "jump 0.5s linear infinite",
+        shadow: "shadow 0.5s linear infinite",
       },
     },
   },

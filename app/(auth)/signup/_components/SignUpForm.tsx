@@ -29,7 +29,7 @@ import { toast } from "@/hooks/use-toast";
 
 export function SignUpForm() {
   const router = useRouter();
-  const { showLoader, isLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
 
   // Initialize form
   const form = useForm<z.infer<typeof SignupFormSchema>>({
@@ -47,7 +47,7 @@ export function SignUpForm() {
   // Form submission handler
   const onSubmit = async (values: z.infer<typeof SignupFormSchema>) => {
     // Handle registration
-    showLoader(3000);
+    setIsLoading(true);
     const { name, email, phone, password } = values;
     try {
       const res = await signup(name, email, phone, password);
