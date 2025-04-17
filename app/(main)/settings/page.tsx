@@ -1,5 +1,12 @@
 import React from "react";
-import { ChevronRight, Bell, CreditCard, Shield, Globe } from "lucide-react";
+import {
+  ChevronRight,
+  Bell,
+  CreditCard,
+  Shield,
+  Globe,
+  LucideDelete,
+} from "lucide-react";
 import { Switch } from "@/src/components/ui/switch";
 import {
   Card,
@@ -12,6 +19,7 @@ import { Separator } from "@/src/components/ui/separator";
 import PinSetupButton from "@/src/components/custom/PinSetupButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
+import { Button } from "@/src/components/ui/button";
 
 const SettingsPage = async () => {
   const session = await getServerSession(authOptions);
@@ -95,6 +103,30 @@ const SettingsPage = async () => {
           name: "Language",
           description: "English (US)",
           action: <ChevronRight className="h-5 w-5 text-swift-dark-gray" />,
+        },
+      ],
+    },
+    {
+      title: "Deletion",
+      icon: <LucideDelete className="h-5 w-5 text-swift-purple" />,
+      items: [
+        {
+          name: "Deactivate Account",
+          description: "Deactivate your account for a specified period of time",
+          action: (
+            <Button className="bg-swift-gray text-red-400 border hover:bg-white">
+              Deactivate
+            </Button>
+          ),
+        },
+        {
+          name: "Delete Account",
+          description: "Delete your account permanently",
+          action: (
+            <Button className=" text-swift-gray bg-red-500 hover:bg-red-400">
+              Delete
+            </Button>
+          ),
         },
       ],
     },

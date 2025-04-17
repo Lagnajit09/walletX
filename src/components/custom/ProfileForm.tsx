@@ -136,6 +136,7 @@ const ProfileFormDialog = ({ data, children }: ProfileFormDialogProps) => {
                           {...field}
                           type="email"
                           placeholder="Email address"
+                          disabled
                         />
                       </FormControl>
                       <FormMessage />
@@ -154,6 +155,7 @@ const ProfileFormDialog = ({ data, children }: ProfileFormDialogProps) => {
                           {...field}
                           placeholder="10-digit phone number"
                           maxLength={10}
+                          disabled
                         />
                       </FormControl>
                       <FormMessage />
