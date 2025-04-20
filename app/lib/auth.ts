@@ -46,6 +46,7 @@ export const authOptions = {
               state: existingUser.state,
               country: existingUser.country,
               dob: existingUser.dob,
+              emailVerified: existingUser.emailVerified,
             };
           }
           return null;
@@ -81,6 +82,7 @@ export const authOptions = {
       session.user.state = user?.state;
       session.user.country = user?.country;
       session.user.dob = user?.dob;
+      session.user.emailVerified = user?.emailVerified;
 
       return session;
     },

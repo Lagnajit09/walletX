@@ -14,6 +14,7 @@ declare module "next-auth" {
       state?: string | null;
       dob?: string | null;
       createdAt?: string | null;
+      emailVerified?: boolean | null;
     };
     expires: ISODateString;
   }

@@ -20,6 +20,7 @@ import PinSetupButton from "@/src/components/custom/PinSetupButton";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/lib/auth";
 import { Button } from "@/src/components/ui/button";
+import VerifyEmailButton from "@/src/components/custom/VerifyEmailButton";
 
 const SettingsPage = async () => {
   const session = await getServerSession(authOptions);
@@ -34,11 +35,13 @@ const SettingsPage = async () => {
           description: session.user?.pin
             ? "Change your 4-digit PIN"
             : "Set up a 4-digit PIN",
+          action: <PinSetupButton />,
+        },
+        {
+          name: "Verify Email",
+          description: "Verify your Email address",
           action: (
-            <PinSetupButton
-              hasExistingPin={!!session.user?.pin}
-              pin={session.user?.pin}
-            />
+            <VerifyEmailButton isEmailVerified={session.user?.emailVerified} />
           ),
         },
         {

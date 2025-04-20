@@ -74,15 +74,16 @@ export function SignUpForm() {
         variant: "destructive",
       });
       console.error(error);
-
       return;
+    } finally {
+      setIsLoading(false);
     }
     toast({
       title: `Welcome, ${name}`,
       description: "Account created successfully!",
       variant: "default",
     });
-    router.push("/dashboard");
+    router.push("/email-confirmation");
   };
 
   return (

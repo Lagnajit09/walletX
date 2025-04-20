@@ -12,8 +12,15 @@ const protectedRoutes = [
   "/settings",
 ];
 
-// Define auth routes (login/signup pages)
-const authRoutes = ["/signin", "/signup"];
+// Define auth routes (login/signup pages and verification pages)
+const authRoutes = [
+  "/signin",
+  "/signup",
+  "/forgot-password",
+  "/email-confirmation",
+  "/verification-success",
+  "/verification-failure",
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -50,9 +57,16 @@ export async function middleware(request: NextRequest) {
   });
 
   // If the user is on an auth route and is already authenticated,
-  // redirect them to the dashboard
+  // redirect them to the dashboard, unless they're on a verification page
   if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    // Don't redirect from verification pages even if authenticated
+    if (
+      !pathname.startsWith("/email-confirmation") &&
+      !pathname.startsWith("/verification-success") &&
+      !pathname.startsWith("/verification-failure")
+    ) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
   }
 
   // If the user is on a protected route and is not authenticated,
