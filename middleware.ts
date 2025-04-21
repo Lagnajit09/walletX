@@ -5,6 +5,7 @@ import { getToken } from "next-auth/jwt";
 // Define protected routes that require authentication
 const protectedRoutes = [
   "/dashboard",
+  "/analytics",
   "/transfer",
   "/profile",
   "/transactions",

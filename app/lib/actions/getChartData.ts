@@ -1,3 +1,4 @@
+// app/lib/actions/getChartData.ts
 import prisma from "../db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
@@ -105,8 +106,9 @@ export async function getChartData(): Promise<chartDataProps[]> {
 
       chartData.push({
         month: MONTHS[month],
-        added: Number((onRampData._sum?.amount || 0) / 100) || 0,
-        withdrawn: Number((offRampData._sum.amount || 0) / 100) || 0,
+        added: Number(((onRampData._sum?.amount || 0) / 100).toFixed(2)) || 0,
+        withdrawn:
+          Number(((offRampData._sum?.amount || 0) / 100).toFixed(2)) || 0,
       });
     }
 

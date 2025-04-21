@@ -32,13 +32,15 @@ export const BalanceCard = ({
           </h2>
         </div>
 
-        <Button
-          variant="ghost"
-          size="sm"
-          className="hidden md:flex items-center gap-1 text-swift-dark-gray"
-        >
-          <BarChart3 className="h-4 w-4" /> View Analytics
-        </Button>
+        <Link href={"/analytics"}>
+          <Button
+            variant="ghost"
+            size="sm"
+            className="hidden md:flex items-center gap-1 text-swift-dark-gray"
+          >
+            <BarChart3 className="h-4 w-4" /> View Analytics
+          </Button>
+        </Link>
       </div>
 
       <div className="flex items-end gap-2 mb-6">

@@ -136,7 +136,7 @@ const SettingsPage = async () => {
   ];
 
   return (
-    <main className="px-4 pt-2 md: px-6 pt-8">
+    <main className="px-4 md:px-6 pt-8">
       <h1 className="text-2xl font-bold mb-6">Settings</h1>
 
       <div className="space-y-6 animate-fade-in">

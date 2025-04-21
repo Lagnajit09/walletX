@@ -60,7 +60,7 @@ async function getTransactions() {
 
 const WalletPage = async () => {
   return (
-    <main className="px-4 pt-2 md:px-6 pt-8">
+    <main className="px-4 md:px-6 pt-8">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Balance Card */}
         <Suspense fallback={<WalletCardSkeleton />}>
