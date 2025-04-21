@@ -35,8 +35,6 @@ export const sendPasswordResetEmail = async (
       from_name: "SwiftPay",
     };
 
-    console.log(templateParams);
-
     emailjs.init({
       publicKey: PUBLIC_KEY,
       privateKey: PRIVATE_KEY,

@@ -20,23 +20,20 @@ import { useLoading } from "@/contexts/LoadingContext";
 import { Spinner } from "@/src/components/ui/spinner";
 import Link from "next/link";
 import { initiatePasswordReset } from "@/app/lib/actions/resetPassword";
-
-const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-});
+import { forgotPasswordFormSchema } from "@/app/lib/form";
 
 export default function ForgotPasswordForm() {
   const { isLoading, setIsLoading } = useLoading();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof forgotPasswordFormSchema>>({
+    resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: {
       email: "",
     },
   });
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof forgotPasswordFormSchema>) => {
     setIsLoading(true);
 
     try {

@@ -69,6 +69,7 @@ This project was an immense learning experience. Some highlights include:
 - **Recharts**
 - **Axios**
 - **Recoil (State Management)**
+- **EmailJS (Email Management)**
 - **Vercel (Deployment)**
 
 ---

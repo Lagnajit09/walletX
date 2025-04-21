@@ -24,25 +24,7 @@ import {
   validateResetToken,
   completePasswordReset,
 } from "@/app/lib/actions/resetPassword";
-
-const formSchema = z
-  .object({
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" })
-      .regex(/[A-Z]/, {
-        message: "Password must contain at least one uppercase letter",
-      })
-      .regex(/[a-z]/, {
-        message: "Password must contain at least one lowercase letter",
-      })
-      .regex(/[0-9]/, { message: "Password must contain at least one number" }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
+import { resetPasswordFormSchema } from "@/app/lib/form";
 
 export default function ResetPasswordForm() {
   const { isLoading, setIsLoading } = useLoading();
@@ -53,8 +35,8 @@ export default function ResetPasswordForm() {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof resetPasswordFormSchema>>({
+    resolver: zodResolver(resetPasswordFormSchema),
     defaultValues: {
       password: "",
       confirmPassword: "",
@@ -83,7 +65,7 @@ export default function ResetPasswordForm() {
     verifyToken();
   }, [token, setIsLoading]);
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof resetPasswordFormSchema>) => {
     if (!token) return;
 
     setIsLoading(true);

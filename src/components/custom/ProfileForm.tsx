@@ -24,25 +24,7 @@ import { useToast } from "@/hooks/use-toast";
 import { updateProfile } from "@/app/lib/actions/updateProfile";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-// Define validation schema using zod
-const profileFormSchema = z.object({
-  name: z
-    .string()
-    .min(1, "Name is required")
-    .regex(/^[a-zA-Z\s]+$/, "Name should only contain letters and spaces"),
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-  number: z
-    .string()
-    .min(1, "Phone number is required")
-    .regex(/^\d{10}$/, "Phone number must be exactly 10 digits"),
-  address: z.string().optional(),
-  state: z.string().optional(),
-  country: z.string().optional(),
-});
+import { profileFormSchema } from "@/app/lib/form";
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
