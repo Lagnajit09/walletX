@@ -25,6 +25,8 @@ model User {
   emailVerified            Boolean              @default(false)
   verificationToken        String?              @unique
   verificationTokenExpires DateTime?
+  resetToken               String?              @unique
+  resetTokenExpires        DateTime?
   OnRampTransaction        OnRampTransaction[]
   Balance                  Balance[]
   sentTransfers            p2pTransfer[]        @relation(name: "FromUserRelation")

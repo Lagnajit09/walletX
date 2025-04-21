@@ -17,6 +17,7 @@ const authRoutes = [
   "/signin",
   "/signup",
   "/forgot-password",
+  "/reset-password",
   "/email-confirmation",
   "/verification-success",
   "/verification-failure",

@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { useLoading } from "@/contexts/LoadingContext";
 import { Spinner } from "@/src/components/ui/spinner";
 import Link from "next/link";
+import { initiatePasswordReset } from "@/app/lib/actions/resetPassword";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -35,16 +36,24 @@ export default function ForgotPasswordForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
 
-    console.log("Password reset requested for:", values.email);
+    try {
+      const success = await initiatePasswordReset(values.email);
 
-    setTimeout(() => {
-      setIsSubmitted(true);
+      if (success) {
+        setIsSubmitted(true);
+        toast.success("Password reset link sent to your email");
+      } else {
+        toast.error("Failed to send reset link. Please try again.");
+      }
+    } catch (error) {
+      console.error("Password reset error:", error);
+      toast.error("Something went wrong. Please try again later.");
+    } finally {
       setIsLoading(false);
-      toast.success("Password reset link sent to your email");
-    }, 1500);
+    }
   };
 
   return (
