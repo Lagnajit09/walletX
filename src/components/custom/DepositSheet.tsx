@@ -1,4 +1,3 @@
-// DepositSheet.tsx
 "use client";
 
 import { Button } from "@/src/components/ui/button";
@@ -66,8 +65,14 @@ const DepositSheet = ({
       return;
     }
 
-    // If PIN is set, allow the sheet to open
     setIsSheetOpen(true);
+  };
+
+  const handleAddMoney = (provider: string | undefined) => {
+    // Close the sheet first
+    setIsSheetOpen(false);
+    // Then initiate the deposit
+    initiateDeposit(provider);
   };
 
   return (
@@ -150,7 +155,7 @@ const DepositSheet = ({
                   </div>
                   <Button
                     className="w-full"
-                    onClick={() => initiateDeposit(getSelectedBank()?.name)}
+                    onClick={() => handleAddMoney(getSelectedBank()?.name)}
                     disabled={!selectedBankId || !amount || Number(amount) <= 0}
                   >
                     Add Money
@@ -226,7 +231,7 @@ const DepositSheet = ({
                   </div>
                   <Button
                     className="w-full"
-                    onClick={() => initiateDeposit(getSelectedCard()?.name)}
+                    onClick={() => handleAddMoney(getSelectedCard()?.name)}
                     disabled={!selectedCardId || !amount || Number(amount) <= 0}
                   >
                     Add Money

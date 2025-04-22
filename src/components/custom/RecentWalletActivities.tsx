@@ -32,7 +32,7 @@ const RecentActivities = ({
           ) : (
             <p className="font-medium">{`Withdrawn from wallet`}</p>
           )}
-          <p className="text-swift-dark-gray text-sm">Today, 2:45 PM</p>
+          <p className="text-swift-dark-gray text-sm">{date}</p>
         </div>
       </div>
 

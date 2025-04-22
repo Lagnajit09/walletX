@@ -1,4 +1,3 @@
-// WithdrawSheet.tsx
 "use client";
 
 import { Button } from "@/src/components/ui/button";
@@ -56,8 +55,14 @@ const WithdrawSheet = ({
       return;
     }
 
-    // If PIN is set, allow the sheet to open
     setIsSheetOpen(true);
+  };
+
+  const handleWithdrawMoney = (provider: string | undefined) => {
+    // Close the sheet first
+    setIsSheetOpen(false);
+    // Then initiate the withdrawal
+    initiateWithdraw(provider);
   };
 
   return (
@@ -132,7 +137,7 @@ const WithdrawSheet = ({
             </div>
             <Button
               className="w-full"
-              onClick={() => initiateWithdraw(getSelectedBank()?.name)}
+              onClick={() => handleWithdrawMoney(getSelectedBank()?.name)}
               disabled={
                 !selectedBankId ||
                 !amount ||

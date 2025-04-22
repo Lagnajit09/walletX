@@ -151,9 +151,7 @@ const WalletPage = async () => {
           <CardHeader className="flex flex-row items-center justify-between">
             <div className="flex flex-col gap-2">
               <CardTitle>Recent Activities</CardTitle>
-              <CardDescription>
-                View your last 30 days transactions
-              </CardDescription>
+              <CardDescription>View your last 10 transactions</CardDescription>
             </div>
 
             <Button variant="link" asChild>
@@ -198,7 +196,9 @@ async function RecentActivitiesSection() {
           />
         ))
       ) : (
-        <p>No Recent Transactions</p>
+        <div className="p-4 text-center text-muted-foreground">
+          No recent transactions
+        </div>
       )}
     </div>
   );

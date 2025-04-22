@@ -3,54 +3,36 @@ import db from "../db";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 
-// This function fetches recent transactions for the logged-in user
-// within the last 30 days. It returns an array of transactions sorted by date.
+// This function fetches the 10 most recent transactions (onRamp + offRamp combined)
+// for the logged-in user, sorted by startTime.
 export async function getRecentTransactions(userId: number) {
-  const today = new Date();
-  const last30Days = new Date(today.setDate(today.getDate() - 30)); // 30 days ago
-
-  // Fetch onRamp transactions
+  // Fetch latest 10 onRamp transactions
   const onRampTransactions = await db.onRampTransaction.findMany({
-    where: {
-      userId,
-      startTime: {
-        gte: last30Days, // fetch records where startTime is greater than or equal to 30 days ago
-      },
-    },
-    orderBy: {
-      startTime: "desc",
-    },
+    where: { userId },
+    orderBy: { startTime: "desc" },
+    take: 10,
   });
 
-  // Fetch offRamp transactions
+  // Fetch latest 10 offRamp transactions
   const offRampTransactions = await db.offRampTransaction.findMany({
-    where: {
-      userId,
-      startTime: {
-        gte: last30Days, // fetch records where startTime is greater than or equal to 30 days ago
-      },
-    },
-    orderBy: {
-      startTime: "desc",
-    },
+    where: { userId },
+    orderBy: { startTime: "desc" },
+    take: 10,
   });
 
-  // Combine the two arrays
+  // Tag each transaction with its type
   const combinedTransactions = [
-    ...onRampTransactions.map((txn) => ({
-      ...txn,
-      type: "onRamp",
-    })),
-    ...offRampTransactions.map((txn) => ({
-      ...txn,
-      type: "offRamp",
-    })),
+    ...onRampTransactions.map((txn) => ({ ...txn, type: "onRamp" })),
+    ...offRampTransactions.map((txn) => ({ ...txn, type: "offRamp" })),
   ];
 
-  // Sort by startTime in reverse order (most recent first)
-  const sortedTransactions = combinedTransactions.sort((a, b) => {
-    return new Date(b.startTime).getTime() - new Date(a.startTime).getTime();
-  });
+  // Sort by startTime and return only the most recent 10
+  const sortedTransactions = combinedTransactions
+    .sort(
+      (a, b) =>
+        new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
+    )
+    .slice(0, 10); // Final 10 most recent
 
   return sortedTransactions;
 }

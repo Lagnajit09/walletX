@@ -16,6 +16,7 @@ import { createOffRampTransaction } from "@/app/lib/actions/createOffRampTransac
 import DepositSheet from "./DepositSheet";
 import WithdrawSheet from "./WithdrawSheet";
 import { useSession } from "next-auth/react";
+import TransactionLoader from "./TransactionLoader";
 
 type WalletCardProps = {
   existingBalance: number;
@@ -36,6 +37,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
   const [balance, setBalance] = useState(existingBalance);
   const [amount, setAmount] = useState("");
   const [isPinDialogOpen, setIsPinDialogOpen] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [pendingTransaction, setPendingTransaction] = useState<{
     type: "deposit" | "withdraw";
     amount: string;
@@ -91,12 +93,10 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
       return;
     }
 
-    // // For simplicity, we're not passing the provider
-    // // In a real implementation, you'd need to get the provider from somewhere
-    // const provider = "Bank Account"; // Default provider
+    setIsProcessing(true);
 
-    if (pendingTransaction.type === "deposit") {
-      try {
+    try {
+      if (pendingTransaction.type === "deposit") {
         await createOnRampTransaction(
           pendingTransaction.provider,
           Number(pendingTransaction.amount)
@@ -108,16 +108,7 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
             2
           )} has been added to your wallet`,
         });
-      } catch (error) {
-        console.error("Error creating on-ramp transaction:", error);
-        toast({
-          title: "Deposit failed",
-          description: "There was an error processing your deposit",
-          variant: "destructive",
-        });
-      }
-    } else {
-      try {
+      } else {
         await createOffRampTransaction(
           pendingTransaction.provider,
           Number(pendingTransaction.amount)
@@ -129,18 +120,28 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
             2
           )} has been withdrawn from your wallet`,
         });
-      } catch (error) {
-        console.error("Error creating off-ramp transaction:", error);
-        toast({
-          title: "Withdrawal failed",
-          description: "There was an error processing your withdrawal",
-          variant: "destructive",
-        });
       }
+    } catch (error) {
+      console.error(
+        `Error creating ${
+          pendingTransaction.type === "deposit" ? "on-ramp" : "off-ramp"
+        } transaction:`,
+        error
+      );
+      toast({
+        title: `${
+          pendingTransaction.type === "deposit" ? "Deposit" : "Withdrawal"
+        } failed`,
+        description: `There was an error processing your ${
+          pendingTransaction.type === "deposit" ? "deposit" : "withdrawal"
+        }`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+      setAmount("");
+      setPendingTransaction(null);
     }
-
-    setAmount("");
-    setPendingTransaction(null);
   };
 
   const handleCloseDialog = () => {
@@ -166,22 +167,28 @@ const WalletCard = ({ existingBalance, locked }: WalletCardProps) => {
             Wallet-ID: {session.data?.user?.walletID}
           </p>
 
-          <div className="flex flex-wrap gap-4 justify-center">
-            <DepositSheet
-              hasPin={session.data?.user?.pin ? true : false}
-              amount={amount}
-              setAmount={setAmount}
-              initiateDeposit={initiateDeposit}
-            />
+          {isProcessing ? (
+            <div className="w-full max-w-xs mx-auto py-3">
+              <TransactionLoader />
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-4 justify-center">
+              <DepositSheet
+                hasPin={session.data?.user?.pin ? true : false}
+                amount={amount}
+                setAmount={setAmount}
+                initiateDeposit={initiateDeposit}
+              />
 
-            <WithdrawSheet
-              hasPin={session.data?.user?.pin ? true : false}
-              amount={amount}
-              balance={balance}
-              setAmount={setAmount}
-              initiateWithdraw={initiateWithdraw}
-            />
-          </div>
+              <WithdrawSheet
+                hasPin={session.data?.user?.pin ? true : false}
+                amount={amount}
+                balance={balance}
+                setAmount={setAmount}
+                initiateWithdraw={initiateWithdraw}
+              />
+            </div>
+          )}
         </div>
       </CardContent>
 
