@@ -16,7 +16,56 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "SwiftPay",
   description: "Seamless, secure, and swift payments for everyday transactions",
-  icons: "/logo.svg",
+  icons: {
+    icon: "/logo.svg",
+    apple: "/logo.svg",
+  },
+  authors: [
+    {
+      name: "Lagnajit Moharana",
+      url: "https://lagnajitmoharana08.web.app/",
+    },
+  ],
+  creator: "Lagnajit Moharana",
+  publisher: "Vercel",
+  keywords: [
+    "SwiftPay",
+    "Wallet",
+    "Payments",
+    "Transactions",
+    "E-commerce",
+    "Fintech",
+    "Secure Payments",
+    "Digital Wallet",
+    "Payment Gateway",
+    "Online Payments",
+    "Swift Transactions",
+  ],
+  twitter: {
+    card: "summary_large_image",
+    site: "@m_lagnajit09",
+    title: "SwiftPay",
+    creator: "@m_lagnajit09",
+    images:
+      "https://res.cloudinary.com/dp4cwxvld/image/upload/v1745352414/SwiftPay-share_lp0zda.png",
+  },
+  openGraph: {
+    title: "SwiftPay",
+    description:
+      "Seamless, secure, and swift payments for everyday transactions",
+    url: "https://swiftpaylm.vercel.app",
+    siteName: "SwiftPay",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dp4cwxvld/image/upload/v1745352414/SwiftPay-share_lp0zda.png",
+        width: 1200,
+        height: 630,
+        alt: "SwiftPay Landing Page",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
