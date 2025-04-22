@@ -64,6 +64,8 @@ export function SignInForm() {
         description: "Incorrect phone or password.",
         variant: "destructive",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 

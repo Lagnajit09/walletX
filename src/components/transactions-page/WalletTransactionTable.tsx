@@ -87,6 +87,7 @@ export function WalletTransactionTable({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <Badge
+                      variant={"outline"}
                       className={cn(
                         transaction.status === "Success"
                           ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-900/50"

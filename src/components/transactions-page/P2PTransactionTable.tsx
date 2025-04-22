@@ -65,11 +65,7 @@ export function P2PTransactionTable({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <Badge
-                      variant={
-                        transaction.status === "Received"
-                          ? "outline"
-                          : "default"
-                      }
+                      variant={"outline"}
                       className={
                         transaction.status === "Received"
                           ? "bg-green-50 text-green-700 dark:bg-green-900/20 dark:text-green-400 border-green-200 dark:border-green-900/50"

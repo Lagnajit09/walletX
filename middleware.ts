@@ -22,6 +22,7 @@ const authRoutes = [
   "/email-confirmation",
   "/verification-success",
   "/verification-failure",
+  "/terms-and-privacy",
 ];
 
 export async function middleware(request: NextRequest) {

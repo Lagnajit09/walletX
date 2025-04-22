@@ -7,9 +7,11 @@ import { Contact } from "@/types/contact";
 export async function addContact({
   name,
   phone,
+  walletId,
 }: {
   name: string;
   phone: string;
+  walletId: string;
 }) {
   try {
     const session = await getServerSession(authOptions);
@@ -22,6 +24,7 @@ export async function addContact({
     const isValidContact = await prisma.user.findUnique({
       where: {
         number: phone,
+        walletID: walletId,
       },
     });
 
@@ -29,7 +32,7 @@ export async function addContact({
       return {
         ok: false,
         status: 404,
-        message: "This is not a registered phone number.",
+        message: "Invalid number or wallet ID!",
       };
     }
 
@@ -39,6 +42,7 @@ export async function addContact({
         name,
         phone,
         userId,
+        walletID: walletId,
       },
     });
 

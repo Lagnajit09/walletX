@@ -159,6 +159,7 @@ export default function TransferPageClient({
       const data = {
         name: newContactData.name,
         phone: newContactData.phone,
+        walletId: newContactData.walletID,
       };
       const res = await addContact(data);
       if (res.ok) {
