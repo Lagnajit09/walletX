@@ -2,13 +2,16 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "../db";
+import { Contact } from "@/types/contact";
 
 export async function addContact({
   name,
   phone,
+  walletId,
 }: {
   name: string;
   phone: string;
+  walletId: string;
 }) {
   try {
     const session = await getServerSession(authOptions);
@@ -21,11 +24,16 @@ export async function addContact({
     const isValidContact = await prisma.user.findUnique({
       where: {
         number: phone,
+        walletID: walletId,
       },
     });
 
     if (!isValidContact) {
-      return { ok: false, status: 404, message: "User doesn't exist!" };
+      return {
+        ok: false,
+        status: 404,
+        message: "Invalid number or wallet ID!",
+      };
     }
 
     // Create new contact
@@ -34,6 +42,7 @@ export async function addContact({
         name,
         phone,
         userId,
+        walletID: walletId,
       },
     });
 
@@ -47,7 +56,12 @@ export async function addContact({
   }
 }
 
-export async function getContacts() {
+export async function getContacts(): Promise<{
+  ok: boolean;
+  status: number;
+  message: string;
+  contacts: Contact[];
+}> {
   try {
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -67,5 +81,36 @@ export async function getContacts() {
       message: "Error finding contacts!",
       contacts: [],
     };
+  }
+}
+
+export async function deleteUserContact({
+  id,
+  phone,
+}: {
+  id: number;
+  phone: string;
+}) {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return { ok: false, status: 400, message: "Unauthorized" };
+    }
+
+    const userId = session.user.id;
+
+    // Delete contact
+    const response = await prisma.contact.delete({
+      where: {
+        id,
+        userId: session.user.id,
+        phone,
+      },
+    });
+
+    return { ok: true, status: 200, message: "Contact deleted." };
+  } catch (error: any) {
+    console.error("Error creating contact:", error);
+    return { ok: false, status: 500, message: "Error deleting contact!" };
   }
 }

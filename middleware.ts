@@ -5,17 +5,53 @@ import { getToken } from "next-auth/jwt";
 // Define protected routes that require authentication
 const protectedRoutes = [
   "/dashboard",
-  "/p2p",
+  "/analytics",
+  "/transfer",
   "/profile",
   "/transactions",
   "/wallet",
+  "/settings",
 ];
 
-// Define auth routes (login/signup pages)
-const authRoutes = ["/auth"];
+// Define auth routes (login/signup pages and verification pages)
+const authRoutes = [
+  "/signin",
+  "/signup",
+  "/forgot-password",
+  "/reset-password",
+  "/email-confirmation",
+  "/verification-success",
+  "/verification-failure",
+  "/terms-and-privacy",
+];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Skip middleware processing for static files and API routes
+  if (
+    pathname.startsWith("/_next") ||
+    pathname.startsWith("/api") ||
+    pathname.match(/\.(?:svg|png|jpg|jpeg|gif|webp)$/)
+  ) {
+    return NextResponse.next();
+  }
+
+  // Check if the path is a valid route
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
+  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+  const isPublicRoute = pathname === "/" || pathname === "/not-found";
+
+  // If the path is not a valid route, redirect to not-found
+  if (!isProtectedRoute && !isAuthRoute && !isPublicRoute) {
+    // Create a URL for the not found page
+    const notFoundUrl = new URL("/not-found", request.url);
+
+    // Return a redirect response
+    return NextResponse.redirect(notFoundUrl);
+  }
 
   // Get the token from the session
   const token = await getToken({
@@ -23,32 +59,26 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
 
-  // Check if the current path is an auth route
-  const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-
-  // Check if the current path is a protected route
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
-  );
-
   // If the user is on an auth route and is already authenticated,
-  // redirect them to the dashboard
+  // redirect them to the dashboard, unless they're on a verification page
   if (isAuthRoute && token) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    // Don't redirect from verification pages even if authenticated
+    if (
+      !pathname.startsWith("/email-confirmation") &&
+      !pathname.startsWith("/verification-success") &&
+      !pathname.startsWith("/verification-failure")
+    ) {
+      return NextResponse.redirect(new URL("/dashboard", request.url));
+    }
   }
 
   // If the user is on a protected route and is not authenticated,
   // redirect them to the signin page
   if (isProtectedRoute && !token) {
-    const signInUrl = new URL("/auth", request.url);
+    const signInUrl = new URL("/signin", request.url);
     // Add the current path as a callback URL
     signInUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(signInUrl);
-  }
-
-  // For api routes, return next() to allow the request to proceed
-  if (pathname.startsWith("/api")) {
-    return NextResponse.next();
   }
 
   // For all other routes, allow the request to proceed
@@ -60,13 +90,5 @@ export const config = {
   matcher: [
     // Match all routes except static files and other system routes
     "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
-    // Include auth routes
-    "/auth",
-    // Include protected routes
-    "/dashboard/:path*",
-    "/p2p/:path*",
-    "/profile/:path*",
-    "/transactions/:path*",
-    "/wallet/:path*",
   ],
 };

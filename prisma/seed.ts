@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcrypt";
+import { randomUUID } from "crypto";
 const prisma = new PrismaClient();
 
 async function main() {
@@ -10,6 +11,8 @@ async function main() {
       number: "1111111111",
       password: await bcrypt.hash("alice", 10),
       name: "alice",
+      walletID: randomUUID(),
+      email: "alice.dummy@test.com",
       Balance: {
         create: {
           amount: 20000,
@@ -34,6 +37,8 @@ async function main() {
       number: "2222222222",
       password: await bcrypt.hash("bob", 10),
       name: "bob",
+      email: "bob.dummy@test.com",
+      walletID: randomUUID(),
       Balance: {
         create: {
           amount: 2000,

@@ -2,78 +2,93 @@
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth";
 import prisma from "../db";
-
-type TransactionStatus = "Sent" | "Received";
-
-export interface Transaction {
-  id: number;
-  amount: string;
-  date: string;
-  fromUser: string;
-  toUser: string;
-  status: TransactionStatus; // Status will strictly be "Sent" or "Received"
-}
+import { Transaction, TransactionStatus } from "@/types/transaction";
 
 export async function p2pTransfer(to: string, amount: number) {
-  const session = await getServerSession(authOptions);
-  const from = session?.user?.id;
-  if (!from) {
-    return {
-      message: "Error while sending",
-    };
-  }
-  const toUser = await prisma.user.findFirst({
-    where: {
-      number: to,
-    },
-  });
-
-  if (!toUser) {
-    return {
-      message: "User not found",
-    };
-  }
-  await prisma.$transaction(async (tx) => {
-    await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(
-      from
-    )} FOR UPDATE`;
-
-    const fromBalance = await tx.balance.findUnique({
-      where: { userId: Number(from) },
-    });
-    if (!fromBalance || fromBalance.amount < amount) {
-      throw new Error("Insufficient funds");
+  try {
+    const session = await getServerSession(authOptions);
+    const from = session?.user?.id;
+    if (!from) {
+      return {
+        status: 401,
+        message: "User not authenticated",
+      };
     }
 
-    await tx.balance.update({
-      where: { userId: Number(from) },
-      data: { amount: { decrement: amount } },
-    });
-
-    await tx.balance.update({
-      where: { userId: toUser.id },
-      data: { amount: { increment: amount } },
-    });
-
-    await tx.p2pTransfer.create({
-      data: {
-        amount,
-        timestamp: new Date(),
-        fromUserId: Number(from),
-        toUserId: toUser.id,
+    const toUser = await prisma.user.findFirst({
+      where: {
+        walletID: to,
       },
     });
-  });
+
+    if (!toUser) {
+      return {
+        status: 404,
+        message: "Provided Wallet-ID doesn't exist.",
+      };
+    }
+
+    const result = await prisma.$transaction(async (tx) => {
+      await tx.$queryRaw`SELECT * FROM "Balance" WHERE "userId" = ${Number(
+        from
+      )} FOR UPDATE`;
+
+      const fromBalance = await tx.balance.findUnique({
+        where: { userId: Number(from) },
+      });
+
+      if (!fromBalance || fromBalance.amount < amount) {
+        return {
+          status: 400,
+          message: "Insufficient funds",
+        };
+      }
+
+      await tx.balance.update({
+        where: { userId: Number(from) },
+        data: { amount: { decrement: amount } },
+      });
+
+      await tx.balance.update({
+        where: { userId: toUser.id },
+        data: { amount: { increment: amount } },
+      });
+
+      await tx.p2pTransfer.create({
+        data: {
+          amount,
+          timestamp: new Date(),
+          fromUserId: Number(from),
+          toUserId: toUser.id,
+        },
+      });
+
+      return {
+        status: 200,
+        message: "Transfer Successful!",
+      };
+    });
+
+    return result || { status: 500, message: "Unknown error occurred" };
+  } catch (error) {
+    console.error(error);
+    return {
+      status: 500,
+      message: error instanceof Error ? error.message : "Server error",
+    };
+  }
 }
 
-export const getP2PTransfers = async (): Promise<Transaction[] | string> => {
+export const getP2PTransfers = async (
+  limit: number = 0
+): Promise<Transaction[] | string> => {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return "Not authorized!";
   }
 
   const userId = session.user?.id;
-  const userNumber = session.user?.number; // assuming number is available in session
+  const userNumber = session.user?.number;
 
   // Fetch transactions along with user details
   const transactions = await prisma.p2pTransfer.findMany({
@@ -87,6 +102,7 @@ export const getP2PTransfers = async (): Promise<Transaction[] | string> => {
     orderBy: {
       timestamp: "desc",
     },
+    take: limit > 0 ? limit : undefined, // Apply limit if provided
   });
 
   // Format the transactions
@@ -111,7 +127,7 @@ export const getP2PTransfers = async (): Promise<Transaction[] | string> => {
 
     return {
       id: txn.id,
-      amount: String(txn.amount / 100),
+      amount: String(txn.amount),
       date: `${formattedTime} on ${formattedDate}`,
       fromUser:
         txn.fromUser.number === userNumber ? "You" : txn.fromUser.number,
