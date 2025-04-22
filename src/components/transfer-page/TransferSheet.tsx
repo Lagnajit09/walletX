@@ -3,7 +3,6 @@
 import {
   QrCode,
   UserPlus,
-  PhoneCall,
   CreditCard,
   Link2,
   UserPlus2,
@@ -24,9 +23,7 @@ import {
   SheetTitle,
 } from "@/src/components/ui/sheet";
 import { TransferSheetProps } from "@/types/contact";
-import { addContact } from "@/app/lib/actions/useContact";
-import { useState } from "react";
-import { toast } from "@/hooks/use-toast";
+import TransactionLoader from "@/src/components/custom/TransactionLoader";
 
 export default function TransferSheet({
   isOpen,
@@ -43,6 +40,7 @@ export default function TransferSheet({
   onAddContact,
   setNewContactData,
   onDeleteContact,
+  isProcessing,
 }: TransferSheetProps) {
   const getMethodIcon = () => {
     switch (transferMethod) {
@@ -104,77 +102,90 @@ export default function TransferSheet({
           </SheetTitle>
         </SheetHeader>
 
-        {selectedContact && (
-          <ContactTransferForm
-            contact={selectedContact}
-            transferAmount={transferAmount}
-            setTransferAmount={setTransferAmount}
-            transferNote={transferNote}
-            setTransferNote={setTransferNote}
-            onInitiateTransfer={onInitiateTransfer}
-            onDeleteContact={onDeleteContact}
-          />
-        )}
-
-        {!selectedContact && transferMethod && (
-          <div className="py-6 flex flex-col items-center space-y-4">
-            <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center mb-2 text-primary">
-              {getMethodIcon()}
-            </div>
-            <div className="text-center">
-              <h3 className="text-xl font-bold">{transferMethod}</h3>
-              <p className="text-muted-foreground">{getMethodDescription()}</p>
-            </div>
-
-            <div className="space-y-4 w-full mt-4">
-              {/* Method specific forms */}
-              {transferMethod === "Wallet Transfer" && (
-                <WalletTransferForm
-                  transferAmount={transferAmount}
-                  setTransferAmount={setTransferAmount}
-                  transferNote={transferNote}
-                  setTransferNote={setTransferNote}
-                  transferWallet={transferWallet}
-                  setTransferWallet={setTransferWallet}
-                  onInitiateTransfer={onInitiateTransfer}
-                />
-              )}
-
-              {transferMethod === "Send to Account" && (
-                <AccountTransferForm
-                  transferAmount={transferAmount}
-                  setTransferAmount={setTransferAmount}
-                  onInitiateTransfer={onInitiateTransfer}
-                />
-              )}
-
-              {transferMethod === "Send to UPI" && (
-                <UpiTransferForm
-                  transferAmount={transferAmount}
-                  setTransferAmount={setTransferAmount}
-                  transferNote={transferNote}
-                  setTransferNote={setTransferNote}
-                  onInitiateTransfer={onInitiateTransfer}
-                />
-              )}
-
-              {transferMethod === "Scan QR" && <QrScanForm />}
-
-              {transferMethod === "Add Contact" && (
-                <AddContactForm
-                  onAddContact={onAddContact}
-                  setNewContactData={setNewContactData}
-                />
-              )}
-
-              {transferMethod === "Request Number" && (
-                <RequestMoneyForm
-                  transferNote={transferNote}
-                  setTransferNote={setTransferNote}
-                />
-              )}
-            </div>
+        {isProcessing ? (
+          <div className="py-16 flex flex-col items-center justify-center">
+            <TransactionLoader />
+            <p className="text-center mt-6 text-muted-foreground">
+              Processing your transfer. Please wait...
+            </p>
           </div>
+        ) : (
+          <>
+            {selectedContact && (
+              <ContactTransferForm
+                contact={selectedContact}
+                transferAmount={transferAmount}
+                setTransferAmount={setTransferAmount}
+                transferNote={transferNote}
+                setTransferNote={setTransferNote}
+                onInitiateTransfer={onInitiateTransfer}
+                onDeleteContact={onDeleteContact}
+              />
+            )}
+
+            {!selectedContact && transferMethod && (
+              <div className="py-6 flex flex-col items-center space-y-4">
+                <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center mb-2 text-primary">
+                  {getMethodIcon()}
+                </div>
+                <div className="text-center">
+                  <h3 className="text-xl font-bold">{transferMethod}</h3>
+                  <p className="text-muted-foreground">
+                    {getMethodDescription()}
+                  </p>
+                </div>
+
+                <div className="space-y-4 w-full mt-4">
+                  {/* Method specific forms */}
+                  {transferMethod === "Wallet Transfer" && (
+                    <WalletTransferForm
+                      transferAmount={transferAmount}
+                      setTransferAmount={setTransferAmount}
+                      transferNote={transferNote}
+                      setTransferNote={setTransferNote}
+                      transferWallet={transferWallet}
+                      setTransferWallet={setTransferWallet}
+                      onInitiateTransfer={onInitiateTransfer}
+                    />
+                  )}
+
+                  {transferMethod === "Send to Account" && (
+                    <AccountTransferForm
+                      transferAmount={transferAmount}
+                      setTransferAmount={setTransferAmount}
+                      onInitiateTransfer={onInitiateTransfer}
+                    />
+                  )}
+
+                  {transferMethod === "Send to UPI" && (
+                    <UpiTransferForm
+                      transferAmount={transferAmount}
+                      setTransferAmount={setTransferAmount}
+                      transferNote={transferNote}
+                      setTransferNote={setTransferNote}
+                      onInitiateTransfer={onInitiateTransfer}
+                    />
+                  )}
+
+                  {transferMethod === "Scan QR" && <QrScanForm />}
+
+                  {transferMethod === "Add Contact" && (
+                    <AddContactForm
+                      onAddContact={onAddContact}
+                      setNewContactData={setNewContactData}
+                    />
+                  )}
+
+                  {transferMethod === "Request Number" && (
+                    <RequestMoneyForm
+                      transferNote={transferNote}
+                      setTransferNote={setTransferNote}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         )}
       </SheetContent>
     </Sheet>

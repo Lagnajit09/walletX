@@ -47,6 +47,7 @@ export default function TransferPageClient({
     phone: "",
     walletID: "",
   });
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     // Filter contacts based on search query
@@ -117,6 +118,9 @@ export default function TransferPageClient({
   };
 
   const handleTransferComplete = async () => {
+    setIsPinDialogOpen(false);
+    setIsProcessing(true);
+
     try {
       const res = await p2pTransfer(
         transferWallet,
@@ -140,6 +144,7 @@ export default function TransferPageClient({
         variant: "destructive",
       });
     } finally {
+      setIsProcessing(false);
       setTransferAmount("");
       setTransferWallet("");
       setTransferNote("");
@@ -277,6 +282,7 @@ export default function TransferPageClient({
         onAddContact={addToContact}
         setNewContactData={setNewContactData}
         onDeleteContact={deleteContact}
+        isProcessing={isProcessing}
       />
 
       <PinVerificationDialog

@@ -44,4 +44,5 @@ export interface TransferSheetProps {
   onAddContact: () => void;
   setNewContactData: (data: NewContactFormType) => void;
   onDeleteContact: () => void;
+  isProcessing: boolean;
 }
