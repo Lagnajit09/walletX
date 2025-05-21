@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Send Request to Supabase
         run: |
-          response=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://swiftpay-red.vercel.app/api/ping")
+          response=$(curl -s -o /dev/null -w "%{http_code}" -X GET "https://swiftpaylm.vercel.app/api/ping")
           if [ $response -ne 200 ]; then
             echo "Ping failed with status code $response"
             exit 1
