@@ -8,21 +8,18 @@ export const GET = async (req: Request) => {
   //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   // }
 
-  const res = await db.contact.count();
-
-  if (res) {
+  console.log("Pinging Supabase");
+  // Check if the database is connected and up and running
+  try {
+    await db.contact.count();
     return NextResponse.json(
-      {
-        message: "Ping successful! App is up and running.",
-        contact: res,
-      },
+      { message: "Ping successful! App is up and running." },
       { status: 200 }
     );
-  } else {
+  } catch (error) {
+    console.error("Error pinging Supabase:", error);
     return NextResponse.json(
-      {
-        message: "Ping failed! App is down.",
-      },
+      { message: "Ping failed! App is down." },
       { status: 500 }
     );
   }

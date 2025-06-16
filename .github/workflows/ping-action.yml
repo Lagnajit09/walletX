@@ -3,6 +3,7 @@ name: Ping Supabase Twice a Week
 on:
   schedule:
     - cron: "0 0 * * 3,6" # Runs every Wednesday and Saturday at midnight UTC
+  workflow_dispatch: # Allows manual triggering of the workflow
 
 jobs:
   ping:
