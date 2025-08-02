@@ -8,19 +8,37 @@ export const GET = async (req: Request) => {
   //   return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   // }
 
-  console.log("Pinging Supabase");
-  // Check if the database is connected and up and running
+  console.log("Health check started");
+
   try {
-    await db.contact.count();
+    // Test database connection using Prisma's $connect method
+    await db.$connect();
+
+    console.log("Health check passed - Server and DB are connected");
+
     return NextResponse.json(
-      { message: "Ping successful! App is up and running." },
+      {
+        message: "Health check passed! Server and database are up and running.",
+        timestamp: new Date().toISOString(),
+        status: "healthy",
+      },
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error pinging Supabase:", error);
+    console.error("Health check failed:", error);
+
     return NextResponse.json(
-      { message: "Ping failed! App is down." },
+      {
+        message: "Health check failed! Database connection error.",
+        timestamp: new Date().toISOString(),
+        status: "unhealthy",
+        error:
+          error instanceof Error ? error.message : "Unknown database error",
+      },
       { status: 500 }
     );
+  } finally {
+    // Always disconnect to clean up
+    await db.$disconnect();
   }
 };
