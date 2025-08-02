@@ -5,8 +5,6 @@ on:
     - cron: "0 0 * * 3,6" # Runs every Wednesday and Saturday at midnight UTC
   workflow_dispatch: # Allows manual triggering of the workflow
 
-jobs:name: Keep Supabase Active
-
 jobs:
   ping-supabase:
     runs-on: ubuntu-latest
