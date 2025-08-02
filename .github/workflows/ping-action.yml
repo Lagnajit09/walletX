@@ -5,7 +5,36 @@ on:
     - cron: "0 0 * * 3,6" # Runs every Wednesday and Saturday at midnight UTC
   workflow_dispatch: # Allows manual triggering of the workflow
 
+jobs:name: Keep Supabase Active
+
 jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Ping Supabase
+        run: |
+          response=$(curl -s -X POST \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Content-Type: application/json" \
+            -w "HTTP_STATUS:%{http_code}" \
+            "${{ secrets.SUPABASE_FUNCTION_URL }}/ping")
+
+          http_status=$(echo "$response" | grep -o "HTTP_STATUS:[0-9]*" | cut -d: -f2)
+          body=$(echo "$response" | sed 's/HTTP_STATUS:[0-9]*$//')
+
+          echo "HTTP Status: $http_status"
+          echo "Response: $body"
+
+          if [ "$http_status" -ne 200 ]; then
+            echo "Ping failed with status $http_status"
+            exit 1
+          fi
+
+          echo "Supabase pinged successfully!"
+
+      - name: Log completion
+        run: echo "Ping completed at $(date)"
   ping:
     runs-on: ubuntu-latest
     steps:

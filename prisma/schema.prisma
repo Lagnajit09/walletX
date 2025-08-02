@@ -13,34 +13,34 @@ model User {
   id                       Int                  @id @default(autoincrement())
   email                    String?              @unique
   name                     String?
-  number                   String               @unique
-  walletID                 String               @unique
   password                 String
+  number                   String               @unique
   pin                      String?
-  createdAt                DateTime             @default(now())
-  dob                      DateTime?
   address                  String?
   country                  String?
+  createdAt                DateTime             @default(now())
+  dob                      DateTime?
   state                    String?
+  walletID                 String               @unique
   emailVerified            Boolean              @default(false)
   verificationToken        String?              @unique
   verificationTokenExpires DateTime?
   resetToken               String?              @unique
   resetTokenExpires        DateTime?
-  OnRampTransaction        OnRampTransaction[]
-  Balance                  Balance[]
-  sentTransfers            p2pTransfer[]        @relation(name: "FromUserRelation")
-  receivedTransfers        p2pTransfer[]        @relation(name: "ToUserRelation")
-  OffRampTransaction       OffRampTransaction[]
+  Balance                  Balance?
   Contact                  Contact[]
+  OffRampTransaction       OffRampTransaction[]
+  OnRampTransaction        OnRampTransaction[]
+  sentTransfers            p2pTransfer[]        @relation("FromUserRelation")
+  receivedTransfers        p2pTransfer[]        @relation("ToUserRelation")
 }
 
 model Contact {
   id       Int     @id @default(autoincrement())
   name     String
   phone    String
-  walletID String? @default(uuid())
   userId   Int
+  walletID String? @default(uuid())
   user     User    @relation(fields: [userId], references: [id])
 
   @@index([userId])
@@ -88,14 +88,20 @@ model p2pTransfer {
   amount     Int
   timestamp  DateTime
   fromUserId Int
-  fromUser   User     @relation(name: "FromUserRelation", fields: [fromUserId], references: [id])
   toUserId   Int
-  toUser     User     @relation(name: "ToUserRelation", fields: [toUserId], references: [id])
+  fromUser   User     @relation("FromUserRelation", fields: [fromUserId], references: [id])
+  toUser     User     @relation("ToUserRelation", fields: [toUserId], references: [id])
 
-  // Indexes on fromUserId, toUserId, and a composite index
   @@index([fromUserId])
   @@index([toUserId])
   @@index([fromUserId, toUserId])
+}
+
+/// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
+model ping {
+  id        BigInt    @id @default(autoincrement())
+  pinged_at DateTime? @default(now()) @db.Timestamptz(6)
+  message   String?   @default("ping")
 }
 
 enum AuthType {
